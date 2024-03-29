@@ -13,45 +13,39 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import "./styles.css";
+import "./styles_header.css";
 
 export const Header = () => {
   return (
-    <header className="flex bg-slate-200 p-2 justify-between">
-      <div className="flex flex-col items-center">
-        <h1
-          id="logo_title"
-          className="antialiased"
-        >
-          IDYLLE
-        </h1>
-        {/* <span id="logo_subtitle" className="text-sm font-bold">CHILL OUT CLUB</span> */}
+    <header className="fixed top-0 left-1/2 transform -translate-x-1/2 h-fit max-w-5xl w-full flex flex-col p-2 justify-between z-10 bg-white border-b-2">
+      <div className="flex pb-4 w-full justify-center">
+        <Link href="/" className="flex items-center">
+          <h1 id="logo_title" className="antialiased">
+            L&apos;IDYLLE
+          </h1>
+        </Link>
       </div>
-      <NavigationMenu>
-        <NavigationMenuList className="flex justify-between">
+      <NavigationMenu className="max-w-full">
+        <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Le restaurant</NavigationMenuTrigger>
+            <NavigationMenuTrigger className="bg-transparent">
+              Le restaurant
+            </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <li className="row-span-3">
-                  <NavigationMenuLink asChild>
-                    <a
-                      className="flex h-full w-full select-none flex-col from-muted/50 to-muted p-1 outline-none focus:shadow-md"
-                      href="/galerie"
-                    >
-                      <Image
-                        src="/img/piedsdanslesable.jpg"
-                        alt="Pieds dans le sable"
-                        width={200}
-                        height={200}
-                        className="w-full rounded-xl"
-                        priority
-                      />
-                    </a>
-                  </NavigationMenuLink>
+                <li className="row-span-3 ">
+                  <Image
+                    src="/img/idylle.png"
+                    alt="pieds dans le sable"
+                    width={200}
+                    height={201}
+                    className="rounded-lg"
+                    placeholder="blur"
+                    blurDataURL="/img/idylle.png"
+                  />
                 </li>
                 <ListItem href="/carte" title="Notre carte">
-                  Découvrez nos plats, desserts, boissons et autres
+                  Découvrez nos entrées, plats, desserts, boissons et tapas
                 </ListItem>
                 <ListItem href="tel:+33585098714" title="Réservation">
                   Réserver à l&apos;avance
@@ -64,7 +58,9 @@ export const Header = () => {
 
           <NavigationMenuItem>
             <Link href="/login" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              <NavigationMenuLink
+                className={`${navigationMenuTriggerStyle()} bg-transparent`}
+              >
                 Se connecter
               </NavigationMenuLink>
             </Link>
@@ -85,12 +81,12 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-2 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block select-none space-y-1 rounded-md p-2 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-wrap",
             className
           )}
           {...props}
         >
-          <div className="text-sm font-bold leading-none">{title}</div>
+          <p className="text-sm font-bold leading-none">{title}</p>
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>

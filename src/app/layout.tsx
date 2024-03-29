@@ -30,9 +30,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="min-h-screen flex flex-col">
-            <div className="flex-1 m-auto max-w-6xl w-full">
+            <div className="flex flex-col m-auto max-w-5xl">
               <Header />
-              <main>{children}</main>
+              <main className="pt-[157px] bg-yellow-100 bg-opacity-10">{children}</main>
               <Footer />
             </div>
           </div>
