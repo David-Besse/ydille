@@ -1,12 +1,12 @@
+import * as React from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { handleeFont } from "@/components/fonts/fonts";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import { cn } from "@/lib/utils";
-import { Header } from "@/features/layout/Header";
+import "./globals.css";
+import { Header } from "@/features/layout/Header/Header";
 import { Footer } from "@/features/layout/Footer";
-
-const inter = Inter({ subsets: ["latin"] });
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Idylle Club",
@@ -21,20 +21,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full" suppressHydrationWarning>
-      <body className={cn(inter.className, "bg-background h-full")}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="min-h-screen flex flex-col">
-            <div className="flex flex-col m-auto max-w-5xl">
-              <Header />
-              <main className="pt-[157px] bg-yellow-100 bg-opacity-10">{children}</main>
-              <Footer />
-            </div>
+    <html lang="fr" suppressHydrationWarning>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        />
+        <script
+          src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossOrigin=""
+          async
+          defer
+        ></script>
+      </Head>
+      <body
+        className={cn(
+          handleeFont.className,
+          "bg-background bg-[url('/img/transats.jpg')] bg-cover bg-no-repeat bg-top bg-fixed"
+        )}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="flex flex-col w-full min-h-screen justify-between">
+            <Header />
+            <main className="flex w-full justify-center items-center py-10">
+              {children}
+            </main>
+            <Footer />
           </div>
         </ThemeProvider>
       </body>

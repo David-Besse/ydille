@@ -1,49 +1,39 @@
 "use client";
 
+import React from "react";
 import {
   NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuTrigger,
   NavigationMenuContent,
+  NavigationMenuItem,
   NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import "./styles_header.css";
 
-export const Header = () => {
+export const NavigationDesktop = () => {
   return (
-    <header className="fixed top-0 left-1/2 transform -translate-x-1/2 h-fit max-w-5xl w-full flex flex-col p-2 justify-between z-10 bg-white border-b-2">
-      <div className="flex pb-4 w-full justify-center">
-        <Link href="/" className="flex items-center">
-          <h1 id="logo_title" className="antialiased">
-            L&apos;IDYLLE
-          </h1>
-        </Link>
-      </div>
-      <NavigationMenu className="max-w-full">
-        <NavigationMenuList>
+    <div className="self-center border-b-2 border-white text-white hidden md:block pb-2">
+      <NavigationMenu>
+        <NavigationMenuList className="flex flex-col md:flex-row">
+          <NavigationMenuItem>
+            <Link href="/" legacyBehavior passHref>
+              <NavigationMenuLink
+                className={`${navigationMenuTriggerStyle()} bg-transparent`}
+              >
+                Accueil
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+
           <NavigationMenuItem>
             <NavigationMenuTrigger className="bg-transparent">
               Le restaurant
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <li className="row-span-3 ">
-                  <Image
-                    src="/img/idylle.png"
-                    alt="pieds dans le sable"
-                    width={200}
-                    height={201}
-                    className="rounded-lg"
-                    placeholder="blur"
-                    blurDataURL="/img/idylle.png"
-                  />
-                </li>
+              <ul className="gap-3 p-4 w-[20rem]">
                 <ListItem href="/carte" title="Notre carte">
                   Découvrez nos entrées, plats, desserts, boissons et tapas
                 </ListItem>
@@ -57,17 +47,36 @@ export const Header = () => {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <Link href="/login" legacyBehavior passHref>
+            <Link href="/contact" legacyBehavior passHref>
               <NavigationMenuLink
                 className={`${navigationMenuTriggerStyle()} bg-transparent`}
               >
-                Se connecter
+                Contact
               </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <Link href="/galerie" accessKey="" legacyBehavior passHref>
+              <NavigationMenuLink
+                className={`${navigationMenuTriggerStyle()} bg-transparent`}
+              >
+                Galerie
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <Link
+              href="/login"
+              className={`${navigationMenuTriggerStyle()} bg-transparent`}
+            >
+              Se connecter
             </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-    </header>
+    </div>
   );
 };
 
