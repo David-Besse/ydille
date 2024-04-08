@@ -3,47 +3,18 @@ import Link from "next/link";
 import Image from "next/image";
 import instaIcon from "../../../public/img/instagram.png";
 import tripIcon from "../../../public/img/tripadvisor.png";
+import facebookIcon from "../../../public/img/facebook.png";
 
 export const Footer = () => {
   return (
-    <footer className="h-fit flex flex-col w-full text-white text-lg gap-4 justify-end">
-      <div
-        id="footer_social"
-        className="flex flex-col w-fit self-center gap-4 order-1"
-      >
-        <div className="flex gap-8 justify-center">
-          <Link
-            href="https://www.instagram.com/lidylle_biscarrosse/"
-            target="_blank"
-          >
-            <Image
-              src={instaIcon}
-              alt="instagram"
-              className="w-10 h-10 md:w-12 md:h-12 hover:scale-125 border-white border-2 rounded-2xl animate-bounce hover:animate-none bg-white"
-            />
-            <span className="sr-only">instagram</span>
-          </Link>
-          <Link
-            href="https://www.tripadvisor.fr/Restaurant_Review-g656490-d1326143-Reviews-L_Idylle-Biscarrosse_Landes_Nouvelle_Aquitaine.html?m=19905"
-            target="_blank"
-          >
-            <Image
-              src={tripIcon}
-              alt="tripadvisor"
-              className="w-10 h-10 md:w-12 md:h-12 hover:scale-125 border-white border-2 rounded-2xl animate-bounce hover:animate-none bg-white"
-            />
-            <span className="sr-only">tripadvisor</span>
-          </Link>
-        </div>
-      </div>
-
+    <footer className="h-fit w-full text-white text-lg">
       <div
         id="footer_links"
-        className="flex flex-col md:flex-row order-2 w-full justify-between text-base pb-2"
+        className="flex flex-col order-2 w-full justify-between text-base py-2"
       >
         <div
           id="footer_rules"
-          className="flex flex-col md:flex-row h-fit gap-1 lg:gap-8 lg:p-2 p-1"
+          className="flex flex-col md:flex-row h-fit md:gap-4 lg:p-2 p-1 justify-center items-center"
         >
           <Link
             href="/mentions-legales"

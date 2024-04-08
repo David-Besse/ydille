@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,8 +11,33 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import {
+  ComponentPropsWithoutRef,
+  ElementRef,
+  forwardRef,
+  useEffect,
+  useState,
+} from "react";
 
 export const NavigationDesktop = () => {
+  const [menuLinkVisible, setMenuLinkVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === "1") {
+        event.preventDefault();
+        event.stopPropagation();
+        setMenuLinkVisible(!menuLinkVisible);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuLinkVisible]);
+
   return (
     <div className="self-center border-b-2 border-white text-white hidden md:block pb-2">
       <NavigationMenu>
@@ -66,42 +90,43 @@ export const NavigationDesktop = () => {
             </Link>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <Link
-              href="/login"
-              className={`${navigationMenuTriggerStyle()} bg-transparent`}
-            >
-              Se connecter
-            </Link>
-          </NavigationMenuItem>
+          {menuLinkVisible && (
+            <NavigationMenuItem>
+              <Link
+                href="/auth/login"
+                className={`${navigationMenuTriggerStyle()} bg-transparent`}
+              >
+                Se connecter
+              </Link>
+            </NavigationMenuItem>
+          )}
         </NavigationMenuList>
       </NavigationMenu>
     </div>
   );
 };
 
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-2 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-wrap",
-            className
-          )}
-          {...props}
-        >
-          <p className="text-sm font-bold leading-none">{title}</p>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
+const ListItem = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
+  ({ className, title, children, ...props }, ref) => {
+    return (
+      <li>
+        <NavigationMenuLink asChild>
+          <a
+            ref={ref}
+            className={cn(
+              "block select-none space-y-1 rounded-md p-2 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-wrap",
+              className
+            )}
+            {...props}
+          >
+            <p className="text-sm font-bold leading-none">{title}</p>
+            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+              {children}
+            </p>
+          </a>
+        </NavigationMenuLink>
+      </li>
+    );
+  }
+);
 ListItem.displayName = "ListItem";

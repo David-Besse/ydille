@@ -2,7 +2,7 @@ import * as React from "react";
 import { asapFont, majorFont } from "@/components/fonts/fonts";
 import { cn } from "@/lib/utils";
 
-export default function Home() {
+const Home = () => {
   return (
     <div className="flex items-center justify-center">
       <div className="flex flex-col p-2 w-full justify-center items-center">
@@ -29,4 +29,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default Home;

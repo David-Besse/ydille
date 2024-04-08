@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 import { Header } from "@/features/layout/Header/Header";
 import { Footer } from "@/features/layout/Footer";
-import Head from "next/head";
+import Socials from "@/features/layout/Socials/Socials";
 
 export const metadata: Metadata = {
   title: "Idylle Club",
@@ -22,32 +22,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        />
-        <script
-          src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-          crossOrigin=""
-          async
-          defer
-        ></script>
-      </Head>
       <body
         className={cn(
           handleeFont.className,
-          "bg-background bg-[url('/img/transats.jpg')] bg-cover bg-no-repeat bg-top bg-fixed"
+          "bg-background bg-[url('/img/transats.jpg')] bg-cover bg-no-repeat bg-top bg-fixed h-screen"
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex flex-col w-full min-h-screen justify-between">
+          <div className="relative flex flex-col w-full h-full justify-between">
             <Header />
-            <main className="flex w-full justify-center items-center py-10">
+            <main className="flex w-full justify-center items-center">
               {children}
             </main>
             <Footer />
+            <Socials />
           </div>
         </ThemeProvider>
       </body>
