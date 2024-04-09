@@ -42,8 +42,12 @@ export const RegisterForm = () => {
 
     startTransition(() => {
       register(values).then((data) => {
-        setError(data.error);
-        setSucess(data.success);
+        if (data.error) {
+          setError(data.error);
+        } else {
+          setSucess(data.success);
+          form.reset();
+        }
       });
     });
   };
@@ -56,8 +60,8 @@ export const RegisterForm = () => {
       showSocial
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
             <FormField
               control={form.control}
               name="name"

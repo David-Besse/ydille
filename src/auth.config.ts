@@ -1,26 +1,41 @@
 import type { NextAuthConfig } from "next-auth";
-import google from "next-auth/providers/google";
+import bcrypt from "bcryptjs";
+import Credentials from "next-auth/providers/credentials";
+import { LoginSchema } from "../schemas";
+import { getUserByEmail } from "../data/user";
+import Google from "next-auth/providers/google";
+import Github from "next-auth/providers/github";
 
-export const authConfig = {
-  pages: {
-    signIn: "/login",
-  },
-  callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      // Check if the user is authenticated
-      const isLoggedIn = !!auth?.user;
+export default {
+  providers: [
+    Google({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    }),
+    Github({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+    }),
+    Credentials({
+      async authorize(credentials) {
+        const validatedFields = LoginSchema.safeParse(credentials);
 
-      // Initialize protected routes
-      const isOnProtected = nextUrl.pathname.startsWith("/dashboard");
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+          const user = await getUserByEmail(email);
 
-      if (isOnProtected) {
-        if (isLoggedIn) return true;
-        return false;
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL("/", nextUrl));
-      }
-      return true;
-    },
-  },
-  providers: [google], // Add providers with an empty array for now
+          if (!user || !user.password) {
+            return null;
+          }
+
+          const passwordMatch = await bcrypt.compare(password, user.password);
+
+          if (passwordMatch) {
+            return user;
+          }
+        }
+        return null;
+      },
+    }),
+  ],
 } satisfies NextAuthConfig;

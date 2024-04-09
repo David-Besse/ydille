@@ -1,10 +1,11 @@
 "use client";
 
-import * as React from "react";
+import { useState, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
 import { CardWrapper } from "@/features/layout/auth/card-wrapper";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -22,9 +23,12 @@ import { FormSuccess } from "@/features/layout/form-sucess";
 import { login } from "../../../../actions/login";
 
 export const LoginForm = () => {
-  const [isPending, startTransition] = React.useTransition();
-  const [error, setError] = React.useState<string | undefined>("");
-  const [success, setSucess] = React.useState<string | undefined>("");
+  const searchParams = useSearchParams();
+  const urlError = searchParams?.get("error") === "OAuthAccountNotLinked" ? "Email utilisé par un autre fournisseur !" : "";
+
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSucess] = useState<string | undefined>("");
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -39,9 +43,13 @@ export const LoginForm = () => {
     setSucess("");
 
     startTransition(() => {
-      login(values).then((data) => {
-        setError(data.error);
-        setSucess(data.success);
+      login(values).then((data: { error?: string; success?: string } | undefined) => {
+        if (data?.error) {
+          setError(data.error);
+        } else {
+          setSucess(data?.success);
+          form.reset();
+        }
       });
     });
   };
@@ -54,8 +62,8 @@ export const LoginForm = () => {
       showSocial
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
             <FormField
               control={form.control}
               name="email"
@@ -69,6 +77,7 @@ export const LoginForm = () => {
                       placeholder="john.doe@example.com"
                       className=""
                       disabled={isPending}
+                      autoComplete="email"
                     />
                   </FormControl>
                   <FormMessage />
@@ -89,6 +98,7 @@ export const LoginForm = () => {
                       placeholder="********"
                       className=""
                       disabled={isPending}
+                      autoComplete="current-password"
                     />
                   </FormControl>
                   <FormMessage />
@@ -96,7 +106,7 @@ export const LoginForm = () => {
               )}
             />
           </div>
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <FormSuccess message={success} />
           <Button type="submit" className="w-full" disabled={isPending}>
             Se connecter

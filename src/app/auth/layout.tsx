@@ -1,8 +1,15 @@
 import React from "react";
+import { asapFont } from "@/components/fonts/fonts";
+import { cn } from "@/lib/utils";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-screen w-full flex items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
+    <div
+      className={cn(
+        "h-full w-fit flex items-center justify-center",
+        asapFont.className
+      )}
+    >
       {children}
     </div>
   );
