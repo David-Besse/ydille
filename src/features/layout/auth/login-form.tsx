@@ -24,7 +24,10 @@ import { login } from "../../../../actions/login";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
-  const urlError = searchParams?.get("error") === "OAuthAccountNotLinked" ? "Email utilisé par un autre fournisseur !" : "";
+  const urlError =
+    searchParams?.get("error") === "OAuthAccountNotLinked"
+      ? "Email utilisé par un autre fournisseur !"
+      : "";
 
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
@@ -43,13 +46,10 @@ export const LoginForm = () => {
     setSucess("");
 
     startTransition(() => {
-      login(values).then((data: { error?: string; success?: string } | undefined) => {
-        if (data?.error) {
-          setError(data.error);
-        } else {
-          setSucess(data?.success);
-          form.reset();
-        }
+      login(values).then((data) => {
+        setError(data?.error);
+        setSucess(data?.success);
+        form.reset();
       });
     });
   };

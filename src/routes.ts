@@ -1,7 +1,7 @@
 /**
  * These routes are public and do not require authentication
  */
-export const publicRoutes: string[] = ["/", "/carte", "/galerie", "/contact"];
+export const publicRoutes: string[] = ["/", "/carte", "/galerie", "/contact", "/auth/verify-email"];
 
 /**
  * These routes are public, used for auhentication and do not require authentication.
