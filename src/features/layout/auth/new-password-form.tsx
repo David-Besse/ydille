@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { CardWrapper } from "@/features/layout/auth/card-wrapper";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
 import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { NewPasswordSchema } from "../../../../schemas";
 import {
   Form,
   FormControl,
@@ -13,36 +14,36 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { RegisterSchema } from "../../../../schemas";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { CardWrapper } from "@/features/layout/auth/card-wrapper";
 import { InputExtended } from "@/features/layout/auth/input-extended";
 import { FormError } from "@/features/layout/form-error";
 import { FormSuccess } from "@/features/layout/form-sucess";
-import { register } from "../../../../actions/register";
+import { newPassword } from "../../../../actions/new-password";
 
-export const RegisterForm = () => {
+export const NewPasswordForm = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams?.get("token");
+
   const [isPending, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSucess] = React.useState<string | undefined>("");
 
-  const form = useForm<z.infer<typeof RegisterSchema>>({
-    resolver: zodResolver(RegisterSchema),
+  const form = useForm<z.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      name: "",
-      email: "",
       password: "",
       confirmPassword: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+  const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
     setError("");
     setSucess("");
 
     startTransition(() => {
-      register(values).then((data) => {
-        setError(data.error);
+      newPassword(values, token).then((data) => {
+        setError(data?.error);
         if (data?.success) {
           setSucess(data.success);
           form.reset();
@@ -53,54 +54,14 @@ export const RegisterForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Création de compte"
-      backButtonLabel="Déja un compte ?"
+      headerLabel="Entrer un nouveau mot de passe"
+      backButtonLabel="Retour à la page de connexion"
       backButtonHref="/auth/login"
-      showSocial
+      showSocial={false}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nom</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      placeholder="le boss"
-                      className=""
-                      disabled={isPending}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="email"
-                      placeholder="john.doe@example.com"
-                      className=""
-                      disabled={isPending}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="password"
@@ -144,7 +105,7 @@ export const RegisterForm = () => {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button type="submit" className="w-full" disabled={isPending}>
-            Créer un compte
+            Réinitialiser le mot de passe
           </Button>
         </form>
       </Form>

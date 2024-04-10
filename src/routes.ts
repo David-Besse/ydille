@@ -1,13 +1,13 @@
 /**
  * These routes are public and do not require authentication
  */
-export const publicRoutes: string[] = ["/", "/carte", "/galerie", "/contact", "/auth/verify-email"];
+export const publicRoutes: string[] = ["/", "/carte", "/galerie", "/contact", "/auth/new-verification"];
 
 /**
  * These routes are public, used for auhentication and do not require authentication.
  * These routes redirect logged users to /settings
  */
-export const authRoutes: string[] = ["/auth/login", "/auth/register", "/auth/error"];
+export const authRoutes: string[] = ["/auth/login", "/auth/register", "/auth/error", "/auth/reset-password", "/auth/new-password"];
 
 /**
  * The prefix of the API routes.
