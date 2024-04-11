@@ -9,7 +9,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../../lib/utils";
 import Link from "next/link";
 import {
   ComponentPropsWithoutRef,

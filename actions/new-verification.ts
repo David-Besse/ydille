@@ -1,5 +1,5 @@
 "use server";
-import { db } from "@/lib/db";
+import { db } from "../lib/db";
 import { getUserByEmail, updateUserById } from "../data/user";
 import { getVerificationTokenByToken } from "../data/verification-token";
 

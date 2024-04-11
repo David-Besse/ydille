@@ -1,6 +1,6 @@
 import React from "react";
 import { asapFont } from "@/components/fonts/fonts";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../lib/utils";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (

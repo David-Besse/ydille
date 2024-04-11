@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { NewPasswordSchema } from "../schemas";
 import bcrypt from "bcryptjs";
-import { db } from "@/lib/db";
+import { db } from "../lib/db";
 import { getPasswordResetTokenByToken } from "../data/password-reset-token";
 import { getUserByEmail, updateUserById } from "../data/user";
 

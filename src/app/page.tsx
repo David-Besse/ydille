@@ -1,6 +1,6 @@
 import * as React from "react";
 import { asapFont, majorFont } from "@/components/fonts/fonts";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 const Home = () => {
   return (

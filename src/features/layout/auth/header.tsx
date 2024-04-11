@@ -1,6 +1,6 @@
 import React from "react";
 import { poppinsFont } from "@/components/fonts/fonts";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../../lib/utils";
 
 interface HeaderProps {
   label: string;
