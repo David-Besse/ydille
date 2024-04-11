@@ -9,7 +9,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { cn } from "../../../../lib/utils";
+import { cn } from "../../../lib/utils";
 import Link from "next/link";
 import {
   ComponentPropsWithoutRef,
@@ -39,7 +39,7 @@ export const NavigationDesktop = () => {
   }, [menuLinkVisible]);
 
   return (
-    <div className="self-center border-b-2 border-white text-white hidden md:block pb-2">
+    <div className="self-center border-b-2 border-white text-white hidden md:block py-2">
       <NavigationMenu>
         <NavigationMenuList className="flex flex-col md:flex-row">
           <NavigationMenuItem>

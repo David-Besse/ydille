@@ -1,4 +1,4 @@
-import { env } from "../../../../lib/env";
+import { env } from "../../../lib/env";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import AppleProvider from "next-auth/providers/apple";

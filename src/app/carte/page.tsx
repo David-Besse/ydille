@@ -2,14 +2,11 @@ import * as React from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import "./styles_carte.css";
 
 const foodList: { name: string; description: string; price: number }[] = [
   {

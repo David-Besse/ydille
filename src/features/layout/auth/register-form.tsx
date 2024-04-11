@@ -74,6 +74,7 @@ export const RegisterForm = () => {
                       placeholder="le boss"
                       className=""
                       disabled={isPending}
+                      autoComplete="name"
                     />
                   </FormControl>
                   <FormMessage />
@@ -94,6 +95,7 @@ export const RegisterForm = () => {
                       placeholder="john.doe@example.com"
                       className=""
                       disabled={isPending}
+                      autoComplete="email"
                     />
                   </FormControl>
                   <FormMessage />
@@ -114,6 +116,7 @@ export const RegisterForm = () => {
                       placeholder="********"
                       className=""
                       disabled={isPending}
+                      autoComplete="new-password"
                     />
                   </FormControl>
                   <FormMessage />
@@ -134,6 +137,7 @@ export const RegisterForm = () => {
                       placeholder="********"
                       className=""
                       disabled={isPending}
+                      autoComplete="new-password"
                     />
                   </FormControl>
                   <FormMessage />

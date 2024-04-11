@@ -10,7 +10,7 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import "leaflet-defaulticon-compatibility";
 // END: Preserve spaces to avoid auto-sorting
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { cn } from "../../../../lib/utils";
+import { cn } from "../../../lib/utils";
 import { ArrowBigDownDash, ArrowBigRightDash, Mail, Phone } from "lucide-react";
 
 import "./styles_map.css";

@@ -1,19 +1,16 @@
-import React from "react";
-import { auth, signOut } from "@/auth";
-import { Button } from "@/components/ui/button";
+"use client";
 
-const SettingsPage = async () => {
-  const session = await auth();
+import React from "react";
+import { useCurrentUser } from "../../../../hooks/user";
+import { LogoutButton } from "../../../features/layout/auth/logout-button";
+
+const SettingsPage = () => {
+  const user = useCurrentUser();
+
   return (
-    <div className="bg-white flex flex-col h-full p-4 w-[600px] items-center justify-center text-lg flex-wrap gap-2 overflow-auto">
-      <p>{JSON.stringify(session?.user, null, 2)}</p>
-      <form
-        action={async () => {
-          "use server";
-          await signOut();
-        }}
-      >
-        <Button type="submit">Sign out</Button>
+    <div className=" flex flex-col h-full w-full items-center justify-center text-lg bg-white">
+      <form>
+        <LogoutButton>Se déconnecter</LogoutButton>
       </form>
     </div>
   );

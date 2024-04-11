@@ -1,6 +1,6 @@
 import * as React from "react";
 import { asapFont, majorFont } from "@/components/fonts/fonts";
-import { cn } from "../../lib/utils";
+import { cn } from "../lib/utils";
 
 const Home = () => {
   return (
@@ -9,8 +9,8 @@ const Home = () => {
         <h1
           id="logo_title"
           className={cn(
-            majorFont.className,
-            "text-[2.8rem] sm:text-[4rem] md:text-[4rem] lg:text-[6rem] md:tracking-[0.8rem]"
+            asapFont.className,
+            "text-[2.8rem] sm:text-[4rem] md:text-[4rem] lg:text-[6rem] md:tracking-[0.8rem] font-extrabold"
           )}
         >
           L&apos;IDYLLE

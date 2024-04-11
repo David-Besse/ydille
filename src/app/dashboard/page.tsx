@@ -1,6 +1,6 @@
 import React from "react";
 import { Poppins } from "next/font/google";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../lib/utils";
 import { Button } from "@/components/ui/button";
 import { LoginButton } from "@/features/layout/auth/login-button";
 
