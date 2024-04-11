@@ -8,6 +8,7 @@ import { getTwoFactorConfirmationByUserId } from "../data/two-factor-confirmatio
 declare module "next-auth" {
   interface Session {
     user: {
+      [x: string]: any;
       id: string;
       role: string;
     };

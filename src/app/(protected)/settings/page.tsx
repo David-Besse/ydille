@@ -8,10 +8,10 @@ const SettingsPage = () => {
   const user = useCurrentUser();
 
   return (
-    <div className=" flex flex-col h-full w-full items-center justify-center text-lg bg-white">
-      <form>
+    <div className="flex items-center rounded justify-center text-lg bg-white p-4">
+      <div>
         <LogoutButton>Se déconnecter</LogoutButton>
-      </form>
+      </div>
     </div>
   );
 };

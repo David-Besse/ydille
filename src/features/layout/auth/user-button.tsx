@@ -6,9 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuGroup,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
@@ -21,30 +19,34 @@ export const UserButton = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Avatar className="w-8 h-8">
+      <DropdownMenuTrigger asChild data-state="closed">
+        <Avatar className="w-8 h-8 hover:scale-125">
           <AvatarImage src={user ? user.image : ""} />
           <AvatarFallback className="bg-sky-500">
             <FaUser className="text-white" />
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-white w-[160px]">
+      <DropdownMenuContent
+        side="bottom"
+        align="start"
+        className="bg-white w-[160px]"
+      >
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="flex items-start justify-start hover:border">
             <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+            Mon profil
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="flex items-start justify-start hover:border">
             <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            Paramètres
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem className="flex items-start justify-start hover:border">
           <LogoutButton>
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Log out</span>
+            Se déconnecter
           </LogoutButton>
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -6,7 +6,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       className={cn(
-        "h-full w-fit flex items-center justify-center",
+        "h-full w-full flex items-center justify-center",
         asapFont.className
       )}
     >

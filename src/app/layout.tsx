@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/theme/ThemeProvider";
 import { cn } from "../lib/utils";
 import "./globals.css";
 import { Header } from "@/features/layout/Header/Header";
-import { Footer } from "@/features/layout/Footer";
+import { Footer } from "@/features/layout/Footer/Footer";
 import Socials from "@/features/layout/Socials/Socials";
 
 export const metadata: Metadata = {
@@ -29,14 +29,7 @@ export default async function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="relative flex flex-col w-full h-full justify-between">
-            <Header />
-            <main className="flex w-full justify-center items-center">
-              {children}
-            </main>
-            <Footer />
-            <Socials />
-          </div>
+          {children}
         </ThemeProvider>
       </body>
     </html>

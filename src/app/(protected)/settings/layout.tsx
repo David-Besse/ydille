@@ -6,7 +6,7 @@ const SettingsLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
   return (
     <SessionProvider session={session}>
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col h-full w-full items-center justify-start">
         <Navbar />
         {children}
       </div>
