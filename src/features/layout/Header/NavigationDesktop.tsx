@@ -96,7 +96,7 @@ export const NavigationDesktop = () => {
                 href="/auth/login"
                 className={`${navigationMenuTriggerStyle()} bg-transparent`}
               >
-                Se connecter
+                Gestion
               </Link>
             </NavigationMenuItem>
           )}

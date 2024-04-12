@@ -11,11 +11,11 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { LogOut, Settings, User } from "lucide-react";
-import { useCurrentUser } from "../../../../hooks/user";
+import { useCurrentUserClient } from "../../../../hooks/useCurrentUserClient";
 import { LogoutButton } from "@/features/layout/auth/logout-button";
 
 export const UserButton = () => {
-  const user = useCurrentUser();
+  const user = useCurrentUserClient();
 
   return (
     <DropdownMenu>

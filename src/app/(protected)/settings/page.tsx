@@ -1,16 +1,15 @@
 "use client";
 
-import React from "react";
-import { useCurrentUser } from "../../../../hooks/user";
+import { useCurrentUserClient } from "../../../../hooks/useCurrentUserClient";
 import { LogoutButton } from "../../../features/layout/auth/logout-button";
 
 const SettingsPage = () => {
-  const user = useCurrentUser();
+  const user = useCurrentUserClient();
 
   return (
     <div className="flex items-center rounded justify-center text-lg bg-white p-4">
       <div>
-        <LogoutButton>Se déconnecter</LogoutButton>
+        <LogoutButton>Déconnecter {user?.email}</LogoutButton>
       </div>
     </div>
   );

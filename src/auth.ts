@@ -4,16 +4,7 @@ import authConfig from "@/auth.config";
 import { db } from "./lib/db";
 import { getUserById } from "../data/user";
 import { getTwoFactorConfirmationByUserId } from "../data/two-factor-confirmation";
-
-declare module "next-auth" {
-  interface Session {
-    user: {
-      [x: string]: any;
-      id: string;
-      role: string;
-    };
-  }
-}
+import { UserRole } from "@prisma/client";
 
 export const {
   handlers: { GET, POST },
@@ -73,14 +64,23 @@ export const {
 
       return true;
     },
+    // A function that updates the session user's id and role based on the provided token.
     async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
+      if (session.user) {
+        // add id to session
+        if (token.sub) {
+          session.user.id = token.sub;
+        }
+        // add role to session
+        if (token.role) {
+          session.user.role = token.role as UserRole;
+        }
+        // add isTwoFactorEnabled to session
+        if (token.isTwoFactorEnabled) {
+          session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+        }
       }
 
-      if (token.role && session.user) {
-        session.user.role = token.role.toString();
-      }
       return session;
     },
     async jwt({ token }) {
@@ -95,6 +95,7 @@ export const {
       }
 
       token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
       return token;
     },
