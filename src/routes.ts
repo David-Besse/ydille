@@ -12,6 +12,7 @@ export const authRoutes: string[] = ["/auth/login", "/auth/register", "/auth/err
 /**
  * The prefix of the API routes.
  * Routes that start with this prefix are used for API authentication purposes
+ * REQUIRED ROUTE for NexthAuth to work
  */
 export const apiAuthPrefix: string = "/api/auth";
 

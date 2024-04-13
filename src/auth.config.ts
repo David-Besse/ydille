@@ -18,8 +18,10 @@ export default {
     }),
     Credentials({
       async authorize(credentials) {
+        // Parse credentials
         const validatedFields = LoginSchema.safeParse(credentials);
 
+        // If credentials are successful, return user
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;
           const user = await getUserByEmail(email);
@@ -34,6 +36,8 @@ export default {
             return user;
           }
         }
+
+        // If credentials are not successful, return null
         return null;
       },
     }),

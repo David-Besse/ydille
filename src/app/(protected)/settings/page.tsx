@@ -1,10 +1,10 @@
 "use client";
 
-import { useCurrentUserClient } from "../../../../hooks/useCurrentUserClient";
+import { useCurrentUser } from "../../../../hooks/useCurrentUser";
 import { LogoutButton } from "../../../features/layout/auth/logout-button";
 
 const SettingsPage = () => {
-  const user = useCurrentUserClient();
+  const user = useCurrentUser();
 
   return (
     <div className="flex items-center rounded justify-center text-lg bg-white p-4">

@@ -66,19 +66,19 @@ export const {
     },
     // A function that updates the session user's id and role based on the provided token.
     async session({ token, session }) {
-      if (session.user) {
+      if (session.user && token.sub) {
         // add id to session
-        if (token.sub) {
-          session.user.id = token.sub;
-        }
+        session.user.id = token.sub;
+      }
+
+      if (session.user && token.role) {
         // add role to session
-        if (token.role) {
-          session.user.role = token.role as UserRole;
-        }
+        session.user.role = token.role as UserRole;
+      }
+
+      if (session.user && token.isTwoFactorEnabled) {
         // add isTwoFactorEnabled to session
-        if (token.isTwoFactorEnabled) {
-          session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
-        }
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
       }
 
       return session;

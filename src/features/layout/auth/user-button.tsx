@@ -11,17 +11,17 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { LogOut, Settings, User } from "lucide-react";
-import { useCurrentUserClient } from "../../../../hooks/useCurrentUserClient";
+import { useCurrentUser } from "../../../../hooks/useCurrentUser";
 import { LogoutButton } from "@/features/layout/auth/logout-button";
 
 export const UserButton = () => {
-  const user = useCurrentUserClient();
+  const user = useCurrentUser();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild data-state="closed">
         <Avatar className="w-8 h-8 hover:scale-125">
-          <AvatarImage src={user ? user.image : ""} />
+          <AvatarImage src={user && user.image ? user.image : ""} />
           <AvatarFallback className="bg-sky-500">
             <FaUser className="text-white" />
           </AvatarFallback>
