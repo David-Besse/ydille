@@ -80,7 +80,7 @@ export const LoginForm = () => {
       showSocial={showTwoFactor ? false : true}
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 ">
           <div className="space-y-2">
             {showTwoFactor && (
               <FormField

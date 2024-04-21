@@ -1,42 +1,28 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { UserButton } from "@/features/layout/auth/user-button";
+import { UserButton } from "@/app/(protected)/_components/user-button";
+import { useCurrentUser } from "../../../../hooks/useCurrentUser";
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export const Navbar = () => {
-  const pathname = usePathname();
+  const currentUser = useCurrentUser();
 
   return (
-    <nav className="flex items-center justify-center p-4 rounded-xl shadow-sm gap-4 bg-white">
-      <div className="flex gap-x-2">
-        <Button
-          variant={pathname === "/server" ? "default" : "outline"}
-          asChild
-        >
-          <Link href="/server">Server</Link>
-        </Button>
-        <Button
-          variant={pathname === "/client" ? "default" : "outline"}
-          asChild
-        >
-          <Link href="/client">Client</Link>
-        </Button>
-        <Button
-          variant={pathname === "/admin" ? "default" : "outline"}
-          asChild
-        >
-          <Link href="/admin">Admin</Link>
-        </Button>
-        <Button
-          variant={pathname === "/settings" ? "default" : "outline"}
-          asChild
-        >
-          <Link href="/settings">Paramètres</Link>
-        </Button>
+    <nav className="fixed w-3/4 top-2 left-1/2 transform -translate-x-1/2 flex items-center justify-between p-4 rounded-xl border-b-gray-400 border-b bg-white">
+      <Link href="/" aria-label="Accueil" title="Accueil">
+        <Image
+          src="/img/idylle.png"
+          alt="logo idylle"
+          width={50}
+          height={50}
+          priority
+        />
+      </Link>
+      <div className="flex gap-4 items-center justify-center">
+        <p className="text-lg">Bonjour {currentUser?.name} !</p>
+        <UserButton />
       </div>
-      <UserButton />
     </nav>
   );
 };

@@ -71,7 +71,7 @@ export const RegisterForm = () => {
                     <Input
                       {...field}
                       type="text"
-                      placeholder="le boss"
+                      placeholder="John Doe"
                       className=""
                       disabled={isPending}
                       autoComplete="name"
@@ -114,7 +114,6 @@ export const RegisterForm = () => {
                       {...field}
                       type="password"
                       placeholder="********"
-                      className=""
                       disabled={isPending}
                       autoComplete="new-password"
                     />
@@ -135,7 +134,6 @@ export const RegisterForm = () => {
                       {...field}
                       type="password"
                       placeholder="********"
-                      className=""
                       disabled={isPending}
                       autoComplete="new-password"
                     />

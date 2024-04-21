@@ -6,7 +6,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       className={cn(
-        "h-full w-full flex items-center justify-center",
+        "w-full min-h-screen flex items-center justify-center bg-[url('/img/pilotis.jpg')] bg-cover bg-no-repeat",
         asapFont.className
       )}
     >

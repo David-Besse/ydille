@@ -25,7 +25,7 @@ export default async function RootLayout({
       <body
         className={cn(
           handleeFont.className,
-          "bg-background bg-[url('/img/transats.jpg')] bg-cover bg-no-repeat bg-top bg-fixed h-screen"
+          "min-h-screen"
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

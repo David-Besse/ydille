@@ -6,7 +6,7 @@ import MainLayout from "@/features/layout/MainLayout";
 const Home = () => {
   return (
     <MainLayout>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center h-full">
         <div className="flex flex-col p-2 w-full justify-center items-center">
           <h1
             id="logo_title"

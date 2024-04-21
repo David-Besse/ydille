@@ -11,50 +11,50 @@ import {
 const foodList: { name: string; description: string; price: number }[] = [
   {
     name: "Planchette de charcuterie",
-    description: "Saucisse, fenouil, carottes, fenouil, carottes, fenouil",
+    description: "Saucisse, fenouil, carottes, tomate, salade, olive",
     price: 15,
   },
   {
     name: "Planchette de carottes",
-    description: "Saucisse, fenouil, carottes, fenouil, carottes, fenouil",
+    description: "Saucisse, fenouil, carottes, tomate, salade, olive",
     price: 18,
   },
   {
     name: "Planchette de fenouil",
-    description: "Saucisse, fenouil, carottes, fenouil, carottes, fenouil",
+    description: "Saucisse, fenouil, carottes, tomate, salade, olive",
     price: 8,
   },
   {
     name: "Planchette de carottes",
-    description: "Saucisse, fenouil, carottes, fenouil, carottes, fenouil",
+    description: "Saucisse, fenouil, carottes, tomate, salade, olive",
     price: 21,
   },
   {
     name: "Planchette de fenouil",
-    description: "Saucisse, fenouil, carottes, fenouil, carottes, fenouil",
+    description: "Saucisse, fenouil, carottes, tomate, salade, olive",
     price: 20,
   },
 ];
 
-const carte: {
+const mealMenu: {
   name: string;
-  foodList: { name: string; description: string; price: number }[];
+  dishList: { name: string; description: string; price: number }[];
 }[] = [
   {
     name: "Tapas",
-    foodList: foodList,
+    dishList: foodList,
   },
   {
     name: "Entrées",
-    foodList: foodList,
+    dishList: foodList,
   },
   {
     name: "Plats",
-    foodList: foodList,
+    dishList: foodList,
   },
   {
     name: "Desserts",
-    foodList: foodList,
+    dishList: foodList,
   },
 ];
 
@@ -70,14 +70,14 @@ const Carte = () => {
       </div>
 
       <div className="flex flex-wrap justify-center items-center gap-8">
-        {carte.map((carteType) => {
+        {mealMenu.map((carteType) => {
           return (
             <div className="self-center border rounded-lg tracking-wide" key={carteType.name}>
               <Table className="overflow-hidden">
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-black font-bold">
-                      Nos tapas
+                      {carteType.name}
                     </TableHead>
                     <TableHead className="text-right w-[4rem] ">
                       Prix*
@@ -85,10 +85,10 @@ const Carte = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {carteType.foodList.map((foodItem) => (
+                  {carteType.dishList.map((foodItem, index) => (
                     <TableRow className="border-none" key={foodItem.name}>
                       <TableCell>
-                        <p className="font-bold ">{foodItem.name}</p>
+                        <p className="font-bold ">{index}{" "}{foodItem.name}</p>
                         <p className="text-muted-foreground ">
                           {foodItem.description}
                         </p>

@@ -9,10 +9,10 @@ interface ProtectedLayoutProps {
 
 const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
   const session = await auth();
-  
+
   return (
     <SessionProvider session={session}>
-      <div className="flex flex-col h-full w-full items-center justify-start gap-y-6">
+      <div className="flex flex-col h-full w-full items-center justify-center gap-y-6 bg-white">
         <Navbar />
         {children}
         <Toaster />

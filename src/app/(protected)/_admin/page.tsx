@@ -1,8 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useCurrentRole } from "../../../../hooks/useCurrentUser";
-import { Key, KeyIcon, KeyRoundIcon } from "lucide-react";
+import { KeyRoundIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { asapFont } from "@/components/fonts/fonts";
 import { RoleGate } from "../_components/role-gate";

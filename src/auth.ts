@@ -5,6 +5,7 @@ import { db } from "./lib/db";
 import { getUserById } from "../data/user";
 import { getTwoFactorConfirmationByUserId } from "../data/two-factor-confirmation";
 import { UserRole } from "@prisma/client";
+import { getAccountByUserId } from "../data/account";
 
 export const {
   handlers: { GET, POST },
@@ -29,6 +30,7 @@ export const {
     },
   },
   callbacks: {
+    // Async function to handle user sign-in
     async signIn({ user, account }) {
       // Allow Oauth without email verification
       if (account?.provider !== "credentials") {
@@ -64,7 +66,28 @@ export const {
 
       return true;
     },
-    // A function that updates the session user's id and role based on the provided token.
+    async jwt({ token }) {
+      if (!token.sub) {
+        return token;
+      }
+
+      const existingUser = await getUserById(token.sub);
+
+      if (!existingUser) {
+        return token;
+      }
+
+      const existingAccount = await getAccountByUserId(existingUser.id);
+
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+      token.isOAuth = !!existingAccount; // check if user has an account, if not, isOAuth is false
+
+      return token;
+    },
+    // A function that updates the session based on the provided token.
     async session({ token, session }) {
       if (session.user && token.sub) {
         // add id to session
@@ -78,26 +101,19 @@ export const {
 
       if (session.user && token.isTwoFactorEnabled) {
         // add isTwoFactorEnabled to session
-        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+        session.user.isTwoFactorEnabled = Boolean(token.isTwoFactorEnabled);
+      }
+
+      if (session.user && token.email && token.name && token.isOAuth) {
+        // add email to session
+        session.user.email = token.email;
+        // add name to session
+        session.user.name = token.name;
+        // add isOAuth to session
+        session.user.isOAuth = !!token.isOAuth;
       }
 
       return session;
-    },
-    async jwt({ token }) {
-      if (!token.sub) {
-        return token;
-      }
-
-      const existingUser = await getUserById(token.sub);
-
-      if (!existingUser) {
-        return token;
-      }
-
-      token.role = existingUser.role;
-      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
-
-      return token;
     },
   },
   adapter: PrismaAdapter(db),

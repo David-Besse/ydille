@@ -5,9 +5,9 @@ import Socials from "@/features/layout/Socials/Socials";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="relative flex flex-col w-full h-full justify-between">
+    <div className="flex flex-col w-full min-h-screen justify-between bg-background bg-[url('/img/transats.jpg')] bg-cover bg-no-repeat bg-top bg-fixed">
       <Header />
-      <main className="flex w-full justify-center items-center">
+      <main className="flex w-full h-full justify-center items-center">
         {children}
       </main>
       <Footer />
