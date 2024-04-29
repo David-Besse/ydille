@@ -12,7 +12,7 @@ const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
 
   return (
     <SessionProvider session={session}>
-      <div className="flex flex-col h-full w-full items-center justify-center gap-y-6 bg-white">
+      <div className="flex flex-col min-h-screen w-full items-center justify-center bg-white py-32">
         <Navbar />
         {children}
         <Toaster />

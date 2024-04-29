@@ -36,7 +36,7 @@ import { FormError } from "@/features/layout/form-error";
 import { FormSuccess } from "@/features/layout/form-sucess";
 import { InputExtended } from "@/features/layout/auth/input-extended";
 
-const ProfilPage = () => {
+const ProfilePage = () => {
   const { update } = useSession();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
@@ -104,6 +104,7 @@ const ProfilPage = () => {
                         placeholder={user && user.name ? user.name : undefined}
                         disabled={isPending}
                         type="text"
+                        autoComplete="username"
                       />
                     </FormControl>
                     <FormMessage />
@@ -127,6 +128,7 @@ const ProfilPage = () => {
                             }
                             disabled={isPending}
                             type="email"
+                            autoComplete="email"
                           />
                         </FormControl>
                         <FormMessage />
@@ -146,6 +148,7 @@ const ProfilPage = () => {
                             placeholder="******"
                             disabled={isPending}
                             type="password"
+                            autoComplete="current-password"
                           />
                         </FormControl>
                         <FormMessage />
@@ -165,6 +168,7 @@ const ProfilPage = () => {
                             placeholder="******"
                             disabled={isPending}
                             type="password"
+                            autoComplete="new-password"
                           />
                         </FormControl>
                         <FormMessage />
@@ -248,4 +252,4 @@ const ProfilPage = () => {
   );
 };
 
-export default ProfilPage;
+export default ProfilePage;

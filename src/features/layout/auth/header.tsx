@@ -15,7 +15,7 @@ export const Header = ({ label }: HeaderProps) => {
             alt="logo idylle"
             width={100}
             height={100}
-            priority
+            priority={false}
           />
         </Link>
       <p className="text-muted-foreground text-center">{label}</p>

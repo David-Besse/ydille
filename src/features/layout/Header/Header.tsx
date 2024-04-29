@@ -14,7 +14,7 @@ export const Header = () => {
             alt="logo idylle"
             width={100}
             height={100}
-            priority
+            priority={false}
           />
         </Link>
       </div>

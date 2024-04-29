@@ -11,11 +11,13 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import {
+  BookOpenCheckIcon,
   GalleryVertical,
-  HomeIcon,
+  Grid2X2Icon,
   LogOut,
   NotebookTextIcon,
   User,
+  UtensilsCrossedIcon,
 } from "lucide-react";
 import { useCurrentUser } from "../../../../hooks/useCurrentUser";
 import { LogoutButton } from "@/features/layout/auth/logout-button";
@@ -36,14 +38,20 @@ export const UserButton = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         side="bottom"
-        align="start"
-        className="bg-white w-[160px]"
+        align="end"
+        className="bg-white w-[180px]"
       >
         <DropdownMenuGroup>
-          <Link href="/gestion/carte">
+          <Link href="/gestion">
             <DropdownMenuItem className="flex items-start justify-start hover:border">
-              <NotebookTextIcon className="mr-2 h-4 w-4" />
-              Gérer la carte
+              <Grid2X2Icon className="mr-2 h-4 w-4" />
+              Accueil gestion
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/gestion/evenements">
+            <DropdownMenuItem className="flex items-start justify-start hover:border">
+              <BookOpenCheckIcon className="mr-2 h-4 w-4" />
+              Gérer les évènements
             </DropdownMenuItem>
           </Link>
           <Link href="/gestion/galerie">
@@ -52,10 +60,16 @@ export const UserButton = () => {
               Gérer la galerie
             </DropdownMenuItem>
           </Link>
+          <Link href="/gestion/carte">
+            <DropdownMenuItem className="flex items-start justify-start hover:border">
+              <UtensilsCrossedIcon className="mr-2 h-4 w-4" />
+              Gérer la carte
+            </DropdownMenuItem>
+          </Link>
           <Link href="/gestion/profil">
             <DropdownMenuItem className="flex items-start justify-start hover:border">
               <User className="mr-2 h-4 w-4" />
-              Mon compte
+              Mon profil
             </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
