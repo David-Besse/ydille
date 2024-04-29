@@ -7,6 +7,9 @@ export const publicRoutes: string[] = [
   "/galerie",
   "/contact",
   "/auth/new-verification",
+  "/mentions-legales",
+  "/politique-de-confidentialite",
+  "/CGU"
 ];
 
 /**

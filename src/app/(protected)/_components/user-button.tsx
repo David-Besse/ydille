@@ -15,7 +15,6 @@ import {
   GalleryVertical,
   Grid2X2Icon,
   LogOut,
-  NotebookTextIcon,
   User,
   UtensilsCrossedIcon,
 } from "lucide-react";
@@ -31,7 +30,7 @@ export const UserButton = () => {
       <DropdownMenuTrigger asChild data-state="closed">
         <Avatar className="w-8 h-8 hover:scale-125 cursor-pointer">
           <AvatarImage src={user && user.image ? user.image : ""} />
-          <AvatarFallback className="bg-sky-500 text-white hover:border hover:text-sky-500 hover:bg-white">
+          <AvatarFallback className="bg-gray-500 text-white hover:border hover:text-gray-500 hover:bg-white">
             <FaUser />
           </AvatarFallback>
         </Avatar>

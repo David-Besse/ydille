@@ -1,13 +1,8 @@
-import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import instaIcon from "../../../public/img/instagram.png";
-import tripIcon from "../../../public/img/tripadvisor.png";
-import facebookIcon from "../../../public/img/facebook.png";
 
 export const Footer = () => {
   return (
-    <footer className="h-fit w-full text-white text-lg">
+    <footer className="h-fit w-full text-black text-lg">
       <div
         id="footer_links"
         className="flex flex-col order-2 w-full justify-between text-base py-2"

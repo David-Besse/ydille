@@ -41,8 +41,8 @@ enum UserRole {
 
 model User {
   id                    String                 @id @default(cuid())
-  name                  String?
-  email                 String?                @unique
+  name                  String?                @db.VarChar(255)
+  email                 String?                @unique @db.VarChar(255)
   emailVerified         DateTime?
   image                 String?
   password              String?
@@ -54,7 +54,7 @@ model User {
 
 model VerificationToken {
   id      String   @id @default(cuid())
-  email   String
+  email   String   @unique @db.VarChar(255)
   token   String   @unique
   expires DateTime
 
@@ -63,7 +63,7 @@ model VerificationToken {
 
 model PasswordResetToken {
   id      String   @id @default(cuid())
-  email   String
+  email   String   @unique @db.VarChar(255)
   token   String   @unique
   expires DateTime
 
@@ -72,7 +72,7 @@ model PasswordResetToken {
 
 model TwoFactorToken {
   id      String   @id @default(cuid())
-  email   String
+  email   String   @unique @db.VarChar(255)
   token   String   @unique
   expires DateTime
 
@@ -81,8 +81,23 @@ model TwoFactorToken {
 
 model TwoFactorConfirmation {
   id     String @id @default(cuid())
-  userId String
+  userId String @db.VarChar(255)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+model MealMenu {
+  id     String @id @default(cuid())
+  name   String @db.VarChar(255)
+  dishes Dish[]
+}
+
+model Dish {
+  id          String   @id @default(cuid())
+  name        String   @db.VarChar(255)
+  price       Int
+  description String   @db.Text
+  mealmenuId  String   @db.VarChar(255)
+  menu        MealMenu @relation(fields: [mealmenuId], references: [id], onDelete: Cascade)
 }

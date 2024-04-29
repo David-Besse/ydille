@@ -11,11 +11,10 @@ export const Header = ({ label }: HeaderProps) => {
     <div className="w-full flex flex-col gap-y-4 items-center justify-center">
       <Link href="/" aria-label="Accueil" title="Accueil">
           <Image
-            src="/img/idylle.png"
+            src="/img/idylle.svg"
             alt="logo idylle"
             width={100}
             height={100}
-            priority={false}
           />
         </Link>
       <p className="text-muted-foreground text-center">{label}</p>

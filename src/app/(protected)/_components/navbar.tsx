@@ -44,11 +44,10 @@ export const Navbar = () => {
     >
       <Link href="/" aria-label="Accueil" title="Accueil">
         <Image
-          src="/img/idylle.png"
+          src="/img/idylle.svg"
           alt="logo idylle"
           width={50}
           height={50}
-          priority={false}
         />
       </Link>
       <div className="flex gap-4 items-center justify-center">
