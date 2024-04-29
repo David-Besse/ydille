@@ -16,7 +16,7 @@ const GestionPage = () => {
       </h1>
       <div className="flex flex-wrap items-center justify-center gap-8 text-center">
         <Link href="/gestion/evenements">
-          <Card className="w-[90vw] hover:scale-105 sm:w-[400px] hover:bg-sky-200 bg-sky-400 hover:text-gray-600">
+          <Card className="w-[90vw] sm:w-[400px] hover:bg-sky-400 bg-sky-200 border-0 hover:border-sky-600 hover:shadow-[0_0_4px_4px_rgb(186,230,253,1)]">
             <CardHeader>
               <p className="text-xl font-bold">Gérer les évènements</p>
             </CardHeader>
@@ -26,7 +26,7 @@ const GestionPage = () => {
           </Card>
         </Link>
         <Link href="/gestion/galerie">
-          <Card className="w-[90vw] hover:scale-105 sm:w-[400px] hover:bg-orange-200 bg-orange-400 hover:text-gray-600">
+          <Card className="w-[90vw] sm:w-[400px] hover:bg-orange-400 bg-orange-200 border-0 hover:border-orange-600 hover:shadow-[0_0_4px_4px_rgb(254,215,170,1)]">
             <CardHeader>
               <p className="text-xl font-bold">Gérer la galerie</p>
             </CardHeader>
@@ -36,7 +36,7 @@ const GestionPage = () => {
           </Card>
         </Link>
         <Link href="/gestion/carte">
-          <Card className="w-[90vw] hover:scale-105 sm:w-[400px] hover:bg-emerald-200 bg-emerald-400 hover:text-gray-600">
+          <Card className="w-[90vw] sm:w-[400px] hover:bg-emerald-400 bg-emerald-200 border-0 hover:border-emerald-600 hover:shadow-[0_0_4px_4px_rgb(167,243,208,1)]">
             <CardHeader>
               <p className="text-xl font-bold">Gérer la carte</p>
             </CardHeader>
@@ -46,7 +46,7 @@ const GestionPage = () => {
           </Card>
         </Link>
         <Link href="/gestion/profil">
-          <Card className="w-[90vw] hover:scale-105 sm:w-[400px] hover:bg-red-200 bg-red-400 hover:text-gray-600">
+          <Card className="w-[90vw] sm:w-[400px] hover:bg-red-400 bg-red-300 border-0 hover:border-red-600 hover:shadow-[0_0_4px_4px_rgb(252,165,165,1)]">
             <CardHeader>
               <p className="text-xl font-bold">Mon profil</p>
             </CardHeader>
