@@ -8,54 +8,63 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { db } from "@/lib/db";
+import { cn } from "@/lib/utils";
+import { asapFont } from "@/components/fonts/fonts";
 
 const Carte = async () => {
-  const mealMenu = await db.mealMenu.findMany();
+  const mealMenu = await db.dishType.findMany();
   const foodList = await db.dish.findMany();
 
   return (
     <div
       id="carte"
-      className="w-full lg:w-[50vw] p-2 md:p-8 border shadow-black shadow-lg rounded-lg bg-white bg-opacity-[95%] z-0"
+      className="w-full lg:w-[50vw] p-2 md:px-24 md:py-12 border-none shadow-black shadow-lg rounded-lg bg-white bg-opacity-[95%] z-0 cursor-default tracking-widest"
     >
-      <div className="w-full flex items-center justify-between text-3xl font-bold self-center py-10">
-        <h2>Carte</h2>
-        <span className="text-sm text-muted-foreground">* TVA incl.</span>
+      <div
+        className={cn(
+          "w-full text-3xl text-center py-10",
+          asapFont.className
+        )}
+      >
+        <h2 className="italic font-bold">Notre carte</h2>
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-16">
+      <div className={cn("flex flex-col justify-center items-center text-black gap-16", asapFont.className)}>
         {mealMenu.map((dishType) => {
           return (
             <div
-              className="self-center border rounded-lg tracking-wider"
+              className="self-center rounded-lg"
               key={dishType.id}
             >
               <Table className="overflow-hidden">
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-black font-bold text-lg">
+                    <TableHead className="text-lg font-bold uppercase">
                       {dishType.name}
                     </TableHead>
-                    <TableHead className="text-right w-[4rem] font-bold">
+                    <TableHead className="text-base text-right w-[4rem] font-bold">
                       Prix*
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {foodList
-                    .filter((foodItem) => foodItem.mealmenuId === dishType.id)
+                    .filter((foodItem) => foodItem.dishTypeId === dishType.id)
                     .map((food, index) => (
                       <TableRow
                         className="border-none"
                         key={index + "_" + food.name}
                       >
-                        <TableCell>
-                          <p className="font-semibold text-base">{food.name}</p>
-                          <p className="text-muted-foreground text-sm">
+                        <TableCell className="py-4 space-y-2 font-semibold">
+                          <p className="text-base">{food.name}</p>
+                          <p
+                            className=
+                              "text-muted-foreground leading-4 tracking-wide"
+                          >
                             {food.description}
                           </p>
                         </TableCell>
-                        <TableCell className="text-right font-bold text-base">
+                        <TableCell className="text-right font-bold text-base py-4">
                           {food.price}€
                         </TableCell>
                       </TableRow>
@@ -65,6 +74,7 @@ const Carte = async () => {
             </div>
           );
         })}
+        <span className="text-base text-muted-foreground font-bold">* TVA incl.</span>
       </div>
     </div>
   );

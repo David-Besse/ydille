@@ -87,7 +87,7 @@ model TwoFactorConfirmation {
   @@unique([userId])
 }
 
-model MealMenu {
+model DishType {
   id     String @id @default(cuid())
   name   String @db.VarChar(255)
   dishes Dish[]
@@ -98,6 +98,6 @@ model Dish {
   name        String   @db.VarChar(255)
   price       Int
   description String   @db.Text
-  mealmenuId  String   @db.VarChar(255)
-  menu        MealMenu @relation(fields: [mealmenuId], references: [id], onDelete: Cascade)
+  dishTypeId  String   @db.VarChar(255)
+  menu        DishType @relation(fields: [dishTypeId], references: [id], onDelete: Cascade)
 }

@@ -7,7 +7,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-col w-full min-h-screen justify-between bg-[url('/img/plage.jpg')] bg-cover bg-no-repeat bg-top bg-fixed">
       <Header />
-      <main className="flex w-full h-full justify-center items-center py-24">
+      <main className="flex w-full h-full justify-around items-center">
         {children}
       </main>
       <Footer />

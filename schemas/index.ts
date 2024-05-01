@@ -158,3 +158,17 @@ export const RegisterSchema = z
       });
     }
   });
+
+export const DishSchema = z.object({
+  id: z.string().trim(),
+  name: z.string().trim(),
+  price: z.number().int().positive(),
+  description: z.string().trim(),
+  mealmenuId: z.string().trim(),
+});
+
+export const DishTypeSchema = z.object({
+  id: z.string().trim(),
+  name: z.string().trim(),
+  dishes: z.array(DishSchema),
+});

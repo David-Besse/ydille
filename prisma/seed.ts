@@ -1,185 +1,84 @@
-import { PrismaClient } from "@prisma/client";
+import { Dish, DishType, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+import { v4 as uuidv4 } from "uuid";
 
-const foodList: {
-  name: string;
-  description: string;
-  price: number;
-  mealmenuId: string;
-}[] = [
+const dishList: Dish[] = [
   {
     name: "Planchette de charcuterie",
     description:
       "Saucisse, fenouil, carottes, tomate, salade, olive, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a elementum diam. Curabitur dignissim pellentesque auctor. Fusce et ligula congue, porttitor enim nec, iaculis ante. Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. Pellentesque a laoreet urna. Maecenas id elit ex. Fusce pellentesque magna eu nulla molestie dignissim",
     price: 15,
-    mealmenuId: "1",
+    dishTypeId: "",
+    id: "",
   },
   {
     name: "Planchette de carottes",
     description:
       "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. Pellentesque a laoreet urna. Maecenas id elit ex. Fusce pellentesque magna eu nulla molestie dignissim",
     price: 18,
-    mealmenuId: "1",
+    dishTypeId: "",
+    id: "",
   },
   {
     name: "Planchette de fenouil",
     description:
       "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu",
     price: 8,
-    mealmenuId: "1",
+    dishTypeId: "",
+    id: "",
   },
   {
-    name: "Planchette de carottes",
+    name: "Assiette de tomates",
     description:
       "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. ",
     price: 21,
-    mealmenuId: "1",
-  },
-  {
-    name: "Planchette de fenouil",
-    description: "Saucisse, fenouil, carottes, tomate, salade, olive",
-    price: 20,
-    mealmenuId: "1",
-  },
-  {
-    name: "Planchette de charcuterie",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a elementum diam. Curabitur dignissim pellentesque auctor. Fusce et ligula congue, porttitor enim nec, iaculis ante. Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. Pellentesque a laoreet urna. Maecenas id elit ex. Fusce pellentesque magna eu nulla molestie dignissim",
-    price: 15,
-    mealmenuId: "2",
-  },
-  {
-    name: "Planchette de carottes",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. Pellentesque a laoreet urna. Maecenas id elit ex. Fusce pellentesque magna eu nulla molestie dignissim",
-    price: 18,
-    mealmenuId: "2",
-  },
-  {
-    name: "Planchette de fenouil",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu",
-    price: 8,
-    mealmenuId: "2",
-  },
-  {
-    name: "Planchette de carottes",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. ",
-    price: 21,
-    mealmenuId: "2",
-  },
-  {
-    name: "Planchette de fenouil",
-    description: "Saucisse, fenouil, carottes, tomate, salade, olive",
-    price: 20,
-    mealmenuId: "2",
-  },
-  {
-    name: "Planchette de charcuterie",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a elementum diam. Curabitur dignissim pellentesque auctor. Fusce et ligula congue, porttitor enim nec, iaculis ante. Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. Pellentesque a laoreet urna. Maecenas id elit ex. Fusce pellentesque magna eu nulla molestie dignissim",
-    price: 15,
-    mealmenuId: "3",
-  },
-  {
-    name: "Planchette de carottes",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. Pellentesque a laoreet urna. Maecenas id elit ex. Fusce pellentesque magna eu nulla molestie dignissim",
-    price: 18,
-    mealmenuId: "3",
-  },
-  {
-    name: "Planchette de fenouil",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu",
-    price: 8,
-    mealmenuId: "3",
-  },
-  {
-    name: "Planchette de carottes",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. ",
-    price: 21,
-    mealmenuId: "3",
-  },
-  {
-    name: "Planchette de fenouil",
-    description: "Saucisse, fenouil, carottes, tomate, salade, olive",
-    price: 20,
-    mealmenuId: "3",
-  },
-  {
-    name: "Planchette de charcuterie",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a elementum diam. Curabitur dignissim pellentesque auctor. Fusce et ligula congue, porttitor enim nec, iaculis ante. Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. Pellentesque a laoreet urna. Maecenas id elit ex. Fusce pellentesque magna eu nulla molestie dignissim",
-    price: 15,
-    mealmenuId: "4",
-  },
-  {
-    name: "Planchette de carottes",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. Pellentesque a laoreet urna. Maecenas id elit ex. Fusce pellentesque magna eu nulla molestie dignissim",
-    price: 18,
-    mealmenuId: "4",
-  },
-  {
-    name: "Planchette de fenouil",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu",
-    price: 8,
-    mealmenuId: "4",
-  },
-  {
-    name: "Planchette de carottes",
-    description:
-      "Saucisse, fenouil, carottes, tomate, salade, olive, Fusce nec lectus commodo, sagittis purus eu, tincidunt odio. ",
-    price: 21,
-    mealmenuId: "4",
-  },
-  {
-    name: "Planchette de fenouil",
-    description: "Saucisse, fenouil, carottes, tomate, salade, olive",
-    price: 20,
-    mealmenuId: "4",
+    dishTypeId: "",
+    id: "",
   },
 ];
 
-const menuList: {
-  id: string;
-  name: string;
-}[] = [
+const dishTypesList: DishType[] = [
   {
-    id: "1",
+    id: uuidv4(),
     name: "Tapas",
   },
   {
-    id: "2",
+    id: uuidv4(),
     name: "Entrées",
   },
   {
-    id: "3",
+    id: uuidv4(),
     name: "Plats",
   },
   {
-    id: "4",
+    id: uuidv4(),
     name: "Desserts",
   },
 ];
 
-async function generateMenu() {
-  return await prisma.mealMenu.createMany({
-    data: menuList,
+let newDishList: Dish[] = [];
+newDishList = dishList.flatMap((dish) =>
+  // creates new dish for each dishTypeList entry, with the dishTypeId from dishTypeList and a unique id. All other properties are spread from dish
+  dishTypesList.map((dishType) => ({
+    ...dish,
+    dishTypeId: dishType.id,
+    id: uuidv4(),
+  }))
+);
+
+async function generateDishType() {
+  return await prisma.dishType.createMany({
+    data: dishTypesList,
   });
 }
 
 async function generateDishes() {
   return await prisma.dish.createMany({
-    data: foodList,
+    data: newDishList,
   });
 }
 
-generateMenu()
+generateDishType()
   .then(async () => {
     await prisma.$disconnect();
   })
