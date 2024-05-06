@@ -161,14 +161,14 @@ export const RegisterSchema = z
 
 export const DishSchema = z.object({
   id: z.string().trim(),
-  name: z.string().trim(),
-  price: z.number().int().positive(),
-  description: z.string().trim(),
-  mealmenuId: z.string().trim(),
+  name: z.string().trim().min(3, { message: "T'as oublié le nom de ton plat !" }),
+  price: z.number().int().positive().min(1, { message: "T'as oublié le prix !" }),
+  description: z.string().trim().min(10, { message: "T'as oublié la description !" }),
+  dishTypeId: z.string().trim(),
 });
 
 export const DishTypeSchema = z.object({
   id: z.string().trim(),
-  name: z.string().trim(),
+  name: z.string().trim().min(3, { message: "T'as oublié le nom du type de plat !" }),
   dishes: z.array(DishSchema),
 });

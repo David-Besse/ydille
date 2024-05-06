@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Table,
   TableBody,
@@ -10,10 +9,12 @@ import {
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { asapFont } from "@/components/fonts/fonts";
+import { ModifyDishButton } from "./modify-dish-button";
+import { Dish, DishType } from "@prisma/client";
 
-const Carte = async () => {
-  const dishTypes = await db.dishType.findMany();
-  const dishes = await db.dish.findMany();
+const HandleCarte = async () => {
+  const dishTypes: DishType[] = await db.dishType.findMany();
+  const dishes: Dish[] = await db.dish.findMany();
 
   return (
     <div
@@ -23,7 +24,7 @@ const Carte = async () => {
       <div
         className={cn("w-full text-3xl text-center py-10", asapFont.className)}
       >
-        <h2 className="italic font-bold">Notre carte</h2>
+        <h2 className="italic font-bold">Gestion de la carte</h2>
       </div>
 
       <div
@@ -48,8 +49,8 @@ const Carte = async () => {
                 </TableHeader>
                 <TableBody>
                   {dishes
-                    .filter((foodItem) => foodItem.dishTypeId === dishType.id)
-                    .map((food, index) => (
+                    .filter((dish: Dish) => dish.dishTypeId === dishType.id)
+                    .map((food: Dish, index) => (
                       <TableRow
                         className="border-none"
                         key={index + "_" + food.name}
@@ -62,6 +63,12 @@ const Carte = async () => {
                         </TableCell>
                         <TableCell className="text-right font-bold text-base py-4">
                           {food.price}€
+                        </TableCell>
+
+                        <TableCell className="text-right font-bold text-base py-4">
+
+                          <ModifyDishButton food={food} foodType={dishType} dishTypesList={dishTypes} />
+
                         </TableCell>
                       </TableRow>
                     ))}
@@ -78,4 +85,4 @@ const Carte = async () => {
   );
 };
 
-export default Carte;
+export default HandleCarte;
