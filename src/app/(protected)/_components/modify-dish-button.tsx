@@ -199,7 +199,7 @@ export const ModifyDishButton = () => {
               />
             </div>
 
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" disabled={isPending} className="hover:bg-emerald-600">
               Valider
             </Button>
           </form>

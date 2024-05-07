@@ -48,7 +48,11 @@ const Carte = async () => {
                 </TableHeader>
                 <TableBody>
                   {dishes
+                    // we filter the dishes that have the same type
                     .filter((foodItem) => foodItem.dishTypeId === dishType.id)
+                    // we sort the dishes by name
+                    .sort((a, b) => a.name.localeCompare(b.name, "fr"))
+                    // we map the dishes
                     .map((food, index) => (
                       <TableRow
                         className="border-none"
