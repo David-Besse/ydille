@@ -1,18 +1,13 @@
-"use client";
-
-import { useState, useTransition } from "react";
-import { Dish, DishType } from "@prisma/client";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DishSchema } from "../../../../schemas";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -27,60 +22,61 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PencilIcon } from "lucide-react";
-import { FormError } from "@/features/layout/form-error";
-import { FormSuccess } from "@/features/layout/form-sucess";
-import { updateDish } from "../../../../data/carte";
 import { Select } from "@radix-ui/react-select";
 import {
   SelectContent,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { modifyDish } from "../../../../actions/modify-dish";
+import _ from "lodash";
+import { toast } from "sonner";
+import { useDishStore } from "@/store/dish-store-provider";
 
-interface ModifyDishButtonProps {
-  food: Dish;
-  foodType: DishType;
-  dishTypesList: DishType[];
-}
-
-export const ModifyDishButton = ({
-  food,
-  foodType,
-  dishTypesList,
-}: ModifyDishButtonProps) => {
-  const [error, setError] = useState<string | undefined>(undefined);
-  const [success, setSucess] = useState<string | undefined>(undefined);
+export const ModifyDishButton = () => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
-
-  if (!food) {
-    throw new Error("Unable to find food");
-  }
+  const { currentDish, localDishTypes, updateLocalDishes } = useDishStore(
+    (state) => state
+  );
 
   const dishForm = useForm<z.infer<typeof DishSchema>>({
     resolver: zodResolver(DishSchema),
-    defaultValues: food,
   });
 
+  useEffect(() => {
+    if (currentDish) {
+      dishForm.setValue("id", currentDish.id);
+      dishForm.setValue("name", currentDish.name);
+      dishForm.setValue("description", currentDish.description);
+      dishForm.setValue("price", currentDish.price);
+      dishForm.setValue("dishTypeId", currentDish.dishTypeId);
+    }
+  }, [currentDish, dishForm]);
+
   const onSubmit = (values: z.infer<typeof DishSchema>) => {
-    setError("");
-    setSucess("");
+    // We use lodash to compare objects (very useful !)
+    if (_.isEqual(values, currentDish)) {
+      setSheetOpening(false);
+      return;
+    }
 
     startTransition(() => {
       modifyDish(values)
         .then((data) => {
           if (data) {
-            setSucess("Plat modifié");
+            updateLocalDishes(values);
+            setSheetOpening(false);
+            toast.success("Plat modifié");
+            dishForm.reset();
           }
           if (!data) {
-            setError("Erreur de mise à jour du plat");
+            toast.error("Erreur de mise à jour du plat");
           }
         })
         .catch((error) => {
-          setError("Une erreur est survenue");
+          toast.error("Une erreur est survenue");
           console.log(error);
         });
     });
@@ -88,8 +84,8 @@ export const ModifyDishButton = ({
 
   return (
     <Sheet
-      open={sheetOpening}
-      onOpenChange={() => setSheetOpening(!sheetOpening)}
+      open={sheetOpening} // state of the sheet
+      onOpenChange={() => setSheetOpening(!sheetOpening)} // control the opening/closing state of the sheet (manually)
     >
       <SheetTrigger asChild>
         <Button variant="outline">
@@ -98,20 +94,20 @@ export const ModifyDishButton = ({
       </SheetTrigger>
       <SheetContent
         side={"bottom"}
-        className="w-full sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-xl sm:rounded-t-xl space-y-6"
+        className="w-[95%] sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl"
       >
         <SheetHeader>
-          <SheetTitle className="text-xl uppercase">Edition :</SheetTitle>
-          <SheetDescription>
-            Modifie le plat puis appuie sur le bouton valider quand tu as fini.
-          </SheetDescription>
+          <SheetTitle className="text-xl tracking-wider">
+            Modifier un plat
+          </SheetTitle>
         </SheetHeader>
         <Form {...dishForm}>
           <form
             onSubmit={dishForm.handleSubmit(onSubmit)}
-            className="flex flex-col space-y-8"
+            className="flex flex-col gap-8 py-8"
           >
-            <div className="space-y-4">
+            <div className="space-y-6">
+              {/* Product name field */}
               <FormField
                 control={dishForm.control}
                 name="name"
@@ -119,18 +115,25 @@ export const ModifyDishButton = ({
                   <FormItem>
                     <FormLabel>Nom du produit</FormLabel>
                     <FormControl>
-                      <Input {...field} type="text" disabled={isPending} />
+                      <Input
+                        {...field}
+                        type="text"
+                        disabled={isPending}
+                        autoComplete="off"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
+              {/* Product description field */}
               <FormField
                 control={dishForm.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Description du produit</FormLabel>
                     <FormControl>
                       <Textarea {...field} rows={5} disabled={isPending} />
                     </FormControl>
@@ -138,6 +141,8 @@ export const ModifyDishButton = ({
                   </FormItem>
                 )}
               />
+
+              {/* Product price field */}
               <FormField
                 control={dishForm.control}
                 name="price"
@@ -158,34 +163,41 @@ export const ModifyDishButton = ({
                   </FormItem>
                 )}
               />
+
+              {/* Product type field */}
               <FormField
                 control={dishForm.control}
                 name="dishTypeId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Prix en euros</FormLabel>
-                    <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormLabel>Catégorie de plat</FormLabel>
+                    <Select
+                      // we need to add a name prop to avoid a browser warning with field
+                      name="dishTypeId"
+                      onValueChange={field.onChange}
+                      // we need to add a default value to avoid a validation error
+                      defaultValue={field.value}
+                      disabled={isPending}
+                    >
+                      <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Sélectionne un type de plat" />
                         </SelectTrigger>
-                        <SelectContent>
-                          {dishTypesList.map((dishType) => (
+                      </FormControl>
+                      <SelectContent>
+                        {localDishTypes &&
+                          localDishTypes.map((dishType) => (
                             <SelectItem key={dishType.id} value={dishType.id}>
                               {dishType.name}
                             </SelectItem>
                           ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-
-            <FormError message={error} />
-            <FormSuccess message={success} />
 
             <Button type="submit" disabled={isPending}>
               Valider

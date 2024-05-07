@@ -2,16 +2,13 @@
 
 import { asapFont } from "@/components/fonts/fonts";
 
-// START: Preserve spaces to avoid auto-sorting
 import "leaflet/dist/leaflet.css";
-
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
-
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
-// END: Preserve spaces to avoid auto-sorting
+
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { cn } from "../../../lib/utils";
-import { ArrowBigDownDash, ArrowBigRightDash, Mail, Phone } from "lucide-react";
+import { ArrowBigRightDash, Mail, Phone } from "lucide-react";
 
 import "./styles_map.css";
 

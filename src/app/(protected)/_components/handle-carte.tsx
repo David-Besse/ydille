@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -6,15 +8,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { asapFont } from "@/components/fonts/fonts";
 import { ModifyDishButton } from "./modify-dish-button";
 import { Dish, DishType } from "@prisma/client";
+import { useDishStore } from "@/store/dish-store-provider";
+import { useEffect } from "react";
 
-const HandleCarte = async () => {
-  const dishTypes: DishType[] = await db.dishType.findMany();
-  const dishes: Dish[] = await db.dish.findMany();
+interface HandleCarteProps {
+  dishes: Dish[];
+  dishTypes: DishType[];
+}
+
+const HandleCarte = ({ dishes, dishTypes }: HandleCarteProps) => {
+  const {
+    localDishes,
+    localDishTypes,
+    setLocalDishes,
+    setLocalDishTypes,
+    setCurrentDish,
+  } = useDishStore((state) => state);
+
+  useEffect(() => {
+    setLocalDishes(dishes);
+    setLocalDishTypes(dishTypes);
+  }, [dishes, dishTypes, setLocalDishes, setLocalDishTypes]);
 
   return (
     <div
@@ -33,50 +51,52 @@ const HandleCarte = async () => {
           asapFont.className
         )}
       >
-        {dishTypes.map((dishType) => {
-          return (
-            <div className="self-center rounded-lg" key={dishType.id}>
-              <Table className="overflow-hidden">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-lg font-bold uppercase">
-                      {dishType.name}
-                    </TableHead>
-                    <TableHead className="text-base text-right w-[4rem] font-bold">
-                      Prix*
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {dishes
-                    .filter((dish: Dish) => dish.dishTypeId === dishType.id)
-                    .map((food: Dish, index) => (
-                      <TableRow
-                        className="border-none"
-                        key={index + "_" + food.name}
-                      >
-                        <TableCell className="py-4 space-y-2 font-semibold">
-                          <p className="text-base">{food.name}</p>
-                          <p className="text-muted-foreground leading-4 tracking-wide">
-                            {food.description}
-                          </p>
-                        </TableCell>
-                        <TableCell className="text-right font-bold text-base py-4">
-                          {food.price}€
-                        </TableCell>
+        {localDishTypes &&
+          localDishTypes.map((dishType: DishType) => {
+            return (
+              <div className="self-center rounded-lg" key={dishType.id}>
+                <Table className="overflow-hidden">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-lg font-bold uppercase">
+                        {dishType.name}
+                      </TableHead>
+                      <TableHead className="text-base text-right w-[4rem] font-bold">
+                        Prix*
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {localDishes &&
+                      localDishes
+                        .filter((dish: Dish) => dish.dishTypeId === dishType.id)
+                        .map((food: Dish, index) => (
+                          <TableRow
+                            className="border-none"
+                            key={index + "_" + food.name}
+                          >
+                            <TableCell className="py-4 space-y-2 font-semibold">
+                              <p className="text-base">{food.name}</p>
+                              <p className="text-muted-foreground leading-4 tracking-wide">
+                                {food.description}
+                              </p>
+                            </TableCell>
+                            <TableCell className="text-right font-bold text-base py-4">
+                              {food.price}€
+                            </TableCell>
 
-                        <TableCell className="text-right font-bold text-base py-4">
-
-                          <ModifyDishButton food={food} foodType={dishType} dishTypesList={dishTypes} />
-
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </div>
-          );
-        })}
+                            <TableCell className="text-right font-bold text-base py-4">
+                              <div onClick={() => setCurrentDish(food)}>
+                                <ModifyDishButton />
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                  </TableBody>
+                </Table>
+              </div>
+            );
+          })}
         <span className="text-base text-muted-foreground font-bold">
           * TVA incl.
         </span>
