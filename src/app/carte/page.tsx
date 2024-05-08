@@ -19,7 +19,6 @@ type DishTypeAndDishes = {
 };
 
 const Carte = async () => {
-
   // fetch data server-side for the first render
   const getDishTypesAndDishes = await db.dishType.findMany({
     include: {
@@ -31,11 +30,15 @@ const Carte = async () => {
     },
   });
 
-  const dishTypes: DishTypeAndDishes[] = getDishTypesAndDishes.map((dishType) => ({
-    id: dishType.id,
-    name: dishType.name,
-    dishes: dishType.dishes.map((dish) => dish.dish),
-  }));
+  console.log(getDishTypesAndDishes);
+
+  const dishTypes: DishTypeAndDishes[] = getDishTypesAndDishes.map(
+    (dishType) => ({
+      id: dishType.id,
+      name: dishType.name,
+      dishes: dishType.dishes.map((dish) => dish.dish),
+    })
+  );
 
   return (
     <div

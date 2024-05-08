@@ -3,11 +3,15 @@ import { Dish } from "@prisma/client";
 
 export type DishState = {
   localDishTypesAndDishes: {
-    id: string | undefined;
+    id: string;
     name: string;
     dishes: Dish[];
   }[];
-  currentDish: Dish | undefined;
+  currentDish: {
+    dishTypeId: string;
+    dishTypeName: string;
+    dish: Dish;
+  };
 };
 
 export type DishStore = DishState & {
@@ -20,7 +24,16 @@ export type DishStore = DishState & {
 export const createDishStore = (
   initialState: DishState = {
     localDishTypesAndDishes: [],
-    currentDish: undefined,
+    currentDish: {
+      dishTypeId: "",
+      dishTypeName: "",
+      dish: {
+        id: "",
+        name: "",
+        price: 0,
+        description: "",
+      },
+    },
   }
 ) =>
   createStore<DishStore>((set) => ({

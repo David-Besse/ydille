@@ -87,35 +87,41 @@ export const HandleMeals = ({ data }: HandleCarteProps) => {
                       </TableHeader>
                       <TableBody>
                         {dishType.dishes
-                            // we sort by name
-                            .sort((a, b) => a.name.localeCompare(b.name, "fr"))
-                            // we map over the dishes
-                            .map((food: Dish, index) => (
-                              <TableRow
-                                className="border-none"
-                                key={index + "_" + food.name}
-                              >
-                                <TableCell className="py-4 space-y-2 font-semibold">
-                                  <p className="text-base">{food.name}</p>
-                                  <p className="text-muted-foreground leading-4 tracking-wide">
-                                    {food.description}
-                                  </p>
-                                </TableCell>
-                                <TableCell className="text-right font-bold text-base py-4">
-                                  {food.price}€
-                                </TableCell>
+                          // we sort by name
+                          .sort((a, b) => a.name.localeCompare(b.name, "fr"))
+                          // we map over the dishes
+                          .map((food: Dish, index) => (
+                            <TableRow
+                              className="border-none"
+                              key={index + "_" + food.name}
+                            >
+                              <TableCell className="py-4 space-y-2 font-semibold">
+                                <p className="text-base">{food.name}</p>
+                                <p className="text-muted-foreground leading-4 tracking-wide">
+                                  {food.description}
+                                </p>
+                              </TableCell>
+                              <TableCell className="text-right font-bold text-base py-4">
+                                {food.price}€
+                              </TableCell>
 
-                                <TableCell className="text-right font-bold text-base py-4">
-                                  <div
-                                    onClick={() => setCurrentDish(food)}
-                                    className="flex flex-col gap-2"
-                                  >
-                                    <ModifyDishButton />
-                                    <DeleteDishButton />
-                                  </div>
-                                </TableCell>
-                              </TableRow>
-                            ))}
+                              <TableCell className="text-right font-bold text-base py-4">
+                                <div
+                                  onClick={() =>
+                                    setCurrentDish({
+                                      dishTypeId: dishType.id,
+                                      dishTypeName: dishType.name,
+                                      dish: food,
+                                    })
+                                  }
+                                  className="flex flex-col gap-2"
+                                >
+                                  <ModifyDishButton />
+                                  <DeleteDishButton />
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
                       </TableBody>
                     </Table>
                   </div>

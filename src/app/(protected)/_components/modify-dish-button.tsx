@@ -37,9 +37,8 @@ import { useDishStore } from "@/store/dish-store-provider";
 export const ModifyDishButton = () => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { currentDish, localDishTypes, updateOneInLocalDishes } = useDishStore(
-    (state) => state
-  );
+  const { currentDish, localDishTypesAndDishes, updateOneInLocalDishes } =
+    useDishStore((state) => state);
 
   const dishForm = useForm<z.infer<typeof DishSchema>>({
     resolver: zodResolver(DishSchema),
@@ -47,10 +46,10 @@ export const ModifyDishButton = () => {
 
   useEffect(() => {
     if (currentDish) {
-      dishForm.setValue("id", currentDish.id);
-      dishForm.setValue("name", currentDish.name);
-      dishForm.setValue("description", currentDish.description);
-      dishForm.setValue("price", currentDish.price);
+      dishForm.setValue("id", currentDish.dish.id);
+      dishForm.setValue("name", currentDish.dish.name);
+      dishForm.setValue("description", currentDish.dish.description);
+      dishForm.setValue("price", currentDish.dish.price);
       dishForm.setValue("dishTypeId", currentDish.dishTypeId);
     }
   }, [currentDish, dishForm]);
@@ -88,7 +87,10 @@ export const ModifyDishButton = () => {
       onOpenChange={() => setSheetOpening(!sheetOpening)} // control the opening/closing state of the sheet (manually)
     >
       <SheetTrigger asChild>
-        <Button variant="outline" className="p-0 h-8 w-8 hover:border-black hover:shadow-md">
+        <Button
+          variant="outline"
+          className="p-0 h-8 w-8 hover:border-black hover:shadow-md"
+        >
           <PencilIcon size={18} />
         </Button>
       </SheetTrigger>
@@ -185,9 +187,12 @@ export const ModifyDishButton = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {localDishTypes &&
-                          localDishTypes.map((dishType) => (
-                            <SelectItem key={dishType.id} value={dishType.id}>
+                        {localDishTypesAndDishes &&
+                          localDishTypesAndDishes.map((dishType) => (
+                            <SelectItem
+                              key={dishType.name}
+                              value={dishType.id}
+                            >
                               {dishType.name}
                             </SelectItem>
                           ))}
@@ -199,7 +204,11 @@ export const ModifyDishButton = () => {
               />
             </div>
 
-            <Button type="submit" disabled={isPending} className="hover:bg-emerald-600">
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="hover:bg-emerald-600"
+            >
               Valider
             </Button>
           </form>
