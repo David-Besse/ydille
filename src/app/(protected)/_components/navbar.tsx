@@ -38,7 +38,7 @@ export const Navbar = () => {
   return (
     <nav
       className={cn(
-        "fixed w-[90%] top-2 left-1/2 transform -translate-x-1/2 flex items-center justify-between p-4 rounded-xl bg-white z-50",
+        "fixed w-[90%] sm:w-2/3 top-2 left-1/2 transform -translate-x-1/2 flex items-center justify-between p-4 rounded-xl bg-white z-50",
         shadowColor
       )}
     >

@@ -15,28 +15,29 @@ import { Dish, DishType } from "@prisma/client";
 import { useDishStore } from "@/store/dish-store-provider";
 import { useEffect, useTransition } from "react";
 import { DeleteDishButton } from "./delete-dish-button";
+import { NewDishButton } from "./new-dish-button";
+import { NewDishTypeButton } from "./new-dishtype-button";
+
+type DishTypeAndDishes = {
+  id: string;
+  name: string;
+  dishes: Dish[];
+};
 
 interface HandleCarteProps {
-  dishes: Dish[];
-  dishTypes: DishType[];
+  data: DishTypeAndDishes[];
 }
 
-export const HandleMeals = ({ dishes, dishTypes }: HandleCarteProps) => {
-  const {
-    localDishes,
-    localDishTypes,
-    setLocalDishes,
-    setLocalDishTypes,
-    setCurrentDish,
-  } = useDishStore((state) => state);
+export const HandleMeals = ({ data }: HandleCarteProps) => {
+  const { localDishTypesAndDishes, setdishTypesAndDishes, setCurrentDish } =
+    useDishStore((state) => state);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     startTransition(() => {
-      setLocalDishes(dishes);
-      setLocalDishTypes(dishTypes);
+      setdishTypesAndDishes(data);
     });
-  }, [dishes, dishTypes, setLocalDishes, setLocalDishTypes]);
+  }, [setdishTypesAndDishes, data]);
 
   return (
     <>
@@ -47,13 +48,20 @@ export const HandleMeals = ({ dishes, dishTypes }: HandleCarteProps) => {
         >
           <div
             className={cn(
-              "w-full text-3xl text-center py-10",
+              "w-full text-3xl text-center pt-10 pb-20",
               asapFont.className
             )}
           >
-            <h2 className="font-bold border-y-2 h-[4rem] flex items-center justify-center">
+            <h2 className="font-bold h-[4rem] flex items-center justify-center">
               Gestion de la carte
             </h2>
+          </div>
+
+          <div className="flex flex-col gap-4 border-t-2 py-12">
+            <div className="flex justify-center gap-4">
+              <NewDishTypeButton />
+              <NewDishButton />
+            </div>
           </div>
 
           <div
@@ -62,8 +70,8 @@ export const HandleMeals = ({ dishes, dishTypes }: HandleCarteProps) => {
               asapFont.className
             )}
           >
-            {localDishTypes &&
-              localDishTypes.map((dishType: DishType) => {
+            {localDishTypesAndDishes &&
+              localDishTypesAndDishes.map((dishType) => {
                 return (
                   <div className="self-center rounded-lg" key={dishType.id}>
                     <Table className="overflow-hidden">
@@ -78,12 +86,7 @@ export const HandleMeals = ({ dishes, dishTypes }: HandleCarteProps) => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {localDishes &&
-                          localDishes
-                            // we filter by dish type
-                            .filter(
-                              (dish: Dish) => dish.dishTypeId === dishType.id
-                            )
+                        {dishType.dishes
                             // we sort by name
                             .sort((a, b) => a.name.localeCompare(b.name, "fr"))
                             // we map over the dishes
@@ -103,7 +106,10 @@ export const HandleMeals = ({ dishes, dishTypes }: HandleCarteProps) => {
                                 </TableCell>
 
                                 <TableCell className="text-right font-bold text-base py-4">
-                                  <div onClick={() => setCurrentDish(food)}>
+                                  <div
+                                    onClick={() => setCurrentDish(food)}
+                                    className="flex flex-col gap-2"
+                                  >
                                     <ModifyDishButton />
                                     <DeleteDishButton />
                                   </div>

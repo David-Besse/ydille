@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,8 +5,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  // uncomment next line if you use Prisma <5.10
-  // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model Account {
@@ -21,22 +13,16 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-}
-
-enum UserRole {
-  USER
-  ADMIN
 }
 
 model User {
@@ -47,8 +33,8 @@ model User {
   image                 String?
   password              String?
   role                  UserRole               @default(USER)
-  accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
+  accounts              Account[]
   TwoFactorConfirmation TwoFactorConfirmation?
 }
 
@@ -81,23 +67,35 @@ model TwoFactorToken {
 
 model TwoFactorConfirmation {
   id     String @id @default(cuid())
-  userId String @db.VarChar(255)
+  userId String @unique @db.VarChar(255)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId])
 }
 
 model DishType {
-  id     String @id @default(cuid())
-  name   String @db.VarChar(255)
-  dishes Dish[]
+  id     String         @id @default(cuid())
+  name   String         @db.VarChar(255)
+  dishes DishDishType[]
 }
 
 model Dish {
-  id          String   @id @default(cuid())
-  name        String   @db.VarChar(255)
+  id          String         @id @default(cuid())
+  name        String         @db.VarChar(255)
   price       Int
-  description String   @db.Text
-  dishTypeId  String   @db.VarChar(255)
-  menu        DishType @relation(fields: [dishTypeId], references: [id], onDelete: Cascade)
+  description String
+  dishTypes   DishDishType[]
+}
+
+model DishDishType {
+  id         String   @id @default(cuid())
+  dishId     String
+  dishTypeId String
+  dish       Dish     @relation(fields: [dishId], references: [id])
+  dishType   DishType @relation(fields: [dishTypeId], references: [id])
+
+  @@unique([dishId, dishTypeId])
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }

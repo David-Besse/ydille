@@ -1,4 +1,4 @@
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,65 +21,54 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { PencilIcon } from "lucide-react";
-import { Select } from "@radix-ui/react-select";
+import { HandPlatterIcon } from "lucide-react";
 import {
+    Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { modifyDish } from "../../../../actions/modify-dish";
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDishStore } from "@/store/dish-store-provider";
 
-export const ModifyDishButton = () => {
+export const NewDishButton = () => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { currentDish, localDishTypes, updateOneInLocalDishes } = useDishStore(
+  const { localDishTypes, updateOneInLocalDishes } = useDishStore(
     (state) => state
   );
 
-  const dishForm = useForm<z.infer<typeof DishSchema>>({
+  const dishTypeForm = useForm<z.infer<typeof DishSchema>>({
     resolver: zodResolver(DishSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      price: 0,
+      dishTypeId: "",
+    },
   });
 
-  useEffect(() => {
-    if (currentDish) {
-      dishForm.setValue("id", currentDish.id);
-      dishForm.setValue("name", currentDish.name);
-      dishForm.setValue("description", currentDish.description);
-      dishForm.setValue("price", currentDish.price);
-      dishForm.setValue("dishTypeId", currentDish.dishTypeId);
-    }
-  }, [currentDish, dishForm]);
-
   const onSubmit = (values: z.infer<typeof DishSchema>) => {
-    // We use lodash to compare objects (very useful !)
-    if (_.isEqual(values, currentDish)) {
-      setSheetOpening(false);
-      return;
-    }
-
-    startTransition(() => {
-      modifyDish(values)
-        .then((data) => {
-          if (data) {
-            updateOneInLocalDishes(values);
-            setSheetOpening(false);
-            toast.success("Plat modifié");
-            dishForm.reset();
-          }
-          if (!data) {
-            toast.error("Erreur de mise à jour du plat");
-          }
-        })
-        .catch((error) => {
-          toast.error("Une erreur est survenue");
-          console.log(error);
-        });
-    });
+    // startTransition(() => {
+    //   modifyDish(values)
+    //     .then((data) => {
+    //       if (data) {
+    //         updateOneInLocalDishes(values);
+    //         setSheetOpening(false);
+    //         toast.success("Plat modifié");
+    //         dishForm.reset();
+    //       }
+    //       if (!data) {
+    //         toast.error("Erreur de mise à jour du plat");
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       toast.error("Une erreur est survenue");
+    //       console.log(error);
+    //     });
+    // });
   };
 
   return (
@@ -88,8 +77,12 @@ export const ModifyDishButton = () => {
       onOpenChange={() => setSheetOpening(!sheetOpening)} // control the opening/closing state of the sheet (manually)
     >
       <SheetTrigger asChild>
-        <Button variant="outline" className="p-0 h-8 w-8 hover:border-black hover:shadow-md">
-          <PencilIcon size={18} />
+        <Button
+          variant="outline"
+          className="font-semibold w-[220px]  hover:border-black shadow-md"
+        >
+          Ajouter un plat
+          <HandPlatterIcon size={24} className="ml-2" />
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -98,18 +91,18 @@ export const ModifyDishButton = () => {
       >
         <SheetHeader>
           <SheetTitle className="text-xl tracking-wider">
-            Modifier un plat
+            Ajouter un plat
           </SheetTitle>
         </SheetHeader>
-        <Form {...dishForm}>
+        <Form {...dishTypeForm}>
           <form
-            onSubmit={dishForm.handleSubmit(onSubmit)}
+            onSubmit={dishTypeForm.handleSubmit(onSubmit)}
             className="flex flex-col gap-8 py-8"
           >
             <div className="space-y-6">
               {/* Product name field */}
               <FormField
-                control={dishForm.control}
+                control={dishTypeForm.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
@@ -129,7 +122,7 @@ export const ModifyDishButton = () => {
 
               {/* Product description field */}
               <FormField
-                control={dishForm.control}
+                control={dishTypeForm.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
@@ -144,7 +137,7 @@ export const ModifyDishButton = () => {
 
               {/* Product price field */}
               <FormField
-                control={dishForm.control}
+                control={dishTypeForm.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
@@ -166,7 +159,7 @@ export const ModifyDishButton = () => {
 
               {/* Product type field */}
               <FormField
-                control={dishForm.control}
+                control={dishTypeForm.control}
                 name="dishTypeId"
                 render={({ field }) => (
                   <FormItem>
@@ -199,7 +192,11 @@ export const ModifyDishButton = () => {
               />
             </div>
 
-            <Button type="submit" disabled={isPending} className="hover:bg-emerald-600">
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="hover:bg-emerald-600"
+            >
               Valider
             </Button>
           </form>
@@ -208,3 +205,4 @@ export const ModifyDishButton = () => {
     </Sheet>
   );
 };
+

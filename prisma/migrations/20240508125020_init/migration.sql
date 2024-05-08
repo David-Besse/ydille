@@ -85,9 +85,17 @@ CREATE TABLE "Dish" (
     "name" VARCHAR(255) NOT NULL,
     "price" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
-    "dishTypeId" VARCHAR(255) NOT NULL,
 
     CONSTRAINT "Dish_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "DishDishType" (
+    "id" TEXT NOT NULL,
+    "dishId" TEXT NOT NULL,
+    "dishTypeId" TEXT NOT NULL,
+
+    CONSTRAINT "DishDishType_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -126,6 +134,9 @@ CREATE UNIQUE INDEX "TwoFactorToken_token_email_key" ON "TwoFactorToken"("token"
 -- CreateIndex
 CREATE UNIQUE INDEX "TwoFactorConfirmation_userId_key" ON "TwoFactorConfirmation"("userId");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "DishDishType_dishId_dishTypeId_key" ON "DishDishType"("dishId", "dishTypeId");
+
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -133,4 +144,7 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "TwoFactorConfirmation" ADD CONSTRAINT "TwoFactorConfirmation_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Dish" ADD CONSTRAINT "Dish_dishTypeId_fkey" FOREIGN KEY ("dishTypeId") REFERENCES "DishType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "DishDishType" ADD CONSTRAINT "DishDishType_dishId_fkey" FOREIGN KEY ("dishId") REFERENCES "Dish"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DishDishType" ADD CONSTRAINT "DishDishType_dishTypeId_fkey" FOREIGN KEY ("dishTypeId") REFERENCES "DishType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

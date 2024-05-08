@@ -30,8 +30,8 @@ export function DeleteDishButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="bg-destructive">
-          <DeleteIcon size={18} className="text-white" />
+        <Button className="p-0 w-8 h-8  border border-red-500 bg-white text-red-500 hover:text-white hover:bg-red-500">
+          <DeleteIcon size={18} className="" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -45,17 +45,17 @@ export function DeleteDishButton() {
             <Button
               variant={"outline"}
               onClick={() => handleDelete()}
-              className="text-base font-bold hover:bg-emerald-500 hover:text-white"
+              className="text-base bg-emerald-500 text-white"
             >
-              OUI
+              oui
             </Button>
           </DialogClose>
           <DialogClose asChild>
             <Button
               variant={"outline"}
-              className="text-base font-bold hover:bg-destructive hover:text-white"
+              className="text-base bg-destructive text-white"
             >
-              NON
+              non
             </Button>
           </DialogClose>
         </DialogFooter>
