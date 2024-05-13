@@ -1,44 +1,89 @@
 import { createStore } from "zustand";
 import { Dish } from "@prisma/client";
+import _ from "lodash";
+
+export type localDishTypeAndDish = {
+  id: string;
+  name: string;
+  dishes: Dish[];
+};
 
 export type DishState = {
-  localDishTypesAndDishes: {
-    id: string;
-    name: string;
-    dishes: Dish[];
-  }[];
+  localDishTypesAndDishes: localDishTypeAndDish[];
   currentDish: {
     dishTypeId: string;
-    dishTypeName: string;
     dish: Dish;
   };
 };
 
-export type DishStore = DishState & {
-  setdishTypesAndDishes: (
+export type DishActions = {
+  setLocalDishTypesAndDishes: (
     localDishTypesAndDishes: DishState["localDishTypesAndDishes"]
   ) => void;
-  setCurrentDish: (currentDish: DishStore["currentDish"]) => void;
+  setCurrentDish: (currentDish: DishState["currentDish"]) => void;
+  updateOneInLocalDishes: (updatedDish: DishState["currentDish"]) => void;
+  deleteOneInLocalDishes: (deletedDish: DishState["currentDish"]) => void;
 };
 
-export const createDishStore = (
-  initialState: DishState = {
-    localDishTypesAndDishes: [],
-    currentDish: {
-      dishTypeId: "",
-      dishTypeName: "",
-      dish: {
-        id: "",
-        name: "",
-        price: 0,
-        description: "",
-      },
+export type DishStore = DishState & DishActions;
+
+export const defaultInitialState: DishState = {
+  localDishTypesAndDishes: [],
+  currentDish: {
+    dishTypeId: "",
+    dish: {
+      id: "",
+      name: "",
+      description: "",
+      price: 0,
     },
-  }
-) =>
-  createStore<DishStore>((set) => ({
-    ...initialState,
-    setdishTypesAndDishes: (localDishTypesAndDishes) =>
+  },
+};
+
+export const createDishStore = (initState: DishState = defaultInitialState) => {
+  return createStore<DishStore>()((set) => ({
+    ...initState,
+    setLocalDishTypesAndDishes: (localDishTypesAndDishes) =>
       set({ localDishTypesAndDishes }),
     setCurrentDish: (currentDish) => set({ currentDish }),
+    updateOneInLocalDishes: (updatedDish) =>
+      set((state) => ({
+        localDishTypesAndDishes: state.localDishTypesAndDishes.map(
+          (element) => {
+            // we filter out the old dish
+            const dishes = element.dishes.filter(
+              (dish) => dish.id !== updatedDish.dish.id
+            );
+
+            // we update dish list with new dish if the dishType is the same
+            if (element.id === updatedDish.dishTypeId) {
+              return {
+                ...element,
+                dishes: [...dishes, updatedDish.dish],
+              };
+            }
+
+            return {
+              ...element,
+              dishes: [...dishes],
+            };
+          }
+        ),
+      })),
+    deleteOneInLocalDishes: (deletedDish) =>
+      set((state) => ({
+        localDishTypesAndDishes: state.localDishTypesAndDishes.map(
+          (element) => {
+            // we filter out the old dish
+            const dishes = element.dishes.filter(
+              (dish) => dish.id !== deletedDish.dish.id
+            );
+            return {
+              ...element,
+              dishes: [...dishes],
+            };
+          }
+        ),
+      })),
   }));
+};

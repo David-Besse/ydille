@@ -72,25 +72,25 @@ model TwoFactorConfirmation {
 }
 
 model DishType {
-  id     String         @id @default(cuid())
-  name   String         @db.VarChar(255)
-  dishes DishDishType[]
+  id             String             @id @default(cuid())
+  name           String             @db.VarChar(255)
+  dishToDishType DishDishTypeLink[]
 }
 
 model Dish {
-  id          String         @id @default(cuid())
-  name        String         @db.VarChar(255)
-  price       Int
-  description String
-  dishTypes   DishDishType[]
+  id             String            @id @default(cuid())
+  name           String            @db.VarChar(255)
+  price          Int
+  description    String
+  dishToDishType DishDishTypeLink?
 }
 
-model DishDishType {
-  id         String   @id @default(cuid())
-  dishId     String
-  dishTypeId String
-  dish       Dish     @relation(fields: [dishId], references: [id])
-  dishType   DishType @relation(fields: [dishTypeId], references: [id])
+model DishDishTypeLink {
+  id         String    @id @default(cuid())
+  dishId     String    @unique
+  dishTypeId String?
+  dish       Dish      @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  dishType   DishType? @relation(fields: [dishTypeId], references: [id])
 
   @@unique([dishId, dishTypeId])
 }

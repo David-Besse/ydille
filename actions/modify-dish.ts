@@ -36,13 +36,10 @@ export const modifyDish = async (values: z.infer<typeof DishSchema>) => {
   }
 
   // Update dish
-  const updatedDish = await updateDish(
-    validatedFields.data.id,
-    validatedFields.data
-  );
+  const updatedDish = await updateDish(validatedFields.data);
   if (!updatedDish) {
     return { error: "Un problème est survenu" };
   }
 
-  return { success: "Plat modifié" };
+  return { dish: updatedDish, success: "Plat modifié" };
 };

@@ -12,7 +12,7 @@ const MealEditPage = async () => {
  // fetch data server-side for the first render
  const getDishTypesAndDishes = await db.dishType.findMany({
   include: {
-    dishes: {
+    dishToDishType: {
       include: {
         dish: true,
       },
@@ -23,7 +23,7 @@ const MealEditPage = async () => {
 const dishTypesAndDishes: DishTypeAndDishes[] = getDishTypesAndDishes.map((dishType) => ({
   id: dishType.id,
   name: dishType.name,
-  dishes: dishType.dishes.map((dish) => dish.dish),
+  dishes: dishType.dishToDishType.map((dish) => dish.dish),
 }));
 
   return <HandleMeals data={dishTypesAndDishes} />;

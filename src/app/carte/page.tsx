@@ -22,7 +22,7 @@ const Carte = async () => {
   // fetch data server-side for the first render
   const getDishTypesAndDishes = await db.dishType.findMany({
     include: {
-      dishes: {
+      dishToDishType: {
         include: {
           dish: true,
         },
@@ -30,13 +30,11 @@ const Carte = async () => {
     },
   });
 
-  console.log(getDishTypesAndDishes);
-
   const dishTypes: DishTypeAndDishes[] = getDishTypesAndDishes.map(
     (dishType) => ({
       id: dishType.id,
       name: dishType.name,
-      dishes: dishType.dishes.map((dish) => dish.dish),
+      dishes: dishType.dishToDishType.map((dish) => dish.dish),
     })
   );
 
@@ -58,44 +56,46 @@ const Carte = async () => {
         )}
       >
         {dishTypes.map((dishType) => {
-          return (
-            <div className="self-center rounded-lg" key={dishType.id}>
-              <Table className="overflow-hidden">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-lg font-bold uppercase">
-                      {dishType.name}
-                    </TableHead>
-                    <TableHead className="text-base text-right w-[4rem] font-bold">
-                      Prix*
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {dishType.dishes
-                    // we sort the dishes by name
-                    .sort((a, b) => a.name.localeCompare(b.name, "fr"))
-                    // we map the dishes
-                    .map((food, index) => (
-                      <TableRow
-                        className="border-none"
-                        key={index + "_" + food.name}
-                      >
-                        <TableCell className="py-4 space-y-2 font-semibold">
-                          <p className="text-base">{food.name}</p>
-                          <p className="text-muted-foreground leading-4 tracking-wide">
-                            {food.description}
-                          </p>
-                        </TableCell>
-                        <TableCell className="text-right font-bold text-base py-4">
-                          {food.price}€
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </div>
-          );
+          if (dishType.name.toLowerCase() !== "stock") {
+            return (
+              <div className="self-center rounded-lg" key={dishType.id}>
+                <Table className="overflow-hidden">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-lg font-bold uppercase">
+                        {dishType.name}
+                      </TableHead>
+                      <TableHead className="text-base text-right w-[4rem] font-bold">
+                        Prix*
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {dishType.dishes
+                      // we sort the dishes by name
+                      .sort((a, b) => a.name.localeCompare(b.name, "fr"))
+                      // we map the dishes
+                      .map((food, index) => (
+                        <TableRow
+                          className="border-none"
+                          key={index + "_" + food.name}
+                        >
+                          <TableCell className="py-4 space-y-2 font-semibold">
+                            <p className="text-base">{food.name}</p>
+                            <p className="text-muted-foreground leading-4 tracking-wide">
+                              {food.description}
+                            </p>
+                          </TableCell>
+                          <TableCell className="text-right font-bold text-base py-4">
+                            {food.price}€
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </div>
+            );
+          }
         })}
         <span className="text-base text-muted-foreground font-bold">
           * TVA incl.

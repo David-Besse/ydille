@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { Dish, DishDishTypeLink } from "@prisma/client";
 
 export async function getAllDishTypes() {
   try {
@@ -72,10 +73,56 @@ export async function createDish(data: any) {
   }
 }
 
-export async function updateDish(id: string, data: any) {
+export async function updateDish(data: Dish & { dishTypeId: string }) {
   try {
-    const dish = await db.dish.update({ where: { id }, data });
-    return dish;
+    // Check for existing dish-to-dishtype relationship
+    const existingRelationship: DishDishTypeLink | null =
+      await db.dishDishTypeLink.findUnique({
+        where: { dishId: data.id },
+      });
+
+    // Update or create relationship based on existing relationship
+    if (existingRelationship) {
+      // Update existing relationship
+      await db.dishDishTypeLink.update({
+        where: { id: existingRelationship.id },
+        data: {
+          dishTypeId: data.dishTypeId,
+        },
+      });
+    } else {
+      // Create new relationship
+      await db.dishDishTypeLink.create({
+        data: {
+          dishId: data.id,
+          dishTypeId: data.dishTypeId,
+        },
+      });
+    }
+
+    // Update dish
+    await db.dish.update({
+      where: { id: data.id },
+      data: {
+        name: data.name,
+        price: data.price,
+        description: data.description,
+      },
+    });
+
+    // Retrieve updated dish
+    const updatedDish = await db.dish.findUnique({
+      where: { id: data.id },
+      include: {
+        dishToDishType: {
+          select: {
+            dishTypeId: true,
+          },
+        },
+      },
+    });
+
+    return updatedDish;
   } catch (error) {
     return null;
   }

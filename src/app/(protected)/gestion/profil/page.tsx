@@ -58,7 +58,6 @@ const ProfilePage = () => {
   const onSubmit = (values: z.infer<typeof ProfilSchema>) => {
     setError("");
     setSuccess("");
-    console.log(user?.isTwoFactorEnabled, values);
 
     startTransition(() => {
       settings(values)

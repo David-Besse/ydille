@@ -1,4 +1,4 @@
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,8 +33,15 @@ import { modifyDish } from "../../../../actions/modify-dish";
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDishStore } from "@/store/dish-store-provider";
+import { Dish } from "@prisma/client";
 
-export const ModifyDishButton = () => {
+export const ModifyDishButton = ({
+  dish,
+  dishTypeId,
+}: {
+  dish: Dish;
+  dishTypeId: string;
+}) => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { currentDish, localDishTypesAndDishes, updateOneInLocalDishes } =
@@ -42,21 +49,28 @@ export const ModifyDishButton = () => {
 
   const dishForm = useForm<z.infer<typeof DishSchema>>({
     resolver: zodResolver(DishSchema),
+    defaultValues: {
+      id: dish.id,
+      name: dish.name,
+      price: dish.price,
+      description: dish.description,
+      dishTypeId: dishTypeId,
+    },
   });
 
-  useEffect(() => {
-    if (currentDish) {
-      dishForm.setValue("id", currentDish.dish.id);
-      dishForm.setValue("name", currentDish.dish.name);
-      dishForm.setValue("description", currentDish.dish.description);
-      dishForm.setValue("price", currentDish.dish.price);
-      dishForm.setValue("dishTypeId", currentDish.dishTypeId);
-    }
-  }, [currentDish, dishForm]);
-
   const onSubmit = (values: z.infer<typeof DishSchema>) => {
+    const isDishUpdated: { dishTypeId: string; dish: Dish } = {
+      dishTypeId: values.dishTypeId,
+      dish: {
+        id: values.id,
+        name: values.name,
+        price: values.price,
+        description: values.description,
+      },
+    };
+
     // We use lodash to compare objects (very useful !)
-    if (_.isEqual(values, currentDish)) {
+    if (_.isEqual(isDishUpdated, currentDish)) {
       setSheetOpening(false);
       return;
     }
@@ -65,7 +79,16 @@ export const ModifyDishButton = () => {
       modifyDish(values)
         .then((data) => {
           if (data) {
-            updateOneInLocalDishes(values);
+            updateOneInLocalDishes({
+              dish: {
+                id: data.dish?.id as string,
+                name: data.dish?.name as string,
+                price: data.dish?.price as number,
+                description: data.dish?.description as string,
+              },
+              dishTypeId: data.dish?.dishToDishType?.dishTypeId as string,
+            });
+
             setSheetOpening(false);
             toast.success("Plat modifié");
             dishForm.reset();
@@ -76,10 +99,13 @@ export const ModifyDishButton = () => {
         })
         .catch((error) => {
           toast.error("Une erreur est survenue");
-          console.log(error);
         });
     });
   };
+
+  if (!currentDish) {
+    return <div>En chargement...</div>;
+  }
 
   return (
     <Sheet
@@ -169,7 +195,7 @@ export const ModifyDishButton = () => {
               {/* Product type field */}
               <FormField
                 control={dishForm.control}
-                name="dishTypeId"
+                name={"dishTypeId"}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Catégorie de plat</FormLabel>
@@ -177,8 +203,7 @@ export const ModifyDishButton = () => {
                       // we need to add a name prop to avoid a browser warning with field
                       name="dishTypeId"
                       onValueChange={field.onChange}
-                      // we need to add a default value to avoid a validation error
-                      defaultValue={field.value}
+                      defaultValue={currentDish.dishTypeId}
                       disabled={isPending}
                     >
                       <FormControl>
@@ -189,10 +214,7 @@ export const ModifyDishButton = () => {
                       <SelectContent>
                         {localDishTypesAndDishes &&
                           localDishTypesAndDishes.map((dishType) => (
-                            <SelectItem
-                              key={dishType.name}
-                              value={dishType.id}
-                            >
+                            <SelectItem key={dishType.name} value={dishType.id}>
                               {dishType.name}
                             </SelectItem>
                           ))}

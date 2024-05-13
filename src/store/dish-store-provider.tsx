@@ -2,10 +2,9 @@
 
 import { type ReactNode, createContext, useRef, useContext } from "react";
 import { type StoreApi, useStore } from "zustand";
-
 import { type DishStore, createDishStore } from "@/store/dish-store";
 
-const DishStoreContext = createContext<StoreApi<DishStore> | null>(null);
+export const DishStoreContext = createContext<StoreApi<DishStore> | null>(null);
 export interface dishStoreProviderProps {
   children: ReactNode;
 }
@@ -24,11 +23,11 @@ export const DishStoreProvider = ({ children }: dishStoreProviderProps) => {
 };
 
 export const useDishStore = <T,>(selector: (store: DishStore) => T): T => {
-  const counterStoreContext = useContext(DishStoreContext);
+  const dishStoreContext = useContext(DishStoreContext);
 
-  if (!counterStoreContext) {
-    throw new Error(`useCounterStore must be use within CounterStoreProvider`);
+  if (!dishStoreContext) {
+    throw new Error(`useDishStore must be use within DishStoreProvider`);
   }
 
-  return useStore(counterStoreContext, selector);
+  return useStore(dishStoreContext, selector);
 };

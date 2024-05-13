@@ -11,12 +11,13 @@ import {
 import { cn } from "@/lib/utils";
 import { asapFont } from "@/components/fonts/fonts";
 import { ModifyDishButton } from "./modify-dish-button";
-import { Dish, DishType } from "@prisma/client";
+import { Dish } from "@prisma/client";
 import { useDishStore } from "@/store/dish-store-provider";
 import { useEffect, useTransition } from "react";
 import { DeleteDishButton } from "./delete-dish-button";
 import { NewDishButton } from "./new-dish-button";
 import { NewDishTypeButton } from "./new-dishtype-button";
+import _ from "lodash";
 
 type DishTypeAndDishes = {
   id: string;
@@ -29,15 +30,17 @@ interface HandleCarteProps {
 }
 
 export const HandleMeals = ({ data }: HandleCarteProps) => {
-  const { localDishTypesAndDishes, setdishTypesAndDishes, setCurrentDish } =
-    useDishStore((state) => state);
+  const {
+    localDishTypesAndDishes,
+    setLocalDishTypesAndDishes,
+    setCurrentDish,
+    currentDish,
+  } = useDishStore((state) => state);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    startTransition(() => {
-      setdishTypesAndDishes(data);
-    });
-  }, [setdishTypesAndDishes, data]);
+    setLocalDishTypesAndDishes(data);
+  }, [setLocalDishTypesAndDishes, data]);
 
   return (
     <>
@@ -110,13 +113,15 @@ export const HandleMeals = ({ data }: HandleCarteProps) => {
                                   onClick={() =>
                                     setCurrentDish({
                                       dishTypeId: dishType.id,
-                                      dishTypeName: dishType.name,
                                       dish: food,
                                     })
                                   }
                                   className="flex flex-col gap-2"
                                 >
-                                  <ModifyDishButton />
+                                  <ModifyDishButton
+                                    dish={food}
+                                    dishTypeId={dishType.id}
+                                  />
                                   <DeleteDishButton />
                                 </div>
                               </TableCell>
