@@ -161,14 +161,35 @@ export const RegisterSchema = z
 
 export const DishSchema = z.object({
   id: z.string().trim(),
-  name: z.string().trim().min(3, { message: "T'as oublié le nom de ton plat !" }),
-  price: z.number().int().positive().min(1, { message: "T'as oublié le prix !" }),
-  description: z.string().trim().min(10, { message: "T'as oublié la description !" }),
-  dishTypeId: z.string().trim(),
+  name: z
+    .string()
+    .trim()
+    .min(3, { message: "T'as oublié le nom de ton plat !" }),
+  price: z
+    .number()
+    .int()
+    .positive()
+    .min(1, { message: "T'as oublié le prix !" }),
+  description: z
+    .string()
+    .trim()
+    .min(10, { message: "T'as oublié la description !" }),
+  dishTypeId: z.string().trim().optional(),
 });
 
 export const DishTypeSchema = z.object({
   id: z.string().trim(),
-  name: z.string().trim().min(3, { message: "T'as oublié le nom du type de plat !" }),
-  dishes: z.array(DishSchema),
+  name: z
+    .string()
+    .trim()
+    .min(3, { message: "T'as oublié le nom du type de plat !" }),
+  dishes: z.array(DishSchema).optional(),
+});
+
+export const CreateDishTypeSchema = z.object({
+  id: z.string().trim().optional(),
+  name: z
+    .string()
+    .trim()
+    .min(3, { message: "T'as oublié le nom du type de plat !" }),
 });

@@ -29,7 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { modifyDish } from "../../../../actions/modify-dish";
+import { modifyDishAction } from "../../../../actions/modify-dish";
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDishStore } from "@/store/dish-store-provider";
@@ -76,35 +76,54 @@ export const ModifyDishButton = ({
     }
 
     startTransition(() => {
-      modifyDish(values)
+      modifyDishAction(values)
         .then((data) => {
-          if (data) {
+          // if no data, there was an error
+          if (!data) {
+            setSheetOpening(false);
+            toast.error(
+              "Erreur de mise à jour du plat. Si le problème persiste, contacte l'administrateur"
+            );
+          }
+
+          // if data.error, there was an error
+          if (data.error) {
+            setSheetOpening(false);
+            toast.error(data.error);
+          }
+
+          // if data.success and data.dish, we have a new dish and we can update the store
+          if (
+            data.success &&
+            data.dish &&
+            data.dish.dishToDishType &&
+            data.dish.dishToDishType.dishTypeId
+          ) {
             updateOneInLocalDishes({
               dish: {
-                id: data.dish?.id as string,
-                name: data.dish?.name as string,
-                price: data.dish?.price as number,
-                description: data.dish?.description as string,
+                id: data.dish.id,
+                name: data.dish.name,
+                price: data.dish.price,
+                description: data.dish.description,
               },
-              dishTypeId: data.dish?.dishToDishType?.dishTypeId as string,
+              dishTypeId: data.dish.dishToDishType.dishTypeId,
             });
 
             setSheetOpening(false);
-            toast.success("Plat modifié");
-            dishForm.reset();
+            toast.success(data.success);
           }
-          if (!data) {
-            toast.error("Erreur de mise à jour du plat");
-          }
+
+          dishForm.reset();
         })
         .catch((error) => {
-          toast.error("Une erreur est survenue");
+          setSheetOpening(false);
+          toast.error(error.error);
         });
     });
   };
 
   if (!currentDish) {
-    return <div>En chargement...</div>;
+    return <div>Je cherche la carte...</div>;
   }
 
   return (

@@ -2,11 +2,13 @@
 
 import { z } from "zod";
 import { db } from "../src/lib/db";
-import { DishTypeSchema } from "../schemas";
+import { CreateDishTypeSchema } from "../schemas";
 import { currentUserFromServer } from "@/lib/currentUserServerAccess";
-import { createDishType, getDish, getDishType, updateDish } from "../data/carte";
+import { createDishType, getDishTypeByName } from "../data/meals";
 
-export const newDishType = async (values: z.infer<typeof DishTypeSchema>) => {
+export const newDishType = async (
+  values: z.infer<typeof CreateDishTypeSchema>
+) => {
   // Get current user
   const user = await currentUserFromServer();
   if (!user) {
@@ -24,24 +26,24 @@ export const newDishType = async (values: z.infer<typeof DishTypeSchema>) => {
   }
 
   // Check if dishType already exists
-  const existingDishType = await getDishType(values.id);
+  const existingDishType = await getDishTypeByName(values.name);
   if (existingDishType) {
     return { error: "La catégorie existe déja !" };
   }
 
   // Validate values with zod
-  const validatedFields = DishTypeSchema.safeParse(values);
+  const validatedFields = CreateDishTypeSchema.safeParse(values);
   if (!validatedFields.success) {
     return { error: "Un problème est survenu" };
   }
 
   // Create new dishType
-  const createdNewDishType = await createDishType(
-    validatedFields.data
-  );
-  if (!createdNewDishType) {
+  const createdDishType = await createDishType({
+    name: validatedFields.data.name,
+  });
+  if (!createdDishType) {
     return { error: "Un problème est survenu" };
   }
 
-  return { success: "Nouvelle catégorie ajoutée !" };
+  return { data: createdDishType, success: "Nouvelle catégorie ajoutée !" };
 };

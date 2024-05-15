@@ -19,6 +19,15 @@ export async function getDishType(id: string) {
   }
 }
 
+export async function getDishTypeByName(name: string) {
+  try {
+    const dishType = await db.dishType.findFirst({ where: { name: name } });
+    return dishType;
+  } catch (error) {
+    return null;
+  }
+}
+
 export async function createDishType(data: any) {
   try {
     const dishType = await db.dishType.create({ data });
@@ -39,8 +48,11 @@ export async function updateDishType(id: string, data: any) {
 
 export async function deleteDishType(id: string) {
   try {
-    const dishType = await db.dishType.delete({ where: { id } });
-    return dishType;
+    await db.dishDishTypeLink.deleteMany({
+      where: { dishTypeId: id },
+    });
+    await db.dishType.delete({ where: { id } });
+    return true;
   } catch (error) {
     return null;
   }
@@ -128,10 +140,12 @@ export async function updateDish(data: Dish & { dishTypeId: string }) {
   }
 }
 
+// delete a dish and all its relationships
 export async function deleteDish(id: string) {
   try {
-    const dish = await db.dish.delete({ where: { id } });
-    return dish;
+    await db.dishDishTypeLink.delete({ where: { dishId: id } });
+    await db.dish.delete({ where: { id } });
+    return true;
   } catch (error) {
     return null;
   }

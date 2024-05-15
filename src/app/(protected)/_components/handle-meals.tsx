@@ -18,15 +18,17 @@ import { DeleteDishButton } from "./delete-dish-button";
 import { NewDishButton } from "./new-dish-button";
 import { NewDishTypeButton } from "./new-dishtype-button";
 import _ from "lodash";
+import { DeleteDishTypeButton } from "./delete-dishtype-button";
+import { localDishTypeAndDish } from "@/store/dish-store";
 
-type DishTypeAndDishes = {
-  id: string;
-  name: string;
-  dishes: Dish[];
-};
+// type DishTypeAndDishes = {
+//   id: string;
+//   name: string;
+//   dishes: Dish[];
+// };
 
 interface HandleCarteProps {
-  data: DishTypeAndDishes[];
+  data: localDishTypeAndDish[];
 }
 
 export const HandleMeals = ({ data }: HandleCarteProps) => {
@@ -61,7 +63,7 @@ export const HandleMeals = ({ data }: HandleCarteProps) => {
           </div>
 
           <div className="flex flex-col gap-4 border-t-2 py-12">
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-col justify-center items-center gap-4">
               <NewDishTypeButton />
               <NewDishButton />
             </div>
@@ -73,15 +75,28 @@ export const HandleMeals = ({ data }: HandleCarteProps) => {
               asapFont.className
             )}
           >
+            {localDishTypesAndDishes.length === 0 && (
+              <div className="w-full flex flex-col justify-center items-center text-center py-6 px-1 bg-white border border-red-200">
+                <p className="w-full text-sm text-center rounded-lg">
+                  Je n&apos;ai pas trouvé la carte du restaurant.
+                  <br />
+                  Pour en créer une, ajoute une catégorie puis ajoute des plats.
+                </p>
+              </div>
+            )}
             {localDishTypesAndDishes &&
-              localDishTypesAndDishes.map((dishType) => {
+              localDishTypesAndDishes.map((dishType: localDishTypeAndDish) => {
                 return (
-                  <div className="self-center rounded-lg" key={dishType.id}>
+                  <div className="w-full rounded-lg" key={dishType.id}>
                     <Table className="overflow-hidden">
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="text-lg font-bold uppercase">
+                          <TableHead className="text-lg font-bold uppercase flex gap-2 justify-start items-center">
                             {dishType.name}
+                            <span className="flex gap-2">
+                              {/* <ModifyDishTypeButton dishTypeId={dishType.id} /> */}
+                              <DeleteDishTypeButton dishTypeElement={dishType} />
+                            </span>
                           </TableHead>
                           <TableHead className="text-base text-right w-[4rem] font-bold">
                             Prix*
@@ -132,9 +147,6 @@ export const HandleMeals = ({ data }: HandleCarteProps) => {
                   </div>
                 );
               })}
-            <span className="text-base text-muted-foreground font-bold">
-              * TVA incl.
-            </span>
           </div>
         </div>
       )}

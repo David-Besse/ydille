@@ -11,29 +11,28 @@ import {
 import { useDishStore } from "@/store/dish-store-provider";
 import { DeleteIcon } from "lucide-react";
 import { toast } from "sonner";
-import { deleteDishAction } from "../../../../actions/delete-dish";
+import { deleteDishTypeAction } from "../../../../actions/delete-dishtype";
 import { useTransition } from "react";
+import { localDishTypeAndDish } from "@/store/dish-store";
 
-export function DeleteDishButton() {
+interface DeleteDishTypeButtonProps {
+    dishTypeElement: localDishTypeAndDish;
+}
+
+export function DeleteDishTypeButton({ dishTypeElement }: DeleteDishTypeButtonProps) {
   const [isPending, startTransition] = useTransition();
-  const { currentDish, deleteOneInLocalDishes } = useDishStore(
+  const { deleteOneInLocalDishTypes } = useDishStore(
     (state) => state
   );
 
   const handleDelete = () => {
     startTransition(() => {
-      deleteDishAction({
-        id: currentDish.dish.id,
-        name: currentDish.dish.name,
-        price: currentDish.dish.price,
-        description: currentDish.dish.description,
-        dishTypeId: currentDish.dishTypeId,
-      })
+      deleteDishTypeAction(dishTypeElement)
         .then((data) => {
           // if no data, there was an error
           if (!data) {
             toast.error(
-              "Erreur de suppression du plat. Si le problème persiste, contacte l'administrateur"
+              "Erreur de suppression de la catégorie. Si le problème persiste, contacte l'administrateur"
             );
           }
 
@@ -44,7 +43,7 @@ export function DeleteDishButton() {
 
           // if data.success, we can update the store
           if (data.success) {
-            deleteOneInLocalDishes(currentDish);
+            deleteOneInLocalDishTypes(dishTypeElement);
             toast.success(data.success);
           }
         })
@@ -57,8 +56,8 @@ export function DeleteDishButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="p-0 w-8 h-8  border border-red-500 bg-white text-red-500 hover:text-white hover:bg-red-500">
-          <DeleteIcon size={18} className="" />
+        <Button className="p-0 w-6 h-6  border border-red-500 bg-white text-red-500 hover:text-white hover:bg-red-500">
+          <DeleteIcon size={14} className="" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

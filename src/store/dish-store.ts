@@ -8,6 +8,11 @@ export type localDishTypeAndDish = {
   dishes: Dish[];
 };
 
+export type localDishType = {
+  id: string;
+  name: string;
+};
+
 export type DishState = {
   localDishTypesAndDishes: localDishTypeAndDish[];
   currentDish: {
@@ -23,6 +28,8 @@ export type DishActions = {
   setCurrentDish: (currentDish: DishState["currentDish"]) => void;
   updateOneInLocalDishes: (updatedDish: DishState["currentDish"]) => void;
   deleteOneInLocalDishes: (deletedDish: DishState["currentDish"]) => void;
+  createOneInLocalDishTypes: (updatedDishType: localDishType) => void;
+  deleteOneInLocalDishTypes: (deletedDishType: localDishTypeAndDish) => void;
 };
 
 export type DishStore = DishState & DishActions;
@@ -84,6 +91,25 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
             };
           }
         ),
+      })),
+    createOneInLocalDishTypes: (updatedDishType) =>
+      set((state) => ({
+        localDishTypesAndDishes: [
+          ...state.localDishTypesAndDishes,
+          {
+            id: updatedDishType.id,
+            name: updatedDishType.name,
+            dishes: [],
+          },
+        ],
+      })),
+    deleteOneInLocalDishTypes: (deletedDishType) =>
+      set((state) => ({
+        localDishTypesAndDishes: [
+          ...state.localDishTypesAndDishes.filter(
+            (element) => element.id !== deletedDishType.id
+          ),
+        ],
       })),
   }));
 };

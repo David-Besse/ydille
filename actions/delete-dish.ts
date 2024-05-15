@@ -4,16 +4,16 @@ import { z } from "zod";
 import { db } from "../src/lib/db";
 import { DishSchema } from "../schemas";
 import { currentUserFromServer } from "@/lib/currentUserServerAccess";
-import { getDish, updateDish } from "../data/meals";
+import { getDish, deleteDish } from "../data/meals";
 
-export const modifyDishAction = async (values: z.infer<typeof DishSchema>) => {
+export const deleteDishAction = async (values: z.infer<typeof DishSchema>) => {
   // Get current user
   const user = await currentUserFromServer();
   if (!user) {
     return { error: "Non autorisé" };
   }
 
-  // get user from db
+  // check if user is in database
   const dbUser = await db.user.findUnique({
     where: {
       id: user.id,
@@ -35,11 +35,11 @@ export const modifyDishAction = async (values: z.infer<typeof DishSchema>) => {
     return { error: "Un problème est survenu" };
   }
 
-  // Update dish
-  const updatedDish = await updateDish(validatedFields.data);
-  if (!updatedDish) {
+  // Delete dish
+  const deletedDish = await deleteDish(validatedFields.data.id);
+  if (!deletedDish) {
     return { error: "Un problème est survenu" };
   }
 
-  return { dish: updatedDish, success: "Plat modifié" };
+  return { success: "Plat supprimé" };
 };

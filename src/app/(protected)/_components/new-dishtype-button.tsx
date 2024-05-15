@@ -2,7 +2,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DishTypeSchema } from "../../../../schemas";
+import { CreateDishTypeSchema } from "../../../../schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,29 +29,31 @@ import { newDishType } from "../../../../actions/new-dishtype";
 export const NewDishTypeButton = () => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { localDishTypes, updateOneInLocalDishes } = useDishStore(
-    (state) => state
-  );
+  const { createOneInLocalDishTypes } = useDishStore((state) => state);
 
-  const dishTypeForm = useForm<z.infer<typeof DishTypeSchema>>({
-    resolver: zodResolver(DishTypeSchema),
+  const dishTypeForm = useForm<z.infer<typeof CreateDishTypeSchema>>({
+    resolver: zodResolver(CreateDishTypeSchema),
     defaultValues: {
       name: "",
-      dishes: [],
-    }
+    },
   });
 
-  const onSubmit = (values: z.infer<typeof DishTypeSchema>) => {
+  const onSubmit = (values: z.infer<typeof CreateDishTypeSchema>) => {
     startTransition(() => {
       newDishType(values)
-        .then((data) => {
-          if (data) {
-            // updateOneInLocalDishes(values);
+        .then((res) => {
+          if (res.success && res.data) {
+            createOneInLocalDishTypes(res.data);
             setSheetOpening(false);
-            toast.success(data.success);
+            toast.success(res.success);
             dishTypeForm.reset();
           }
-          if (!data) {
+
+          if (res.error) {
+            toast.error(res.error);
+          }
+
+          if (!res) {
             toast.error("Erreur de mise à jour du plat");
           }
         })
