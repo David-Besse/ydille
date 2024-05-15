@@ -207,6 +207,15 @@ export const ModifyDishFormSchema = z.object({
   dishTypeId: z.string().trim(),
 });
 
+
+export const ModifyDishTypeFormSchema = z.object({
+  id: z.string().trim(),
+  name: z
+    .string()
+    .trim()
+    .min(3, { message: "T'as oublié le nom de ton plat !" }),
+});
+
 export const CreateDishTypeSchema = z.object({
   id: z.string().trim().optional(),
   name: z

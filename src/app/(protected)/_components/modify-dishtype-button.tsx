@@ -2,7 +2,6 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateDishTypeSchema } from "../../../../schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,44 +19,70 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ChefHatIcon } from "lucide-react";
+import { PencilIcon } from "lucide-react";
+import { modifyDishTypeAction } from "../../../../actions/modify-dishtype";
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDishStore } from "@/store/dish-store-provider";
-import { newDishType } from "../../../../actions/new-dishtype";
+import { ModifyDishTypeFormSchema } from "../../../../schemas";
 
-export const NewDishTypeButton = () => {
+interface ModifyDishTypeButtonProps {
+  dishTypeElement: {
+    id: string;
+    name: string;
+  };
+}
+
+export const ModifyDishTypeButton = ({
+  dishTypeElement,
+}: ModifyDishTypeButtonProps) => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { createDishTypeInState } = useDishStore((state) => state);
+  const { updateDishTypeInState } = useDishStore((state) => state);
 
-  const dishTypeForm = useForm<z.infer<typeof CreateDishTypeSchema>>({
-    resolver: zodResolver(CreateDishTypeSchema),
+  const modifyDishTypeForm = useForm<z.infer<typeof ModifyDishTypeFormSchema>>({
+    resolver: zodResolver(ModifyDishTypeFormSchema),
     defaultValues: {
-      name: "",
+      id: dishTypeElement.id,
+      name: dishTypeElement.name,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof CreateDishTypeSchema>) => {
+  const onSubmit = (values: z.infer<typeof ModifyDishTypeFormSchema>) => {
+
+    // Use lodash to check if there are any changes in properties between form values and dishTypeElement
+    if (_.isEqual(values, dishTypeElement)) {
+      setSheetOpening(false);
+      return;
+    }
+
+    // Process the form submission and update the store
     startTransition(() => {
-      newDishType(values)
+      modifyDishTypeAction({
+        id: values.id,
+        name: values.name,
+      })
         .then((data) => {
+          // if data.error, there was an error
           if (data.error) {
-            toast.error(data.error);
-            return;
+            setSheetOpening(false);
+            toast.error(
+              "Erreur de mise à jour de la catégorie. Si le problème persiste, contacte l'administrateur"
+            );
           }
 
-          if (data.createdDishType) {
-            createDishTypeInState(data.createdDishType);
+          // if data.success and data.dish, we have a new dish and we can update the store
+          if (data.success) {
+            updateDishTypeInState(data.updatedDishType);
             setSheetOpening(false);
             toast.success(data.success);
-            dishTypeForm.reset();
           }
 
+          modifyDishTypeForm.reset();
         })
         .catch((error) => {
+          setSheetOpening(false);
           toast.error(error.error);
-          console.log(error);
         });
     });
   };
@@ -70,10 +95,9 @@ export const NewDishTypeButton = () => {
       <SheetTrigger asChild>
         <Button
           variant="outline"
-          className="font-semibold w-[220px]  hover:border-black shadow-md"
+          className="p-0 h-6 w-6 hover:border-black hover:shadow-md"
         >
-          Ajouter une catégorie
-          <ChefHatIcon size={24} className="ml-2" />
+          <PencilIcon size={18} />
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -82,25 +106,22 @@ export const NewDishTypeButton = () => {
       >
         <SheetHeader>
           <SheetTitle className="text-xl tracking-wider">
-            Ajouter une catégorie
+            Modifier une catégorie
           </SheetTitle>
         </SheetHeader>
-        <Form {...dishTypeForm}>
+        <Form {...modifyDishTypeForm}>
           <form
-            onSubmit={dishTypeForm.handleSubmit(onSubmit)}
+            onSubmit={modifyDishTypeForm.handleSubmit(onSubmit)}
             className="flex flex-col gap-8 py-8"
           >
             <div className="space-y-6">
               {/* Product name field */}
               <FormField
-                control={dishTypeForm.control}
+                control={modifyDishTypeForm.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base tracking-wide">
-                      Nom de la catégorie de plat (exemple: entrées ou tapas
-                      ...)
-                    </FormLabel>
+                    <FormLabel>Nom de la catégorie</FormLabel>
                     <FormControl>
                       <Input
                         {...field}

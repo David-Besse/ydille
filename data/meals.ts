@@ -37,10 +37,15 @@ export async function createDishType(data: any) {
   }
 }
 
-export async function updateDishType(id: string, data: any) {
+export async function updateDishType(data: any) {
   try {
-    const dishType = await db.dishType.update({ where: { id }, data });
-    return dishType;
+    const updatedDishType = await db.dishType.update({
+      where: { id: data.id },
+      data: {
+        name: data.name,
+      },
+    });
+    return updatedDishType;
   } catch (error) {
     return null;
   }
@@ -144,10 +149,14 @@ export async function updateDish({
       },
     });
 
-    if (!updatedDish || !updatedDish.dishToDishType || !updatedDish.dishToDishType.dishType) {
+    if (
+      !updatedDish ||
+      !updatedDish.dishToDishType ||
+      !updatedDish.dishToDishType.dishType
+    ) {
       return null;
     }
-    
+
     // Return updated dish
     return {
       dish: {

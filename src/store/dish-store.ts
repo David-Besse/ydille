@@ -35,8 +35,9 @@ export type DishActions = {
   setCurrentDishAndDishType: (currentDish: currentDishAndDishType) => void;
   updateDishInState: (updatedDish: currentDishAndDishType) => void;
   deleteDishInState: (deletedDish: currentDishAndDishType) => void;
-  createDishTypeInState: (createdDishType: currentDishAndDishType) => void;
-  deleteDishTypeInState: (deletedDishType: currentDishAndDishType) => void;
+  createDishTypeInState: (createdDishType: localDishType) => void;
+  deleteDishTypeInState: (deletedDishType: localDishType) => void;
+  updateDishTypeInState: (updatedDishType: localDishType) => void;
 };
 
 export type DishStore = DishState & DishActions;
@@ -108,12 +109,12 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
         ),
       })),
 
-    createDishTypeInState: (updatedDishType) =>
+    createDishTypeInState: (createdDishType) =>
       set((state) => ({
         localDishAndDishTypeList: [
           ...state.localDishAndDishTypeList,
           {
-            dishType: updatedDishType.dishType,
+            dishType: createdDishType,
             dishes: [],
           },
         ],
@@ -123,9 +124,24 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
       set((state) => ({
         localDishAndDishTypeList: [
           ...state.localDishAndDishTypeList.filter(
-            (element) => element.dishType.id !== deletedDishType.dishType.id
+            (element) => element.dishType.id !== deletedDishType.id
           ),
         ],
+      })),
+
+    updateDishTypeInState: (updatedDishType) =>
+      set((state) => ({
+        localDishAndDishTypeList: state.localDishAndDishTypeList.map(
+          (element) => {
+            if (element.dishType.id === updatedDishType.id) {
+              return {
+                ...element,
+                dishType: updatedDishType,
+              };
+            }
+            return element;
+          }
+        ),
       })),
   }));
 };

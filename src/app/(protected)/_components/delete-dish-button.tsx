@@ -16,27 +16,14 @@ import { useTransition } from "react";
 
 export function DeleteDishButton() {
   const [isPending, startTransition] = useTransition();
-  const { currentDish, deleteOneInLocalDishes } = useDishStore(
+  const { currentDishAndDishType, deleteDishInState } = useDishStore(
     (state) => state
   );
 
   const handleDelete = () => {
     startTransition(() => {
-      deleteDishAction({
-        id: currentDish.dish.id,
-        name: currentDish.dish.name,
-        price: currentDish.dish.price,
-        description: currentDish.dish.description,
-        dishTypeId: currentDish.dishTypeId,
-      })
+      deleteDishAction(currentDishAndDishType)
         .then((data) => {
-          // if no data, there was an error
-          if (!data) {
-            toast.error(
-              "Erreur de suppression du plat. Si le problème persiste, contacte l'administrateur"
-            );
-          }
-
           // if data.error, there was an error
           if (data.error) {
             toast.error(data.error);
@@ -44,7 +31,7 @@ export function DeleteDishButton() {
 
           // if data.success, we can update the store
           if (data.success) {
-            deleteOneInLocalDishes(currentDish);
+            deleteDishInState(currentDishAndDishType);
             toast.success(data.success);
           }
         })
@@ -57,7 +44,7 @@ export function DeleteDishButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="p-0 w-8 h-8  border border-red-500 bg-white text-red-500 hover:text-white hover:bg-red-500">
+        <Button className="p-0 w-6 h-6  border border-red-500 bg-white text-red-500 hover:text-white hover:bg-red-500">
           <DeleteIcon size={18} className="" />
         </Button>
       </DialogTrigger>

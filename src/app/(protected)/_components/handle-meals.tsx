@@ -18,6 +18,7 @@ import { NewDishButton } from "./new-dish-button";
 import { NewDishTypeButton } from "./new-dishtype-button";
 import _ from "lodash";
 import { DeleteDishTypeButton } from "./delete-dishtype-button";
+import { ModifyDishTypeButton } from "./modify-dishtype-button";
 
 interface HandleMealsProps {
   data: {
@@ -99,7 +100,7 @@ export const HandleMeals = ({ data }: HandleMealsProps) => {
                           <TableHead className="text-lg font-bold uppercase flex gap-2 justify-start items-center">
                             {dishAndDIshTypeObject.dishType.name}
                             <span className="flex gap-2">
-                              {/* <ModifyDishTypeButton dishTypeId={dishType.id} /> */}
+                              <ModifyDishTypeButton dishTypeElement={dishAndDIshTypeObject.dishType} />
                               <DeleteDishTypeButton
                                 dishTypeElement={dishAndDIshTypeObject.dishType}
                               />
@@ -134,15 +135,15 @@ export const HandleMeals = ({ data }: HandleMealsProps) => {
                                 <div
                                   onClick={() =>
                                     setCurrentDishAndDishType({
-                                      dish: food,
                                       dishType: dishAndDIshTypeObject.dishType,
+                                      dish: food,
                                     })
                                   }
                                   className="flex flex-col gap-2"
                                 >
                                   <ModifyDishButton
-                                    dish={food}
                                     dishType={dishAndDIshTypeObject.dishType}
+                                    dish={food}
                                   />
                                   <DeleteDishButton />
                                 </div>

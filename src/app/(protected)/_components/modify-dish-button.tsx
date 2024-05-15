@@ -138,7 +138,7 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
       <SheetTrigger asChild>
         <Button
           variant="outline"
-          className="p-0 h-8 w-8 hover:border-black hover:shadow-md"
+          className="p-0 h-6 w-6 hover:border-black hover:shadow-md"
         >
           <PencilIcon size={18} />
         </Button>

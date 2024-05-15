@@ -2,11 +2,11 @@
 
 import { z } from "zod";
 import { db } from "../src/lib/db";
-import { DishSchema } from "../schemas";
+import { DishAndDishTypeSchema } from "../schemas";
 import { currentUserFromServer } from "@/lib/currentUserServerAccess";
 import { getDish, deleteDish } from "../data/meals";
 
-export const deleteDishAction = async (values: z.infer<typeof DishSchema>) => {
+export const deleteDishAction = async (values: z.infer<typeof DishAndDishTypeSchema>) => {
   // Get current user
   const user = await currentUserFromServer();
   if (!user) {
@@ -24,19 +24,19 @@ export const deleteDishAction = async (values: z.infer<typeof DishSchema>) => {
   }
 
   // Check if dish exists
-  const existingDish = await getDish(values.id);
+  const existingDish = await getDish(values.dish.id);
   if (!existingDish) {
     return { error: "Plat introuvable" };
   }
 
   // Validate values with zod
-  const validatedFields = DishSchema.safeParse(values);
+  const validatedFields = DishAndDishTypeSchema.safeParse(values);
   if (!validatedFields.success) {
     return { error: "Un problème est survenu" };
   }
 
   // Delete dish
-  const deletedDish = await deleteDish(validatedFields.data.id);
+  const deletedDish = await deleteDish(validatedFields.data.dish.id);
   if (!deletedDish) {
     return { error: "Un problème est survenu" };
   }

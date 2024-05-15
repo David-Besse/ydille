@@ -45,5 +45,5 @@ export const newDishType = async (
     return { error: "Un problème est survenu" };
   }
 
-  return { data: createdDishType, success: "Nouvelle catégorie ajoutée !" };
+  return { createdDishType: createdDishType, success: "Nouvelle catégorie ajoutée !" };
 };

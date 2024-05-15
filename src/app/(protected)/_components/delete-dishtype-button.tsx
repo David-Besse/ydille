@@ -13,29 +13,24 @@ import { DeleteIcon } from "lucide-react";
 import { toast } from "sonner";
 import { deleteDishTypeAction } from "../../../../actions/delete-dishtype";
 import { useTransition } from "react";
-import { localDishTypeAndDish } from "@/store/dish-store";
 
 interface DeleteDishTypeButtonProps {
-    dishTypeElement: localDishTypeAndDish;
+  dishTypeElement: {
+    id: string;
+    name: string;
+  };
 }
 
-export function DeleteDishTypeButton({ dishTypeElement }: DeleteDishTypeButtonProps) {
+export function DeleteDishTypeButton({
+  dishTypeElement,
+}: DeleteDishTypeButtonProps) {
   const [isPending, startTransition] = useTransition();
-  const { deleteOneInLocalDishTypes } = useDishStore(
-    (state) => state
-  );
+  const { deleteDishTypeInState } = useDishStore((state) => state);
 
   const handleDelete = () => {
     startTransition(() => {
       deleteDishTypeAction(dishTypeElement)
         .then((data) => {
-          // if no data, there was an error
-          if (!data) {
-            toast.error(
-              "Erreur de suppression de la catégorie. Si le problème persiste, contacte l'administrateur"
-            );
-          }
-
           // if data.error, there was an error
           if (data.error) {
             toast.error(data.error);
@@ -43,7 +38,7 @@ export function DeleteDishTypeButton({ dishTypeElement }: DeleteDishTypeButtonPr
 
           // if data.success, we can update the store
           if (data.success) {
-            deleteOneInLocalDishTypes(dishTypeElement);
+            deleteDishTypeInState(dishTypeElement);
             toast.success(data.success);
           }
         })
