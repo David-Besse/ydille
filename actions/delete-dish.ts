@@ -20,7 +20,7 @@ export const deleteDishAction = async (values: z.infer<typeof DishSchema>) => {
     },
   });
   if (!dbUser) {
-    return { error: "Utilisateur introuvable" };
+    return { error: "Utilisateur introuvable, veuillez vous connecter" };
   }
 
   // Check if dish exists

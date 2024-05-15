@@ -1,43 +1,53 @@
 import { createStore } from "zustand";
-import { Dish } from "@prisma/client";
 import _ from "lodash";
 
-export type localDishTypeAndDish = {
+type localDish = {
   id: string;
   name: string;
-  dishes: Dish[];
+  price: number;
+  description: string;
 };
 
-export type localDishType = {
+type localDishType = {
   id: string;
   name: string;
 };
 
-export type DishState = {
-  localDishTypesAndDishes: localDishTypeAndDish[];
-  currentDish: {
-    dishTypeId: string;
-    dish: Dish;
-  };
+type localDishAndDishTypeList = {
+  dishType: localDishType;
+  dishes: localDish[];
+}[];
+
+type currentDishAndDishType = {
+  dishType: localDishType;
+  dish: localDish;
+};
+
+type DishState = {
+  localDishAndDishTypeList: localDishAndDishTypeList;
+  currentDishAndDishType: currentDishAndDishType;
 };
 
 export type DishActions = {
-  setLocalDishTypesAndDishes: (
-    localDishTypesAndDishes: DishState["localDishTypesAndDishes"]
+  setLocalDishAndDishTypeList: (
+    dishAndDishTypeList: localDishAndDishTypeList
   ) => void;
-  setCurrentDish: (currentDish: DishState["currentDish"]) => void;
-  updateOneInLocalDishes: (updatedDish: DishState["currentDish"]) => void;
-  deleteOneInLocalDishes: (deletedDish: DishState["currentDish"]) => void;
-  createOneInLocalDishTypes: (updatedDishType: localDishType) => void;
-  deleteOneInLocalDishTypes: (deletedDishType: localDishTypeAndDish) => void;
+  setCurrentDishAndDishType: (currentDish: currentDishAndDishType) => void;
+  updateDishInState: (updatedDish: currentDishAndDishType) => void;
+  deleteDishInState: (deletedDish: currentDishAndDishType) => void;
+  createDishTypeInState: (createdDishType: currentDishAndDishType) => void;
+  deleteDishTypeInState: (deletedDishType: currentDishAndDishType) => void;
 };
 
 export type DishStore = DishState & DishActions;
 
 export const defaultInitialState: DishState = {
-  localDishTypesAndDishes: [],
-  currentDish: {
-    dishTypeId: "",
+  localDishAndDishTypeList: [],
+  currentDishAndDishType: {
+    dishType: {
+      id: "",
+      name: "",
+    },
     dish: {
       id: "",
       name: "",
@@ -50,20 +60,24 @@ export const defaultInitialState: DishState = {
 export const createDishStore = (initState: DishState = defaultInitialState) => {
   return createStore<DishStore>()((set) => ({
     ...initState,
-    setLocalDishTypesAndDishes: (localDishTypesAndDishes) =>
-      set({ localDishTypesAndDishes }),
-    setCurrentDish: (currentDish) => set({ currentDish }),
-    updateOneInLocalDishes: (updatedDish) =>
+
+    setLocalDishAndDishTypeList: (localDishAndDishTypeList) =>
+      set({ localDishAndDishTypeList }),
+
+    setCurrentDishAndDishType: (currentDishAndDishType) =>
+      set({ currentDishAndDishType }),
+
+    updateDishInState: (updatedDish) =>
       set((state) => ({
-        localDishTypesAndDishes: state.localDishTypesAndDishes.map(
+        localDishAndDishTypeList: state.localDishAndDishTypeList.map(
           (element) => {
             // we filter out the old dish
             const dishes = element.dishes.filter(
               (dish) => dish.id !== updatedDish.dish.id
             );
 
-            // we update dish list with new dish if the dishType is the same
-            if (element.id === updatedDish.dishTypeId) {
+            // we update dish list with new dish
+            if (element.dishType.id === updatedDish.dishType.id) {
               return {
                 ...element,
                 dishes: [...dishes, updatedDish.dish],
@@ -77,9 +91,10 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
           }
         ),
       })),
-    deleteOneInLocalDishes: (deletedDish) =>
+
+    deleteDishInState: (deletedDish) =>
       set((state) => ({
-        localDishTypesAndDishes: state.localDishTypesAndDishes.map(
+        localDishAndDishTypeList: state.localDishAndDishTypeList.map(
           (element) => {
             // we filter out the old dish
             const dishes = element.dishes.filter(
@@ -92,22 +107,23 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
           }
         ),
       })),
-    createOneInLocalDishTypes: (updatedDishType) =>
+
+    createDishTypeInState: (updatedDishType) =>
       set((state) => ({
-        localDishTypesAndDishes: [
-          ...state.localDishTypesAndDishes,
+        localDishAndDishTypeList: [
+          ...state.localDishAndDishTypeList,
           {
-            id: updatedDishType.id,
-            name: updatedDishType.name,
+            dishType: updatedDishType.dishType,
             dishes: [],
           },
         ],
       })),
-    deleteOneInLocalDishTypes: (deletedDishType) =>
+
+    deleteDishTypeInState: (deletedDishType) =>
       set((state) => ({
-        localDishTypesAndDishes: [
-          ...state.localDishTypesAndDishes.filter(
-            (element) => element.id !== deletedDishType.id
+        localDishAndDishTypeList: [
+          ...state.localDishAndDishTypeList.filter(
+            (element) => element.dishType.id !== deletedDishType.dishType.id
           ),
         ],
       })),

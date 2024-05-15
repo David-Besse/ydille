@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { Dish, DishDishTypeLink } from "@prisma/client";
+import { Dish, DishType } from "@prisma/client";
 
 export async function getAllDishTypes() {
   try {
@@ -85,13 +85,18 @@ export async function createDish(data: any) {
   }
 }
 
-export async function updateDish(data: Dish & { dishTypeId: string }) {
+export async function updateDish({
+  dish,
+  dishType,
+}: {
+  dish: Dish;
+  dishType: DishType;
+}) {
   try {
     // Check for existing dish-to-dishtype relationship
-    const existingRelationship: DishDishTypeLink | null =
-      await db.dishDishTypeLink.findUnique({
-        where: { dishId: data.id },
-      });
+    const existingRelationship = await db.dishDishTypeLink.findUnique({
+      where: { dishId: dish.id },
+    });
 
     // Update or create relationship based on existing relationship
     if (existingRelationship) {
@@ -99,42 +104,60 @@ export async function updateDish(data: Dish & { dishTypeId: string }) {
       await db.dishDishTypeLink.update({
         where: { id: existingRelationship.id },
         data: {
-          dishTypeId: data.dishTypeId,
+          dishTypeId: dishType.id,
         },
       });
     } else {
       // Create new relationship
       await db.dishDishTypeLink.create({
         data: {
-          dishId: data.id,
-          dishTypeId: data.dishTypeId,
+          dishId: dish.id,
+          dishTypeId: dishType.id,
         },
       });
     }
 
     // Update dish
     await db.dish.update({
-      where: { id: data.id },
+      where: { id: dish.id },
       data: {
-        name: data.name,
-        price: data.price,
-        description: data.description,
+        name: dish.name,
+        price: dish.price,
+        description: dish.description,
       },
     });
 
-    // Retrieve updated dish
+    // Retrieve updated dish with his dish-to-dishtype relationship
     const updatedDish = await db.dish.findUnique({
-      where: { id: data.id },
+      where: { id: dish.id },
       include: {
         dishToDishType: {
           select: {
-            dishTypeId: true,
+            dishType: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },
     });
 
-    return updatedDish;
+    if (!updatedDish || !updatedDish.dishToDishType || !updatedDish.dishToDishType.dishType) {
+      return null;
+    }
+    
+    // Return updated dish
+    return {
+      dish: {
+        id: updatedDish.id,
+        name: updatedDish.name,
+        price: updatedDish.price,
+        description: updatedDish.description,
+      },
+      dishType: updatedDish.dishToDishType.dishType,
+    };
   } catch (error) {
     return null;
   }

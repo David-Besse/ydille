@@ -6,7 +6,9 @@ import { DishTypeSchema } from "../schemas";
 import { currentUserFromServer } from "@/lib/currentUserServerAccess";
 import { deleteDishType, getDishType } from "../data/meals";
 
-export const deleteDishTypeAction = async (values: z.infer<typeof DishTypeSchema>) => {
+export const deleteDishTypeAction = async (
+  values: z.infer<typeof DishTypeSchema>
+) => {
   // Get current user
   const user = await currentUserFromServer();
   if (!user) {
@@ -20,7 +22,7 @@ export const deleteDishTypeAction = async (values: z.infer<typeof DishTypeSchema
     },
   });
   if (!dbUser) {
-    return { error: "Utilisateur introuvable" };
+    return { error: "Utilisateur introuvable, veuillez vous connecter" };
   }
 
   // Check if dish exists

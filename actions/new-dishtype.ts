@@ -22,7 +22,7 @@ export const newDishType = async (
     },
   });
   if (!dbUser) {
-    return { error: "Utilisateur introuvable !" };
+    return { error: "Utilisateur introuvable, veuillez vous connecter" };
   }
 
   // Check if dishType already exists

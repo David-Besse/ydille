@@ -2,11 +2,13 @@
 
 import { z } from "zod";
 import { db } from "../src/lib/db";
-import { DishSchema } from "../schemas";
+import { DishAndDishTypeSchema } from "../schemas";
 import { currentUserFromServer } from "@/lib/currentUserServerAccess";
 import { getDish, updateDish } from "../data/meals";
 
-export const modifyDishAction = async (values: z.infer<typeof DishSchema>) => {
+export const modifyDishAction = async (
+  values: z.infer<typeof DishAndDishTypeSchema>
+) => {
   // Get current user
   const user = await currentUserFromServer();
   if (!user) {
@@ -20,17 +22,17 @@ export const modifyDishAction = async (values: z.infer<typeof DishSchema>) => {
     },
   });
   if (!dbUser) {
-    return { error: "Utilisateur introuvable" };
+    return { error: "Utilisateur introuvable, veuillez vous connecter" };
   }
 
   // Check if dish exists
-  const existingDish = await getDish(values.id);
+  const existingDish = await getDish(values.dish.id);
   if (!existingDish) {
     return { error: "Plat introuvable" };
   }
 
   // Validate values with zod
-  const validatedFields = DishSchema.safeParse(values);
+  const validatedFields = DishAndDishTypeSchema.safeParse(values);
   if (!validatedFields.success) {
     return { error: "Un problème est survenu" };
   }
@@ -41,5 +43,5 @@ export const modifyDishAction = async (values: z.infer<typeof DishSchema>) => {
     return { error: "Un problème est survenu" };
   }
 
-  return { dish: updatedDish, success: "Plat modifié" };
+  return { updatedDish: updatedDish, success: "Plat modifié" };
 };

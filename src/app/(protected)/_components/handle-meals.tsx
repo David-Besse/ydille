@@ -11,7 +11,6 @@ import {
 import { cn } from "@/lib/utils";
 import { asapFont } from "@/components/fonts/fonts";
 import { ModifyDishButton } from "./modify-dish-button";
-import { Dish } from "@prisma/client";
 import { useDishStore } from "@/store/dish-store-provider";
 import { useEffect, useTransition } from "react";
 import { DeleteDishButton } from "./delete-dish-button";
@@ -19,30 +18,33 @@ import { NewDishButton } from "./new-dish-button";
 import { NewDishTypeButton } from "./new-dishtype-button";
 import _ from "lodash";
 import { DeleteDishTypeButton } from "./delete-dishtype-button";
-import { localDishTypeAndDish } from "@/store/dish-store";
 
-// type DishTypeAndDishes = {
-//   id: string;
-//   name: string;
-//   dishes: Dish[];
-// };
-
-interface HandleCarteProps {
-  data: localDishTypeAndDish[];
+interface HandleMealsProps {
+  data: {
+    dishType: {
+      id: string;
+      name: string;
+    };
+    dishes: {
+      id: string;
+      name: string;
+      description: string;
+      price: number;
+    }[];
+  }[];
 }
 
-export const HandleMeals = ({ data }: HandleCarteProps) => {
+export const HandleMeals = ({ data }: HandleMealsProps) => {
   const {
-    localDishTypesAndDishes,
-    setLocalDishTypesAndDishes,
-    setCurrentDish,
-    currentDish,
+    localDishAndDishTypeList,
+    setLocalDishAndDishTypeList,
+    setCurrentDishAndDishType,
   } = useDishStore((state) => state);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    setLocalDishTypesAndDishes(data);
-  }, [setLocalDishTypesAndDishes, data]);
+    setLocalDishAndDishTypeList(data);
+  }, [setLocalDishAndDishTypeList, data]);
 
   return (
     <>
@@ -75,7 +77,7 @@ export const HandleMeals = ({ data }: HandleCarteProps) => {
               asapFont.className
             )}
           >
-            {localDishTypesAndDishes.length === 0 && (
+            {localDishAndDishTypeList.length === 0 && (
               <div className="w-full flex flex-col justify-center items-center text-center py-6 px-1 bg-white border border-red-200">
                 <p className="w-full text-sm text-center rounded-lg">
                   Je n&apos;ai pas trouvé la carte du restaurant.
@@ -84,18 +86,23 @@ export const HandleMeals = ({ data }: HandleCarteProps) => {
                 </p>
               </div>
             )}
-            {localDishTypesAndDishes &&
-              localDishTypesAndDishes.map((dishType: localDishTypeAndDish) => {
+            {localDishAndDishTypeList.length > 0 &&
+              localDishAndDishTypeList.map((dishAndDIshTypeObject) => {
                 return (
-                  <div className="w-full rounded-lg" key={dishType.id}>
+                  <div
+                    className="w-full rounded-lg"
+                    key={dishAndDIshTypeObject.dishType.id}
+                  >
                     <Table className="overflow-hidden">
                       <TableHeader>
                         <TableRow>
                           <TableHead className="text-lg font-bold uppercase flex gap-2 justify-start items-center">
-                            {dishType.name}
+                            {dishAndDIshTypeObject.dishType.name}
                             <span className="flex gap-2">
                               {/* <ModifyDishTypeButton dishTypeId={dishType.id} /> */}
-                              <DeleteDishTypeButton dishTypeElement={dishType} />
+                              <DeleteDishTypeButton
+                                dishTypeElement={dishAndDIshTypeObject.dishType}
+                              />
                             </span>
                           </TableHead>
                           <TableHead className="text-base text-right w-[4rem] font-bold">
@@ -104,11 +111,11 @@ export const HandleMeals = ({ data }: HandleCarteProps) => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {dishType.dishes
+                        {dishAndDIshTypeObject.dishes
                           // we sort by name
                           .sort((a, b) => a.name.localeCompare(b.name, "fr"))
                           // we map over the dishes
-                          .map((food: Dish, index) => (
+                          .map((food, index) => (
                             <TableRow
                               className="border-none"
                               key={index + "_" + food.name}
@@ -126,16 +133,16 @@ export const HandleMeals = ({ data }: HandleCarteProps) => {
                               <TableCell className="text-right font-bold text-base py-4">
                                 <div
                                   onClick={() =>
-                                    setCurrentDish({
-                                      dishTypeId: dishType.id,
+                                    setCurrentDishAndDishType({
                                       dish: food,
+                                      dishType: dishAndDIshTypeObject.dishType,
                                     })
                                   }
                                   className="flex flex-col gap-2"
                                 >
                                   <ModifyDishButton
                                     dish={food}
-                                    dishTypeId={dishType.id}
+                                    dishType={dishAndDIshTypeObject.dishType}
                                   />
                                   <DeleteDishButton />
                                 </div>

@@ -11,19 +11,11 @@ import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { asapFont } from "@/components/fonts/fonts";
 import { Dish } from "@prisma/client";
-import { forEach } from "lodash";
-import { verify } from "crypto";
 import { PencilLineIcon } from "lucide-react";
-
-type DishTypeAndDishes = {
-  id: string;
-  name: string;
-  dishes: Dish[];
-};
 
 const Carte = async () => {
   // fetch data server-side for the first render
-  const getDishTypesAndDishes = await db.dishType.findMany({
+  const dishTypesAndDishesList = await db.dishType.findMany({
     include: {
       dishToDishType: {
         include: {
@@ -34,41 +26,32 @@ const Carte = async () => {
   });
 
   // normalize data to match the expected format
-  const dishTypes: DishTypeAndDishes[] = getDishTypesAndDishes.map(
+  const dishTypesAndDishesListFormated = dishTypesAndDishesList.map(
     (dishType) => ({
-      id: dishType.id,
-      name: dishType.name,
+      dishType: {
+        id: dishType.id,
+        name: dishType.name,
+      },
       dishes: dishType.dishToDishType.map((dish) => dish.dish),
     })
   );
 
-  // const dishTypes = [
-  //   {
-  //     id: "qdfkinfaqzb2dzqjbdqzjdl1zq",
-  //     name: "plats",
-  //     dishes: [
-  //       {
-  //         id: "qdfkinfaqzb2dzqjbdqzjdl1zq",
-  //         name: "crevettes",
-  //         price: 10,
-  //         description: "crevettes rotis au four",
-  //       },
-  //     ],
-  //   },
-  // ];
+  // Prevent displaying stock
+  const mealsWihtoutStock = dishTypesAndDishesListFormated.filter((el) => {
+    return el.dishType.name.toLowerCase() !== "stock";
+  });
 
   // check if each dishType has at least one dish
-  const verifyDishType = dishTypes.map((dishType) => {
+  const verifyDishTypes = mealsWihtoutStock.map((dishType) => {
     return dishType.dishes.length;
   });
-  console.log(verifyDishType);
 
   return (
     <div
       id="carte"
       className="w-full lg:w-[50vw] p-2 md:px-24 md:py-12 border-none shadow-black shadow-lg rounded-lg bg-white bg-opacity-[90%] z-0 cursor-default tracking-widest"
     >
-      {verifyDishType.some((dishType) => dishType === 0) && (
+      {verifyDishTypes.some((dishType) => dishType === 0) && (
         <div className="w-full flex flex-col justify-center items-center text-center py-6 px-1 gap-8">
           <PencilLineIcon className="w-12 h-12" />
           <p className="w-full text-base font-semibold text-center rounded-lg">
@@ -78,7 +61,7 @@ const Carte = async () => {
         </div>
       )}
 
-      {verifyDishType.some((dishType) => dishType > 0) && (
+      {verifyDishTypes.some((dishType) => dishType > 0) && (
         <div
           className={cn(
             "w-full text-3xl text-center py-10",
@@ -89,22 +72,27 @@ const Carte = async () => {
         </div>
       )}
 
-      {verifyDishType.some((dishType) => dishType > 0) && (
+      {verifyDishTypes.some((dishType) => dishType > 0) && (
         <div
           className={cn(
             "flex flex-col justify-center items-center text-black gap-16",
             asapFont.className
           )}
         >
-          {dishTypes.map((dishType) => {
-            if (dishType.name.toLowerCase() !== "stock") {
+          {dishTypesAndDishesListFormated.map((dishTypesAndDishesElement) => {
+            if (
+              dishTypesAndDishesElement.dishType.name.toLowerCase() !== "stock"
+            ) {
               return (
-                <div className="w-full rounded-lg" key={dishType.id}>
+                <div
+                  className="w-full rounded-lg"
+                  key={dishTypesAndDishesElement.dishType.id}
+                >
                   <Table className="overflow-hidden">
                     <TableHeader>
                       <TableRow>
                         <TableHead className="text-lg font-bold uppercase">
-                          {dishType.name}
+                          {dishTypesAndDishesElement.dishType.name}
                         </TableHead>
                         <TableHead className="text-base text-right w-[4rem] font-bold">
                           Prix*
@@ -112,7 +100,7 @@ const Carte = async () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {dishType.dishes
+                      {dishTypesAndDishesElement.dishes
                         // we sort the dishes by name
                         .sort((a, b) => a.name.localeCompare(b.name, "fr"))
                         // we map the dishes

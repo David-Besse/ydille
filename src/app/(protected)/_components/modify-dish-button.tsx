@@ -2,7 +2,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DishSchema } from "../../../../schemas";
+import { ModifyDishFormSchema } from "../../../../schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -33,34 +33,56 @@ import { modifyDishAction } from "../../../../actions/modify-dish";
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDishStore } from "@/store/dish-store-provider";
-import { Dish } from "@prisma/client";
 
-export const ModifyDishButton = ({
-  dish,
-  dishTypeId,
-}: {
-  dish: Dish;
-  dishTypeId: string;
-}) => {
+interface ModifyDishButtonProps {
+  dish: {
+    id: string;
+    name: string;
+    price: number;
+    description: string;
+  };
+  dishType: {
+    id: string;
+    name: string;
+  };
+}
+
+export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { currentDish, localDishTypesAndDishes, updateOneInLocalDishes } =
-    useDishStore((state) => state);
+  const {
+    currentDishAndDishType,
+    localDishAndDishTypeList,
+    updateDishInState,
+  } = useDishStore((state) => state);
 
-  const dishForm = useForm<z.infer<typeof DishSchema>>({
-    resolver: zodResolver(DishSchema),
+  const dishTypeList = localDishAndDishTypeList.map(
+    (element) => element.dishType
+  );
+
+  const modifyDishForm = useForm<z.infer<typeof ModifyDishFormSchema>>({
+    resolver: zodResolver(ModifyDishFormSchema),
     defaultValues: {
       id: dish.id,
       name: dish.name,
       price: dish.price,
       description: dish.description,
-      dishTypeId: dishTypeId,
+      dishTypeId: dishType.id,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof DishSchema>) => {
-    const isDishUpdated: { dishTypeId: string; dish: Dish } = {
-      dishTypeId: values.dishTypeId,
+  const onSubmit = (values: z.infer<typeof ModifyDishFormSchema>) => {
+    // find the selected dish type
+    const currentDishType = dishTypeList.filter(
+      (el) => el.id === values.dishTypeId
+    );
+
+    // Create an object with the dish and dishType form values
+    const formValues: typeof currentDishAndDishType = {
+      dishType: {
+        id: values.dishTypeId,
+        name: currentDishType[0].name,
+      },
       dish: {
         id: values.id,
         name: values.name,
@@ -69,51 +91,33 @@ export const ModifyDishButton = ({
       },
     };
 
-    // We use lodash to compare objects (very useful !)
-    if (_.isEqual(isDishUpdated, currentDish)) {
+    // Use lodash to check if there are any changes in all properties between formValues and currentDishAndDishType
+    // if they are the same, we don't need to update
+    if (_.isEqual(formValues, currentDishAndDishType)) {
       setSheetOpening(false);
       return;
     }
 
+    // Process the form submission and update the store
     startTransition(() => {
-      modifyDishAction(values)
+      modifyDishAction(formValues)
         .then((data) => {
-          // if no data, there was an error
-          if (!data) {
+          // if data.error, there was an error
+          if (data.error) {
             setSheetOpening(false);
             toast.error(
               "Erreur de mise à jour du plat. Si le problème persiste, contacte l'administrateur"
             );
           }
 
-          // if data.error, there was an error
-          if (data.error) {
-            setSheetOpening(false);
-            toast.error(data.error);
-          }
-
           // if data.success and data.dish, we have a new dish and we can update the store
-          if (
-            data.success &&
-            data.dish &&
-            data.dish.dishToDishType &&
-            data.dish.dishToDishType.dishTypeId
-          ) {
-            updateOneInLocalDishes({
-              dish: {
-                id: data.dish.id,
-                name: data.dish.name,
-                price: data.dish.price,
-                description: data.dish.description,
-              },
-              dishTypeId: data.dish.dishToDishType.dishTypeId,
-            });
-
+          if (data.updatedDish) {
+            updateDishInState(data.updatedDish);
             setSheetOpening(false);
             toast.success(data.success);
           }
 
-          dishForm.reset();
+          modifyDishForm.reset();
         })
         .catch((error) => {
           setSheetOpening(false);
@@ -122,7 +126,7 @@ export const ModifyDishButton = ({
     });
   };
 
-  if (!currentDish) {
+  if (!currentDishAndDishType) {
     return <div>Je cherche la carte...</div>;
   }
 
@@ -148,15 +152,15 @@ export const ModifyDishButton = ({
             Modifier un plat
           </SheetTitle>
         </SheetHeader>
-        <Form {...dishForm}>
+        <Form {...modifyDishForm}>
           <form
-            onSubmit={dishForm.handleSubmit(onSubmit)}
+            onSubmit={modifyDishForm.handleSubmit(onSubmit)}
             className="flex flex-col gap-8 py-8"
           >
             <div className="space-y-6">
               {/* Product name field */}
               <FormField
-                control={dishForm.control}
+                control={modifyDishForm.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
@@ -176,7 +180,7 @@ export const ModifyDishButton = ({
 
               {/* Product description field */}
               <FormField
-                control={dishForm.control}
+                control={modifyDishForm.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
@@ -191,7 +195,7 @@ export const ModifyDishButton = ({
 
               {/* Product price field */}
               <FormField
-                control={dishForm.control}
+                control={modifyDishForm.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
@@ -213,7 +217,7 @@ export const ModifyDishButton = ({
 
               {/* Product type field */}
               <FormField
-                control={dishForm.control}
+                control={modifyDishForm.control}
                 name={"dishTypeId"}
                 render={({ field }) => (
                   <FormItem>
@@ -222,7 +226,7 @@ export const ModifyDishButton = ({
                       // we need to add a name prop to avoid a browser warning with field
                       name="dishTypeId"
                       onValueChange={field.onChange}
-                      defaultValue={currentDish.dishTypeId}
+                      defaultValue={currentDishAndDishType.dishType.id}
                       disabled={isPending}
                     >
                       <FormControl>
@@ -231,12 +235,17 @@ export const ModifyDishButton = ({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {localDishTypesAndDishes &&
-                          localDishTypesAndDishes.map((dishType) => (
-                            <SelectItem key={dishType.name} value={dishType.id}>
-                              {dishType.name}
-                            </SelectItem>
-                          ))}
+                        {localDishAndDishTypeList &&
+                          localDishAndDishTypeList.map(
+                            (dishAndDishTypeObject) => (
+                              <SelectItem
+                                key={dishAndDishTypeObject.dishType.name}
+                                value={dishAndDishTypeObject.dishType.id}
+                              >
+                                {dishAndDishTypeObject.dishType.name}
+                              </SelectItem>
+                            )
+                          )}
                       </SelectContent>
                     </Select>
                     <FormMessage />

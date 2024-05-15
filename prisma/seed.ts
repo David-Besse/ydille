@@ -1,12 +1,7 @@
-import {
-  Dish,
-  DishType,
-  Prisma,
-  PrismaClient,
-} from "@prisma/client";
+import { Dish, DishType, Prisma, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-async function main() {
+export async function populate() {
   const dishList: Prisma.DishCreateInput[] = [
     {
       name: "Plat de charcuterie gourmande",
@@ -172,7 +167,7 @@ async function main() {
   }
 }
 
-main()
+populate()
   .then(async () => {
     await prisma.$disconnect();
     console.log("Seeding done!");
