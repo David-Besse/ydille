@@ -106,7 +106,8 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
           if (data.error) {
             setSheetOpening(false);
             toast.error(
-              "Erreur de mise à jour du plat. Si le problème persiste, contacte l'administrateur"
+              data.error ||
+                "Erreur de mise à jour de la carte. Si le problème persiste, contacte l'administrateur"
             );
           }
 
@@ -204,8 +205,11 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
                       <Input
                         {...field}
                         type="number"
+                        step={0.01}
+                        min={0}
+                        max={1000}
                         onChange={(event) => {
-                          field.onChange(parseInt(event.target.value));
+                          field.onChange(parseFloat(event.target.value));
                         }}
                         disabled={isPending}
                       />
@@ -223,7 +227,7 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
                   <FormItem>
                     <FormLabel>Catégorie de plat</FormLabel>
                     <Select
-                      // we need to add a name prop to avoid a browser warning with field
+                      // we need to add a name prop to avoid a browser warning with this field
                       name="dishTypeId"
                       onValueChange={field.onChange}
                       defaultValue={currentDishAndDishType.dishType.id}

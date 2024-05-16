@@ -43,7 +43,7 @@ export const NewDishTypeButton = () => {
       newDishType(values)
         .then((data) => {
           if (data.error) {
-            toast.error(data.error);
+            toast.error(data.error || "Une erreur est survenue");
             return;
           }
 
@@ -53,7 +53,6 @@ export const NewDishTypeButton = () => {
             toast.success(data.success);
             dishTypeForm.reset();
           }
-
         })
         .catch((error) => {
           toast.error(error.error);

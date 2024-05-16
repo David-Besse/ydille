@@ -49,7 +49,6 @@ export const ModifyDishTypeButton = ({
   });
 
   const onSubmit = (values: z.infer<typeof ModifyDishTypeFormSchema>) => {
-
     // Use lodash to check if there are any changes in properties between form values and dishTypeElement
     if (_.isEqual(values, dishTypeElement)) {
       setSheetOpening(false);
@@ -67,7 +66,8 @@ export const ModifyDishTypeButton = ({
           if (data.error) {
             setSheetOpening(false);
             toast.error(
-              "Erreur de mise à jour de la catégorie. Si le problème persiste, contacte l'administrateur"
+              data.error ||
+                "Erreur de mise à jour de la catégorie. Si le problème persiste, contacte l'administrateur"
             );
           }
 

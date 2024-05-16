@@ -109,14 +109,14 @@ const Carte = async () => {
                             className="border-none"
                             key={index + "_" + food.name}
                           >
-                            <TableCell className="py-4 space-y-2 font-semibold">
+                            <TableCell className="py-4 pr-8 space-y-2 font-semibold">
                               <p className="text-base">{food.name}</p>
-                              <p className="text-muted-foreground leading-4 tracking-wide">
+                              <p className="text-muted-foreground leading-4 tracking-wider">
                                 {food.description}
                               </p>
                             </TableCell>
-                            <TableCell className="text-right font-bold text-base py-4">
-                              {food.price}€
+                            <TableCell className="flex justify-start items-center text-nowrap font-bold text-base py-4">
+                              {food.price.toFixed(2)} €
                             </TableCell>
                           </TableRow>
                         ))}

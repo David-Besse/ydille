@@ -22,7 +22,7 @@ export const modifyDishAction = async (
     },
   });
   if (!dbUser) {
-    return { error: "Utilisateur introuvable, veuillez vous connecter" };
+    return { error: "Utilisateur introuvable, veuillez vous reconnecter" };
   }
 
   // Check if dish exists

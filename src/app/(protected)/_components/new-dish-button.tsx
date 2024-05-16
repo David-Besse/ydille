@@ -60,7 +60,7 @@ export const NewDishButton = () => {
       newDishAction(values)
         .then((data) => {
           if (data.error) {
-            toast.error("Erreur lors de la création du plat");
+            data.error || toast.error("Erreur lors de la création du plat");
           }
 
           if (data.updatedDish) {
@@ -152,8 +152,11 @@ export const NewDishButton = () => {
                       <Input
                         {...field}
                         type="number"
+                        step={0.01}
+                        min={0}
+                        max={1000}
                         onChange={(event) => {
-                          field.onChange(parseInt(event.target.value));
+                          field.onChange(parseFloat(event.target.value) || "");
                         }}
                         disabled={isPending}
                       />

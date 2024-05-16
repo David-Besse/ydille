@@ -80,7 +80,7 @@ model DishType {
 model Dish {
   id             String            @id @default(cuid())
   name           String            @db.VarChar(255)
-  price          Int
+  price          Float
   description    String
   dishToDishType DishDishTypeLink?
 }

@@ -167,7 +167,6 @@ export const DishSchema = z.object({
     .min(3, { message: "T'as oublié le nom de ton plat !" }),
   price: z
     .number()
-    .int()
     .positive()
     .min(1, { message: "T'as oublié le prix !" }),
   description: z
@@ -197,7 +196,6 @@ export const ModifyDishFormSchema = z.object({
     .min(3, { message: "T'as oublié le nom de ton plat !" }),
   price: z
     .number()
-    .int()
     .positive()
     .min(1, { message: "T'as oublié le prix !" }),
   description: z
@@ -214,7 +212,6 @@ export const CreateDishFormSchema = z.object({
     .min(3, { message: "T'as oublié le nom de ton plat !" }),
   price: z
     .number()
-    .int()
     .positive()
     .min(1, { message: "T'as oublié le prix !" }),
   description: z
