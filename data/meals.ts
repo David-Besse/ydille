@@ -81,10 +81,84 @@ export async function getDish(id: string) {
   }
 }
 
-export async function createDish(data: any) {
+export async function createDish(data: {
+  dish: {
+    name: string;
+    price: number;
+    description: string;
+  };
+  dishType: {
+    id: string;
+    name: string;
+  };
+}) {
   try {
-    const dish = await db.dish.create({ data });
-    return dish;
+    // Create new dish
+    const dish = await db.dish.create({ data: { ...data.dish } });
+
+    // Check for existing dishType
+    const existingDishType = await db.dishType.findFirst({
+      where: {
+        id: data.dishType.id,
+      },
+    });
+
+    // If not, create a new dishtype named "stock" and create a new dish-to-dishtype relationship
+    if (!existingDishType) {
+      // create a new dishtype named "stock" (default)
+      const newDishType = await db.dishType.create({
+        data: {
+          name: "stock",
+        },
+      });
+
+      // Create a new dish-to-dishType relationship with newDishType
+      await db.dishDishTypeLink.create({
+        data: { dishId: dish.id, dishTypeId: newDishType.id },
+      });
+    } else {
+      // If yes, create a new dish-to-dishtype relationship with existingDishType
+      await db.dishDishTypeLink.create({
+        data: { dishId: dish.id, dishTypeId: existingDishType.id },
+      });
+    }
+
+    const newDishWithDishType = await db.dish.findUnique({
+      where: { id: dish.id },
+      include: {
+        dishToDishType: {
+          include: {
+            dishType: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (
+      !newDishWithDishType ||
+      !newDishWithDishType.dishToDishType ||
+      !newDishWithDishType.dishToDishType.dishType
+    ) {
+      return null;
+    }
+
+    return {
+      dish: {
+        id: newDishWithDishType.id,
+        name: newDishWithDishType.name,
+        price: newDishWithDishType.price,
+        description: newDishWithDishType.description,
+      },
+      dishType: {
+        id: newDishWithDishType.dishToDishType.dishType.id,
+        name: newDishWithDishType.dishToDishType.dishType.name,
+      },
+    };
   } catch (error) {
     return null;
   }

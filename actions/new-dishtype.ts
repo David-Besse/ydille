@@ -2,12 +2,12 @@
 
 import { z } from "zod";
 import { db } from "../src/lib/db";
-import { CreateDishTypeSchema } from "../schemas";
+import { CreateDishTypeFormSchema } from "../schemas";
 import { currentUserFromServer } from "@/lib/currentUserServerAccess";
 import { createDishType, getDishTypeByName } from "../data/meals";
 
 export const newDishType = async (
-  values: z.infer<typeof CreateDishTypeSchema>
+  values: z.infer<typeof CreateDishTypeFormSchema>
 ) => {
   // Get current user
   const user = await currentUserFromServer();
@@ -32,7 +32,7 @@ export const newDishType = async (
   }
 
   // Validate values with zod
-  const validatedFields = CreateDishTypeSchema.safeParse(values);
+  const validatedFields = CreateDishTypeFormSchema.safeParse(values);
   if (!validatedFields.success) {
     return { error: "Un problème est survenu" };
   }

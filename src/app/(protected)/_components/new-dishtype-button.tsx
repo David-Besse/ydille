@@ -2,7 +2,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateDishTypeSchema } from "../../../../schemas";
+import { CreateDishTypeFormSchema } from "../../../../schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,14 +31,14 @@ export const NewDishTypeButton = () => {
   const [isPending, startTransition] = useTransition();
   const { createDishTypeInState } = useDishStore((state) => state);
 
-  const dishTypeForm = useForm<z.infer<typeof CreateDishTypeSchema>>({
-    resolver: zodResolver(CreateDishTypeSchema),
+  const dishTypeForm = useForm<z.infer<typeof CreateDishTypeFormSchema>>({
+    resolver: zodResolver(CreateDishTypeFormSchema),
     defaultValues: {
       name: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof CreateDishTypeSchema>) => {
+  const onSubmit = (values: z.infer<typeof CreateDishTypeFormSchema>) => {
     startTransition(() => {
       newDishType(values)
         .then((data) => {

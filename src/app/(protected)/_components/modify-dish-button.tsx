@@ -235,17 +235,11 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {localDishAndDishTypeList &&
-                          localDishAndDishTypeList.map(
-                            (dishAndDishTypeObject) => (
-                              <SelectItem
-                                key={dishAndDishTypeObject.dishType.name}
-                                value={dishAndDishTypeObject.dishType.id}
-                              >
-                                {dishAndDishTypeObject.dishType.name}
-                              </SelectItem>
-                            )
-                          )}
+                        {dishTypeList.map((dishType) => (
+                          <SelectItem key={dishType.name} value={dishType.id}>
+                            {dishType.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

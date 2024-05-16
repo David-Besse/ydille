@@ -2,7 +2,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DishSchema } from "../../../../schemas";
+import { CreateDishFormSchema } from "../../../../schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/form";
 import { HandPlatterIcon } from "lucide-react";
 import {
-    Select,
+  Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -32,43 +32,49 @@ import {
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDishStore } from "@/store/dish-store-provider";
+import { newDishAction } from "../../../../actions/newdish";
 
 export const NewDishButton = () => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { localDishTypes, updateOneInLocalDishes } = useDishStore(
+  const { localDishAndDishTypeList, updateDishInState } = useDishStore(
     (state) => state
   );
 
-  const dishTypeForm = useForm<z.infer<typeof DishSchema>>({
-    resolver: zodResolver(DishSchema),
+  const dishTypeList = localDishAndDishTypeList.map(
+    (element) => element.dishType
+  );
+
+  const dishForm = useForm<z.infer<typeof CreateDishFormSchema>>({
+    resolver: zodResolver(CreateDishFormSchema),
     defaultValues: {
       name: "",
       description: "",
       price: 0,
-      dishTypeId: "",
+      dishTypeId: "stock",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof DishSchema>) => {
-    // startTransition(() => {
-    //   modifyDish(values)
-    //     .then((data) => {
-    //       if (data) {
-    //         updateOneInLocalDishes(values);
-    //         setSheetOpening(false);
-    //         toast.success("Plat modifié");
-    //         dishForm.reset();
-    //       }
-    //       if (!data) {
-    //         toast.error("Erreur de mise à jour du plat");
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       toast.error("Une erreur est survenue");
-    //       console.log(error);
-    //     });
-    // });
+  const onSubmit = (values: z.infer<typeof CreateDishFormSchema>) => {
+    startTransition(() => {
+      newDishAction(values)
+        .then((data) => {
+          if (data.error) {
+            toast.error("Erreur lors de la création du plat");
+          }
+
+          if (data.updatedDish) {
+            updateDishInState(data.updatedDish);
+            setSheetOpening(false);
+            toast.success("Nouveau plat enregistré !");
+            dishForm.reset();
+          }
+        })
+        .catch((error) => {
+          toast.error("Une erreur est survenue");
+          console.log(error);
+        });
+    });
   };
 
   return (
@@ -94,15 +100,15 @@ export const NewDishButton = () => {
             Ajouter un plat
           </SheetTitle>
         </SheetHeader>
-        <Form {...dishTypeForm}>
+        <Form {...dishForm}>
           <form
-            onSubmit={dishTypeForm.handleSubmit(onSubmit)}
+            onSubmit={dishForm.handleSubmit(onSubmit)}
             className="flex flex-col gap-8 py-8"
           >
             <div className="space-y-6">
               {/* Product name field */}
               <FormField
-                control={dishTypeForm.control}
+                control={dishForm.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
@@ -122,7 +128,7 @@ export const NewDishButton = () => {
 
               {/* Product description field */}
               <FormField
-                control={dishTypeForm.control}
+                control={dishForm.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
@@ -137,7 +143,7 @@ export const NewDishButton = () => {
 
               {/* Product price field */}
               <FormField
-                control={dishTypeForm.control}
+                control={dishForm.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
@@ -159,7 +165,7 @@ export const NewDishButton = () => {
 
               {/* Product type field */}
               <FormField
-                control={dishTypeForm.control}
+                control={dishForm.control}
                 name="dishTypeId"
                 render={({ field }) => (
                   <FormItem>
@@ -178,12 +184,11 @@ export const NewDishButton = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {localDishTypes &&
-                          localDishTypes.map((dishType) => (
-                            <SelectItem key={dishType.id} value={dishType.id}>
-                              {dishType.name}
-                            </SelectItem>
-                          ))}
+                        {dishTypeList.map((dishType) => (
+                          <SelectItem key={dishType.id} value={dishType.id}>
+                            {dishType.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -205,4 +210,3 @@ export const NewDishButton = () => {
     </Sheet>
   );
 };
-

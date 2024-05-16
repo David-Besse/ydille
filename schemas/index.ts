@@ -207,19 +207,36 @@ export const ModifyDishFormSchema = z.object({
   dishTypeId: z.string().trim(),
 });
 
+export const CreateDishFormSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(3, { message: "T'as oublié le nom de ton plat !" }),
+  price: z
+    .number()
+    .int()
+    .positive()
+    .min(1, { message: "T'as oublié le prix !" }),
+  description: z
+    .string()
+    .trim()
+    .min(10, { message: "T'as oublié la description !" }),
+  dishTypeId: z.string().trim(),
+})
+
 
 export const ModifyDishTypeFormSchema = z.object({
   id: z.string().trim(),
   name: z
     .string()
     .trim()
-    .min(3, { message: "T'as oublié le nom de ton plat !" }),
+    .min(3, { message: "T'as oublié le nom de la catégorie !" }),
 });
 
-export const CreateDishTypeSchema = z.object({
+export const CreateDishTypeFormSchema = z.object({
   id: z.string().trim().optional(),
   name: z
     .string()
     .trim()
-    .min(3, { message: "T'as oublié le nom du type de plat !" }),
+    .min(3, { message: "T'as oublié le nom de la catégorie !" }),
 });
