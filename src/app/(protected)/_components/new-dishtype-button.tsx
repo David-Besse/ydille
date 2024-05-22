@@ -6,12 +6,12 @@ import { CreateDishTypeFormSchema } from "../../../../schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -62,28 +62,27 @@ export const NewDishTypeButton = () => {
   };
 
   return (
-    <Sheet
+    <Dialog
       open={sheetOpening} // state of the sheet
       onOpenChange={() => setSheetOpening(!sheetOpening)} // control the opening/closing state of the sheet (manually)
     >
-      <SheetTrigger asChild>
+      <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="font-semibold w-[220px]  hover:border-black shadow-md"
+          className="font-semibold w-[220px] h-[100px] flex flex-col items-center justify-center gap-2 text-wrap hover:border-black shadow-md"
         >
+          <ChefHatIcon size={24} className="" />
           Ajouter une catégorie
-          <ChefHatIcon size={24} className="ml-2" />
         </Button>
-      </SheetTrigger>
-      <SheetContent
-        side={"bottom"}
+      </DialogTrigger>
+      <DialogContent
         className="w-[95%] sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl"
       >
-        <SheetHeader>
-          <SheetTitle className="text-xl tracking-wider">
+        <DialogHeader>
+          <DialogTitle className="text-xl tracking-wider">
             Ajouter une catégorie
-          </SheetTitle>
-        </SheetHeader>
+          </DialogTitle>
+        </DialogHeader>
         <Form {...dishTypeForm}>
           <form
             onSubmit={dishTypeForm.handleSubmit(onSubmit)}
@@ -123,7 +122,7 @@ export const NewDishTypeButton = () => {
             </Button>
           </form>
         </Form>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 };

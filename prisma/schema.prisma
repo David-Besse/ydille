@@ -74,6 +74,7 @@ model TwoFactorConfirmation {
 model DishType {
   id             String             @id @default(cuid())
   name           String             @db.VarChar(255)
+  order          Int
   dishToDishType DishDishTypeLink[]
 }
 

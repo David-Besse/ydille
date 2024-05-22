@@ -9,7 +9,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { useDishStore } from "@/store/dish-store-provider";
-import { DeleteIcon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { deleteDishAction } from "../../../../actions/delete-dish";
 import { useTransition } from "react";
@@ -45,7 +45,7 @@ export function DeleteDishButton() {
     <Dialog>
       <DialogTrigger asChild>
         <Button className="p-0 w-6 h-6  border border-red-500 bg-white text-red-500 hover:text-white hover:bg-red-500">
-          <DeleteIcon size={18} className="" />
+          <Trash2Icon size={18} className="" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

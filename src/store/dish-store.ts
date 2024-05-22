@@ -1,36 +1,37 @@
 import { createStore } from "zustand";
 import _ from "lodash";
 
-type localDish = {
+export type localDish = {
   id: string;
   name: string;
   price: number;
   description: string;
 };
 
-type localDishType = {
+export type localDishType = {
   id: string;
   name: string;
+  order: number;
 };
 
-type localDishAndDishTypeList = {
-  dishType: localDishType;
+export type localDishesAndDishTypesList = {
   dishes: localDish[];
+  dishType: localDishType;
 }[];
 
-type currentDishAndDishType = {
-  dishType: localDishType;
+export type currentDishAndDishType = {
   dish: localDish;
+  dishType: localDishType;
 };
 
-type DishState = {
-  localDishAndDishTypeList: localDishAndDishTypeList;
+export type DishState = {
+  localDishesAndDishTypesList: localDishesAndDishTypesList;
   currentDishAndDishType: currentDishAndDishType;
 };
 
 export type DishActions = {
-  setLocalDishAndDishTypeList: (
-    dishAndDishTypeList: localDishAndDishTypeList
+  setLocalDishesAndDishTypesList: (
+    dishesAndDishTypesList: localDishesAndDishTypesList
   ) => void;
   setCurrentDishAndDishType: (currentDish: currentDishAndDishType) => void;
   updateDishInState: (updatedDish: currentDishAndDishType) => void;
@@ -43,11 +44,12 @@ export type DishActions = {
 export type DishStore = DishState & DishActions;
 
 export const defaultInitialState: DishState = {
-  localDishAndDishTypeList: [],
+  localDishesAndDishTypesList: [],
   currentDishAndDishType: {
     dishType: {
       id: "",
       name: "",
+      order: 0,
     },
     dish: {
       id: "",
@@ -62,15 +64,15 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
   return createStore<DishStore>()((set) => ({
     ...initState,
 
-    setLocalDishAndDishTypeList: (localDishAndDishTypeList) =>
-      set({ localDishAndDishTypeList }),
+    setLocalDishesAndDishTypesList: (localDishesAndDishTypesList) =>
+      set({ localDishesAndDishTypesList: localDishesAndDishTypesList }),
 
     setCurrentDishAndDishType: (currentDishAndDishType) =>
       set({ currentDishAndDishType }),
 
     updateDishInState: (updatedDish) =>
       set((state) => ({
-        localDishAndDishTypeList: state.localDishAndDishTypeList.map(
+        localDishesAndDishTypesList: state.localDishesAndDishTypesList.map(
           (element) => {
             // we filter out the old dish
             const dishes = element.dishes.filter(
@@ -95,7 +97,7 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
 
     deleteDishInState: (deletedDish) =>
       set((state) => ({
-        localDishAndDishTypeList: state.localDishAndDishTypeList.map(
+        localDishesAndDishTypesList: state.localDishesAndDishTypesList.map(
           (element) => {
             // we filter out the old dish
             const dishes = element.dishes.filter(
@@ -111,8 +113,8 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
 
     createDishTypeInState: (createdDishType) =>
       set((state) => ({
-        localDishAndDishTypeList: [
-          ...state.localDishAndDishTypeList,
+        localDishesAndDishTypesList: [
+          ...state.localDishesAndDishTypesList,
           {
             dishType: createdDishType,
             dishes: [],
@@ -122,8 +124,8 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
 
     deleteDishTypeInState: (deletedDishType) =>
       set((state) => ({
-        localDishAndDishTypeList: [
-          ...state.localDishAndDishTypeList.filter(
+        localDishesAndDishTypesList: [
+          ...state.localDishesAndDishTypesList.filter(
             (element) => element.dishType.id !== deletedDishType.id
           ),
         ],
@@ -131,7 +133,7 @@ export const createDishStore = (initState: DishState = defaultInitialState) => {
 
     updateDishTypeInState: (updatedDishType) =>
       set((state) => ({
-        localDishAndDishTypeList: state.localDishAndDishTypeList.map(
+        localDishesAndDishTypesList: state.localDishesAndDishTypesList.map(
           (element) => {
             if (element.dishType.id === updatedDishType.id) {
               return {

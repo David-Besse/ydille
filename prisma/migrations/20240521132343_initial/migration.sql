@@ -75,6 +75,7 @@ CREATE TABLE "TwoFactorConfirmation" (
 CREATE TABLE "DishType" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255) NOT NULL,
+    "order" INTEGER NOT NULL,
 
     CONSTRAINT "DishType_pkey" PRIMARY KEY ("id")
 );
@@ -83,19 +84,19 @@ CREATE TABLE "DishType" (
 CREATE TABLE "Dish" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "price" INTEGER NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
     "description" TEXT NOT NULL,
 
     CONSTRAINT "Dish_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "DishDishType" (
+CREATE TABLE "DishDishTypeLink" (
     "id" TEXT NOT NULL,
     "dishId" TEXT NOT NULL,
-    "dishTypeId" TEXT NOT NULL,
+    "dishTypeId" TEXT,
 
-    CONSTRAINT "DishDishType_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "DishDishTypeLink_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -135,7 +136,10 @@ CREATE UNIQUE INDEX "TwoFactorToken_token_email_key" ON "TwoFactorToken"("token"
 CREATE UNIQUE INDEX "TwoFactorConfirmation_userId_key" ON "TwoFactorConfirmation"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "DishDishType_dishId_dishTypeId_key" ON "DishDishType"("dishId", "dishTypeId");
+CREATE UNIQUE INDEX "DishDishTypeLink_dishId_key" ON "DishDishTypeLink"("dishId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "DishDishTypeLink_dishId_dishTypeId_key" ON "DishDishTypeLink"("dishId", "dishTypeId");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -144,7 +148,7 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "TwoFactorConfirmation" ADD CONSTRAINT "TwoFactorConfirmation_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DishDishType" ADD CONSTRAINT "DishDishType_dishId_fkey" FOREIGN KEY ("dishId") REFERENCES "Dish"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "DishDishTypeLink" ADD CONSTRAINT "DishDishTypeLink_dishId_fkey" FOREIGN KEY ("dishId") REFERENCES "Dish"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DishDishType" ADD CONSTRAINT "DishDishType_dishTypeId_fkey" FOREIGN KEY ("dishTypeId") REFERENCES "DishType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "DishDishTypeLink" ADD CONSTRAINT "DishDishTypeLink_dishTypeId_fkey" FOREIGN KEY ("dishTypeId") REFERENCES "DishType"("id") ON DELETE SET NULL ON UPDATE CASCADE;

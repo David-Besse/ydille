@@ -34,13 +34,16 @@ export const modifyDishAction = async (
   // Validate values with zod
   const validatedFields = DishAndDishTypeSchema.safeParse(values);
   if (!validatedFields.success) {
-    return { error: "Un problème est survenu" };
+    return {
+      error: "Un problème est survenu pendant la vérification des données",
+    };
   }
 
   // Update dish
   const updatedDish = await updateDish(validatedFields.data);
   if (!updatedDish) {
-    return { error: "Un problème est survenu" };
+    console.log(updateDish);
+    return { error: "Un problème est survenu lors de la mise à jour du plat" };
   }
 
   return { updatedDish: updatedDish, success: "Plat modifié" };

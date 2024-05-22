@@ -4,11 +4,7 @@ import { z } from "zod";
 import { db } from "../src/lib/db";
 import { ModifyDishTypeFormSchema } from "../schemas";
 import { currentUserFromServer } from "@/lib/currentUserServerAccess";
-import {
-  createDishType,
-  getDishTypeByName,
-  updateDishType,
-} from "../data/meals";
+import { updateDishType } from "../data/meals";
 
 export const modifyDishTypeAction = async (
   values: z.infer<typeof ModifyDishTypeFormSchema>

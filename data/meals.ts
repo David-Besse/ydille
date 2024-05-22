@@ -28,7 +28,7 @@ export async function getDishTypeByName(name: string) {
   }
 }
 
-export async function createDishType(data: any) {
+export async function createDishType(data: { name: string; order: number }) {
   try {
     const dishType = await db.dishType.create({ data });
     return dishType;
@@ -43,6 +43,7 @@ export async function updateDishType(data: any) {
       where: { id: data.id },
       data: {
         name: data.name,
+        order: data.order,
       },
     });
     return updatedDishType;
@@ -87,10 +88,7 @@ export async function createDish(data: {
     price: number;
     description: string;
   };
-  dishType: {
-    id: string;
-    name: string;
-  };
+  dishType: DishType;
 }) {
   try {
     // Create new dish
@@ -109,6 +107,7 @@ export async function createDish(data: {
       const newDishType = await db.dishType.create({
         data: {
           name: "stock",
+          order: 0,
         },
       });
 
@@ -132,6 +131,7 @@ export async function createDish(data: {
               select: {
                 id: true,
                 name: true,
+                order: true,
               },
             },
           },
@@ -157,6 +157,7 @@ export async function createDish(data: {
       dishType: {
         id: newDishWithDishType.dishToDishType.dishType.id,
         name: newDishWithDishType.dishToDishType.dishType.name,
+        order: newDishWithDishType.dishToDishType.dishType.order,
       },
     };
   } catch (error) {
@@ -216,6 +217,7 @@ export async function updateDish({
               select: {
                 id: true,
                 name: true,
+                order: true,
               },
             },
           },
@@ -239,7 +241,11 @@ export async function updateDish({
         price: updatedDish.price,
         description: updatedDish.description,
       },
-      dishType: updatedDish.dishToDishType.dishType,
+      dishType: {
+        id: updatedDish.dishToDishType.dishType.id,
+        name: updatedDish.dishToDishType.dishType.name,
+        order: updatedDish.dishToDishType.dishType.order,
+      },
     };
   } catch (error) {
     return null;

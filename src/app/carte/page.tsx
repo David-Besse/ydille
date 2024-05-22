@@ -10,7 +10,7 @@ import {
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { asapFont } from "@/components/fonts/fonts";
-import { Dish } from "@prisma/client";
+import { Dish, DishType } from "@prisma/client";
 import { PencilLineIcon } from "lucide-react";
 
 const Carte = async () => {
@@ -25,24 +25,32 @@ const Carte = async () => {
     },
   });
 
-  // normalize data to match the expected format
+  // format data
   const dishTypesAndDishesListFormated = dishTypesAndDishesList.map(
     (dishType) => ({
       dishType: {
         id: dishType.id,
         name: dishType.name,
+        order: dishType.order,
       },
       dishes: dishType.dishToDishType.map((dish) => dish.dish),
     })
   );
 
-  // Prevent displaying stock
-  const mealsWihtoutStock = dishTypesAndDishesListFormated.filter((el) => {
-    return el.dishType.name.toLowerCase() !== "stock";
+  // Prevent displaying "stock"
+  const dishtypesAndDishesNoStock = dishTypesAndDishesListFormated.filter(
+    (el) => {
+      return el.dishType.name.toLowerCase() !== "stock";
+    }
+  );
+
+  // sort by order
+  const dishtypesAndDishesSorted = dishtypesAndDishesNoStock.sort((a, b) => {
+    return a.dishType.order - b.dishType.order;
   });
 
   // check if each dishType has at least one dish
-  const verifyDishTypes = mealsWihtoutStock.map((dishType) => {
+  const verifyDishTypes = dishtypesAndDishesSorted.map((dishType) => {
     return dishType.dishes.length;
   });
 
@@ -79,52 +87,48 @@ const Carte = async () => {
             asapFont.className
           )}
         >
-          {dishTypesAndDishesListFormated.map((dishTypesAndDishesElement) => {
-            if (
-              dishTypesAndDishesElement.dishType.name.toLowerCase() !== "stock"
-            ) {
-              return (
-                <div
-                  className="w-full rounded-lg"
-                  key={dishTypesAndDishesElement.dishType.id}
-                >
-                  <Table className="overflow-hidden">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-lg font-bold uppercase">
-                          {dishTypesAndDishesElement.dishType.name}
-                        </TableHead>
-                        <TableHead className="text-base text-right w-[4rem] font-bold">
-                          Prix*
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {dishTypesAndDishesElement.dishes
-                        // we sort the dishes by name
-                        .sort((a, b) => a.name.localeCompare(b.name, "fr"))
-                        // we map the dishes
-                        .map((food, index) => (
-                          <TableRow
-                            className="border-none"
-                            key={index + "_" + food.name}
-                          >
-                            <TableCell className="py-4 pr-8 space-y-2 font-semibold">
-                              <p className="text-base">{food.name}</p>
-                              <p className="text-muted-foreground leading-4 tracking-wider">
-                                {food.description}
-                              </p>
-                            </TableCell>
-                            <TableCell className="flex justify-start items-center text-nowrap font-bold text-base py-4">
-                              {food.price.toFixed(2)} €
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              );
-            }
+          {dishtypesAndDishesSorted.map((dishTypesAndDishesElement) => {
+            return (
+              <div
+                className="w-full rounded-lg"
+                key={dishTypesAndDishesElement.dishType.id}
+              >
+                <Table className="overflow-hidden">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-lg font-bold uppercase">
+                        {dishTypesAndDishesElement.dishType.name}
+                      </TableHead>
+                      <TableHead className="text-base text-right w-[4rem] font-bold">
+                        Prix*
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {dishTypesAndDishesElement.dishes
+                      // we sort the dishes by name
+                      .sort((a, b) => a.name.localeCompare(b.name, "fr"))
+                      // we map the dishes
+                      .map((food, index) => (
+                        <TableRow
+                          className="border-none"
+                          key={index + "_" + food.name}
+                        >
+                          <TableCell className="py-4 pr-8 space-y-2 font-semibold">
+                            <p className="text-base">{food.name}</p>
+                            <p className="text-muted-foreground leading-4 tracking-wider">
+                              {food.description}
+                            </p>
+                          </TableCell>
+                          <TableCell className="flex justify-start items-center text-nowrap font-bold text-base py-4">
+                            {food.price.toFixed(2)} €
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </div>
+            );
           })}
           <span className="text-base text-muted-foreground font-bold">
             * TVA incl.

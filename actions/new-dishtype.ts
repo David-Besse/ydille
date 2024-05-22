@@ -40,6 +40,7 @@ export const newDishType = async (
   // Create new dishType
   const createdDishType = await createDishType({
     name: validatedFields.data.name,
+    order: validatedFields.data.order,
   });
   if (!createdDishType) {
     return { error: "Un problème est survenu" };

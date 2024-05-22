@@ -159,34 +159,42 @@ export const RegisterSchema = z
     }
   });
 
+// dish schema
 export const DishSchema = z.object({
   id: z.string().trim(),
   name: z
     .string()
     .trim()
     .min(3, { message: "T'as oublié le nom de ton plat !" }),
-  price: z
-    .number()
-    .positive()
-    .min(1, { message: "T'as oublié le prix !" }),
+  price: z.number().positive(),
   description: z
     .string()
     .trim()
     .min(10, { message: "T'as oublié la description !" }),
 });
 
+// dishtype schema
 export const DishTypeSchema = z.object({
   id: z.string().trim(),
   name: z
     .string()
     .trim()
     .min(3, { message: "T'as oublié le nom du type de plat !" }),
+  order: z.number().nonnegative().int(),
 });
 
+// one dish and his dishtype schema
 export const DishAndDishTypeSchema = z.object({
   dish: DishSchema,
   dishType: DishTypeSchema,
 });
+
+export const DishesAndDishTypesListSchema = z.array(
+  z.object({
+    dishType: DishTypeSchema,
+    dishes: z.array(DishSchema),
+  })
+);
 
 export const ModifyDishFormSchema = z.object({
   id: z.string().trim(),
@@ -194,10 +202,7 @@ export const ModifyDishFormSchema = z.object({
     .string()
     .trim()
     .min(3, { message: "T'as oublié le nom de ton plat !" }),
-  price: z
-    .number()
-    .positive()
-    .min(1, { message: "T'as oublié le prix !" }),
+  price: z.number().positive().min(1, { message: "T'as oublié le prix !" }),
   description: z
     .string()
     .trim()
@@ -210,17 +215,13 @@ export const CreateDishFormSchema = z.object({
     .string()
     .trim()
     .min(3, { message: "T'as oublié le nom de ton plat !" }),
-  price: z
-    .number()
-    .positive()
-    .min(1, { message: "T'as oublié le prix !" }),
+  price: z.number().positive().min(1, { message: "T'as oublié le prix !" }),
   description: z
     .string()
     .trim()
     .min(10, { message: "T'as oublié la description !" }),
   dishTypeId: z.string().trim(),
-})
-
+});
 
 export const ModifyDishTypeFormSchema = z.object({
   id: z.string().trim(),
@@ -236,4 +237,7 @@ export const CreateDishTypeFormSchema = z.object({
     .string()
     .trim()
     .min(3, { message: "T'as oublié le nom de la catégorie !" }),
+  order: z.number().min(1, {
+    message: "Ce serait dommage de servir le dessert avant l'entrée ?",
+  }),
 });

@@ -6,12 +6,12 @@ import { ModifyDishFormSchema } from "../../../../schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
@@ -33,18 +33,11 @@ import { modifyDishAction } from "../../../../actions/modify-dish";
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDishStore } from "@/store/dish-store-provider";
+import { localDish, localDishType } from "../../../store/dish-store";
 
 interface ModifyDishButtonProps {
-  dish: {
-    id: string;
-    name: string;
-    price: number;
-    description: string;
-  };
-  dishType: {
-    id: string;
-    name: string;
-  };
+  dish: localDish;
+  dishType: localDishType;
 }
 
 export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
@@ -52,11 +45,12 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
   const [isPending, startTransition] = useTransition();
   const {
     currentDishAndDishType,
-    localDishAndDishTypeList,
+    localDishesAndDishTypesList,
     updateDishInState,
   } = useDishStore((state) => state);
 
-  const dishTypeList = localDishAndDishTypeList.map(
+  // get the list of dish types
+  const dishTypeList = localDishesAndDishTypesList.map(
     (element) => element.dishType
   );
 
@@ -79,15 +73,16 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
 
     // Create an object with the dish and dishType form values
     const formValues: typeof currentDishAndDishType = {
-      dishType: {
-        id: values.dishTypeId,
-        name: currentDishType[0].name,
-      },
       dish: {
         id: values.id,
         name: values.name,
         price: values.price,
         description: values.description,
+      },
+      dishType: {
+        id: values.dishTypeId,
+        name: currentDishType[0].name,
+        order: currentDishType[0].order,
       },
     };
 
@@ -132,27 +127,26 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
   }
 
   return (
-    <Sheet
+    <Dialog
       open={sheetOpening} // state of the sheet
       onOpenChange={() => setSheetOpening(!sheetOpening)} // control the opening/closing state of the sheet (manually)
     >
-      <SheetTrigger asChild>
+      <DialogTrigger asChild>
         <Button
           variant="outline"
           className="p-0 h-6 w-6 hover:border-black hover:shadow-md"
         >
           <PencilIcon size={18} />
         </Button>
-      </SheetTrigger>
-      <SheetContent
-        side={"bottom"}
+      </DialogTrigger>
+      <DialogContent
         className="w-[95%] sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl"
       >
-        <SheetHeader>
-          <SheetTitle className="text-xl tracking-wider">
+        <DialogHeader>
+          <DialogTitle className="text-xl tracking-wider">
             Modifier un plat
-          </SheetTitle>
-        </SheetHeader>
+          </DialogTitle>
+        </DialogHeader>
         <Form {...modifyDishForm}>
           <form
             onSubmit={modifyDishForm.handleSubmit(onSubmit)}
@@ -261,7 +255,7 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
             </Button>
           </form>
         </Form>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 };

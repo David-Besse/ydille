@@ -5,12 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -88,27 +88,24 @@ export const ModifyDishTypeButton = ({
   };
 
   return (
-    <Sheet
+    <Dialog
       open={sheetOpening} // state of the sheet
       onOpenChange={() => setSheetOpening(!sheetOpening)} // control the opening/closing state of the sheet (manually)
     >
-      <SheetTrigger asChild>
+      <DialogTrigger asChild>
         <Button
           variant="outline"
           className="p-0 h-6 w-6 hover:border-black hover:shadow-md"
         >
           <PencilIcon size={18} />
         </Button>
-      </SheetTrigger>
-      <SheetContent
-        side={"bottom"}
-        className="w-[95%] sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl"
-      >
-        <SheetHeader>
-          <SheetTitle className="text-xl tracking-wider">
+      </DialogTrigger>
+      <DialogContent className="w-[95%] sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl">
+        <DialogHeader>
+          <DialogTitle className="text-xl tracking-wider">
             Modifier une catégorie
-          </SheetTitle>
-        </SheetHeader>
+          </DialogTitle>
+        </DialogHeader>
         <Form {...modifyDishTypeForm}>
           <form
             onSubmit={modifyDishTypeForm.handleSubmit(onSubmit)}
@@ -145,7 +142,7 @@ export const ModifyDishTypeButton = ({
             </Button>
           </form>
         </Form>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 };

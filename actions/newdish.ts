@@ -41,15 +41,17 @@ export const newDishAction = async (
     };
   }
 
-  // Update dish
-  const updatedDish = await createDish({
+  const newDish = {
     dish: {
       name: validatedFields.data.name,
       price: validatedFields.data.price,
       description: validatedFields.data.description,
     },
     dishType: dishType,
-  });
+  };
+
+  // Update dish
+  const updatedDish = await createDish(newDish);
   if (!updatedDish) {
     return { error: "Un problème est survenu" };
   }

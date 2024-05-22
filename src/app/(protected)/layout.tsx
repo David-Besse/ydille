@@ -12,7 +12,7 @@ const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
 
   return (
     <SessionProvider session={session}>
-      <div className="flex flex-col min-h-screen w-full items-center justify-center bg-[url('/img/plage.jpg')] bg-cover bg-no-repeat py-32">
+      <div className="flex flex-col min-h-screen w-full items-center justify-center">
         <Navbar />
         {children}
         <Toaster />

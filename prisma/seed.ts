@@ -104,18 +104,23 @@ export async function populate() {
   const dishTypesList: Prisma.DishTypeCreateInput[] = [
     {
       name: "Tapas",
+      order: 1,
     },
     {
       name: "Entrées",
+      order: 2,
     },
     {
       name: "Plats",
+      order: 3,
     },
     {
       name: "Desserts",
+      order: 4,
     },
     {
       name: "Stock",
+      order: 0,
     },
   ];
 
