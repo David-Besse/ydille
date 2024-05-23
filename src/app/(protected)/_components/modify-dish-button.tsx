@@ -106,7 +106,7 @@ export const ModifyDishButton = ({ dish, dishType }: ModifyDishButtonProps) => {
             );
           }
 
-          // if data.success and data.dish, we have a new dish and we can update the store
+          // if data.success and data.updatedDish, we can update the store with the new dish
           if (data.updatedDish) {
             updateDishInState(data.updatedDish);
             setSheetOpening(false);

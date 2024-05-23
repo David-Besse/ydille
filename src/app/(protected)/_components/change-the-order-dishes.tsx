@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { ListOrderedIcon } from "lucide-react";
 import _ from "lodash";
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dialog";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { localDish, localDishType } from "@/store/dish-store";
+import { toast } from "sonner";
+import { orderChangeDishtypeAction } from "../../../../actions/order-change-dishtype";
 
 export const ChangeTheOrderDishes = () => {
   const [sheetOpening, setSheetOpening] = useState(false);
@@ -21,6 +23,7 @@ export const ChangeTheOrderDishes = () => {
   const [items, setItems] = useState<
     { dishes: localDish[]; dishType: localDishType }[]
   >([]);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setItems(localDishesAndDishTypesList);
@@ -38,9 +41,20 @@ export const ChangeTheOrderDishes = () => {
       };
     });
 
-    setLocalDishesAndDishTypesList(newItemsListOrdered);
-
-    setSheetOpening(false);
+    startTransition(() => {
+      orderChangeDishtypeAction(newItemsListOrdered)
+        .then((data) => {
+          if (data.success && data.updatedDishesAndDishtypes) {
+            setLocalDishesAndDishTypesList(data.updatedDishesAndDishtypes);
+            toast.success(data.success);
+            setSheetOpening(false);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.error);
+          console.log(error);
+        });
+    });
   };
 
   return (
@@ -78,9 +92,9 @@ export const ChangeTheOrderDishes = () => {
                 <Reorder.Item
                   key={item.dishType.id}
                   value={item}
-                  className="min-w-[150px] w-fit h-[50px] flex items-center justify-center rounded-lg border shadow-sm cursor-grab hover:bg-slate-100 hover:border-2 px-4"
+                  className="min-w-[250px] w-fit h-[50px] flex items-center justify-center rounded-lg border shadow-sm cursor-grab hover:bg-slate-100 hover:border-2 px-4"
                 >
-                  <p className="w-full text-sm text-center flex justify-between font-semibold p-1">
+                  <p className="w-full text-sm text-center flex justify-between font-semibold p-1 gap-2">
                     <span className="h-fit">{index}</span>{" "}
                     <span>{item.dishType.name.toUpperCase()}</span>
                   </p>
@@ -94,6 +108,7 @@ export const ChangeTheOrderDishes = () => {
           type="button"
           onClick={handleOrderChange}
           className="hover:bg-emerald-600 w-fit self-end"
+          disabled={isPending}
         >
           Valider
         </Button>

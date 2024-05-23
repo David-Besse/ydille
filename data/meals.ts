@@ -37,7 +37,11 @@ export async function createDishType(data: { name: string; order: number }) {
   }
 }
 
-export async function updateDishType(data: any) {
+export async function updateDishType(data: {
+  id: string;
+  name: string;
+  order: number;
+}) {
   try {
     const updatedDishType = await db.dishType.update({
       where: { id: data.id },

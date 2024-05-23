@@ -30,6 +30,7 @@ interface ModifyDishTypeButtonProps {
   dishTypeElement: {
     id: string;
     name: string;
+    order: number;
   };
 }
 
@@ -45,6 +46,7 @@ export const ModifyDishTypeButton = ({
     defaultValues: {
       id: dishTypeElement.id,
       name: dishTypeElement.name,
+      order: dishTypeElement.order,
     },
   });
 
@@ -60,6 +62,7 @@ export const ModifyDishTypeButton = ({
       modifyDishTypeAction({
         id: values.id,
         name: values.name,
+        order: values.order,
       })
         .then((data) => {
           // if data.error, there was an error

@@ -229,6 +229,7 @@ export const ModifyDishTypeFormSchema = z.object({
     .string()
     .trim()
     .min(3, { message: "T'as oublié le nom de la catégorie !" }),
+  order: z.number().nonnegative().int(),
 });
 
 export const CreateDishTypeFormSchema = z.object({
@@ -237,7 +238,12 @@ export const CreateDishTypeFormSchema = z.object({
     .string()
     .trim()
     .min(3, { message: "T'as oublié le nom de la catégorie !" }),
-  order: z.number().min(1, {
-    message: "Ce serait dommage de servir le dessert avant l'entrée ?",
-  }),
+  order: z.number().nonnegative().int(),
 });
+
+export const OrderChangeDishtypeSchema = z.array(
+  z.object({
+    dishType: DishTypeSchema,
+    dishes: z.array(DishSchema),
+  })
+);
