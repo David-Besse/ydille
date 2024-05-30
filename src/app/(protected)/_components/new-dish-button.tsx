@@ -32,7 +32,7 @@ import {
 import _ from "lodash";
 import { toast } from "sonner";
 import { useDishStore } from "@/store/dish-store-provider";
-import { newDishAction } from "../../../../actions/newdish";
+import { newDishAction } from "../../../../actions/new-dish";
 
 export const NewDishButton = () => {
   const [sheetOpening, setSheetOpening] = useState(false);
@@ -51,7 +51,7 @@ export const NewDishButton = () => {
       name: "",
       description: "",
       price: 0,
-      dishTypeId: "stock",
+      dishTypeId: undefined,
     },
   });
 
@@ -59,12 +59,12 @@ export const NewDishButton = () => {
     startTransition(() => {
       newDishAction(values)
         .then((data) => {
-          if (data.error) {
+          if (data.error || !data.createdDishWithDishType) {
             data.error || toast.error("Erreur lors de la création du plat");
           }
 
-          if (data.updatedDish) {
-            updateDishInState(data.updatedDish);
+          if (data.createdDishWithDishType) {
+            updateDishInState(data.createdDishWithDishType);
             setSheetOpening(false);
             toast.success("Nouveau plat enregistré !");
             dishForm.reset();
@@ -72,7 +72,6 @@ export const NewDishButton = () => {
         })
         .catch((error) => {
           toast.error("Une erreur est survenue");
-          console.log(error);
         });
     });
   };
@@ -91,9 +90,7 @@ export const NewDishButton = () => {
           Ajouter un plat
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className="w-[95%] sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl"
-      >
+      <DialogContent className="w-[95%] sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl">
         <DialogHeader>
           <DialogTitle className="text-xl tracking-wider">
             Ajouter un plat

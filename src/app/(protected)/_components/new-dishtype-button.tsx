@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +29,9 @@ import { newDishType } from "../../../../actions/new-dishtype";
 export const NewDishTypeButton = () => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { createDishTypeInState } = useDishStore((state) => state);
+  const { createDishTypeInState, localDishesAndDishTypesList } = useDishStore(
+    (state) => state
+  );
 
   const dishTypeForm = useForm<z.infer<typeof CreateDishTypeFormSchema>>({
     resolver: zodResolver(CreateDishTypeFormSchema),
@@ -37,6 +39,11 @@ export const NewDishTypeButton = () => {
       name: "",
     },
   });
+
+  // set the order of the new dishType to the last dishType + 1
+  useEffect(() => {
+    dishTypeForm.setValue("order", localDishesAndDishTypesList.length + 1);
+  }, [dishTypeForm, localDishesAndDishTypesList]);
 
   const onSubmit = (values: z.infer<typeof CreateDishTypeFormSchema>) => {
     startTransition(() => {
@@ -56,7 +63,6 @@ export const NewDishTypeButton = () => {
         })
         .catch((error) => {
           toast.error(error.error);
-          console.log(error);
         });
     });
   };
@@ -75,9 +81,7 @@ export const NewDishTypeButton = () => {
           Ajouter une catégorie
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className="w-[95%] sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl"
-      >
+      <DialogContent className="w-[95%] sm:w-fit p-6">
         <DialogHeader>
           <DialogTitle className="text-xl tracking-wider">
             Ajouter une catégorie
@@ -86,9 +90,9 @@ export const NewDishTypeButton = () => {
         <Form {...dishTypeForm}>
           <form
             onSubmit={dishTypeForm.handleSubmit(onSubmit)}
-            className="flex flex-col gap-8 py-8"
+            className="w-full flex flex-col gap-8 py-8"
           >
-            <div className="space-y-6">
+            <div className="space-y-6 md:space-y-0 md:gap-4 md:flex items-end">
               {/* Product name field */}
               <FormField
                 control={dishTypeForm.control}
@@ -96,7 +100,7 @@ export const NewDishTypeButton = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-base tracking-wide">
-                      Nom de la catégorie de plat (exemple: entrées ou tapas
+                      Nom de la catégorie de plat (ex: entrées ou tapas
                       ...)
                     </FormLabel>
                     <FormControl>
@@ -105,7 +109,24 @@ export const NewDishTypeButton = () => {
                         type="text"
                         disabled={isPending}
                         autoComplete="off"
+                        className="w-96 h-9"
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={dishTypeForm.control}
+                name="order"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      N° :
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} type="number" disabled={true} className="w-16 h-9 bg-gray-200 font-semibold" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

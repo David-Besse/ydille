@@ -37,10 +37,10 @@ const Carte = async () => {
     })
   );
 
-  // Prevent displaying "stock"
+  // Prevent displaying the default dishType
   const dishtypesAndDishesNoStock = dishTypesAndDishesListFormated.filter(
     (el) => {
-      return el.dishType.name.toLowerCase() !== "stock";
+      return el.dishType.order !== 0;
     }
   );
 

@@ -52,7 +52,6 @@ export const ChangeTheOrderDishes = () => {
         })
         .catch((error) => {
           toast.error(error.error);
-          console.log(error);
         });
     });
   };

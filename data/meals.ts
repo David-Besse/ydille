@@ -105,28 +105,12 @@ export async function createDish(data: {
       },
     });
 
-    // If not, create a new dishtype named "stock" and create a new dish-to-dishtype relationship
-    if (!existingDishType) {
-      // create a new dishtype named "stock" (default)
-      const newDishType = await db.dishType.create({
-        data: {
-          name: "stock",
-          order: 0,
-        },
-      });
+    // Create a new dish-to-dishtype relationship with existingDishType
+    await db.dishDishTypeLink.create({
+      data: { dishId: dish.id, dishTypeId: existingDishType?.id },
+    });
 
-      // Create a new dish-to-dishType relationship with newDishType
-      await db.dishDishTypeLink.create({
-        data: { dishId: dish.id, dishTypeId: newDishType.id },
-      });
-    } else {
-      // If yes, create a new dish-to-dishtype relationship with existingDishType
-      await db.dishDishTypeLink.create({
-        data: { dishId: dish.id, dishTypeId: existingDishType.id },
-      });
-    }
-
-    const newDishWithDishType = await db.dish.findUnique({
+    const createdDishWithDishType = await db.dish.findUnique({
       where: { id: dish.id },
       include: {
         dishToDishType: {
@@ -143,25 +127,27 @@ export async function createDish(data: {
       },
     });
 
+    //if dishType is not created return null
     if (
-      !newDishWithDishType ||
-      !newDishWithDishType.dishToDishType ||
-      !newDishWithDishType.dishToDishType.dishType
+      !createdDishWithDishType ||
+      !createdDishWithDishType.dishToDishType ||
+      !createdDishWithDishType.dishToDishType.dishType
     ) {
       return null;
     }
 
+    // return the created dish with his dishType
     return {
       dish: {
-        id: newDishWithDishType.id,
-        name: newDishWithDishType.name,
-        price: newDishWithDishType.price,
-        description: newDishWithDishType.description,
+        id: createdDishWithDishType.id,
+        name: createdDishWithDishType.name,
+        price: createdDishWithDishType.price,
+        description: createdDishWithDishType.description,
       },
       dishType: {
-        id: newDishWithDishType.dishToDishType.dishType.id,
-        name: newDishWithDishType.dishToDishType.dishType.name,
-        order: newDishWithDishType.dishToDishType.dishType.order,
+        id: createdDishWithDishType.dishToDishType.dishType.id,
+        name: createdDishWithDishType.dishToDishType.dishType.name,
+        order: createdDishWithDishType.dishToDishType.dishType.order,
       },
     };
   } catch (error) {

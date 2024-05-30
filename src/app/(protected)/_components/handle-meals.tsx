@@ -40,103 +40,103 @@ export const HandleMeals = ({ data }: HandleMealsProps) => {
   return (
     <div
       id="handle-meals"
-      className="w-full p-2 md:px-24 md:py-12 border-none shadow-black shadow-lg rounded-lg bg-white bg-opacity-[95%] z-0 cursor-default tracking-widest"
+      className="w-full py-24 px-2 md:px-0 border-none shadow-black shadow-lg rounded-lg bg-white z-0 cursor-default tracking-widest"
     >
       <div
-        className={cn(
-          "w-full text-3xl text-center pt-10 pb-20",
-          asapFont.className
-        )}
+        className={cn("w-full text-2xl py-10 border-b-2", asapFont.className)}
       >
-        <h2 className="font-bold h-[4rem] flex items-center justify-center">
-          Gestion de la carte
+        <h2 className="font-bold px-2 text-center md:text-end">
+          Panneau de gestion de la carte
         </h2>
       </div>
 
-      <div className="flex flex-col gap-4 border-t-2 py-12">
-        <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+      <div className="flex flex-col md:flex-row">
+        <aside className="md:w-fit flex flex-col justify-start items-center gap-2 p-2 border-b-2 md:border-b-0 md:border-r-2">
           <NewDishTypeButton />
           <NewDishButton />
           <ChangeTheOrderDishes />
-        </div>
-      </div>
+        </aside>
 
-      <div
-        className={cn(
-          "flex flex-col justify-center items-center text-black gap-16",
-          asapFont.className
-        )}
-      >
-        {localDishesAndDishTypesList.length > 0 &&
-          localDishesAndDishTypesList
-            .sort((a, b) => a.dishType.order - b.dishType.order)
-            .map((dishAndDishtype) => {
-              return (
-                <div
-                  className="w-full rounded-lg"
-                  key={dishAndDishtype.dishType.id}
-                >
-                  <Table className="overflow-hidden">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-lg font-bold uppercase flex gap-2 justify-start items-center">
-                          {dishAndDishtype.dishType.order}. {dishAndDishtype.dishType.name}
-                          <span className="flex gap-2">
-                            <ModifyDishTypeButton
-                              dishTypeElement={dishAndDishtype.dishType}
-                            />
-                            <DeleteDishTypeButton
-                              dishTypeElement={dishAndDishtype.dishType}
-                            />
-                          </span>
-                        </TableHead>
-                        {/* <TableHead className="text-base text-right w-[4rem] font-bold">
+        <div
+          className={cn(
+            "w-full flex flex-col justify-center items-center text-black gap-16 md:px-24 py-24",
+            asapFont.className
+          )}
+        >
+          {localDishesAndDishTypesList.length > 0 &&
+            localDishesAndDishTypesList
+              .sort((a, b) => a.dishType.order - b.dishType.order)
+              .map((dishAndDishtype) => {
+                return (
+                  <div
+                    className="w-full md:w-2/3 rounded-lg"
+                    key={dishAndDishtype.dishType.id}
+                  >
+                    <Table className="overflow-hidden">
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-lg font-bold uppercase flex gap-2 justify-start items-center">
+                            {dishAndDishtype.dishType.order}.{" "}
+                            {dishAndDishtype.dishType.name}
+                            <span className="flex gap-2">
+                              <ModifyDishTypeButton
+                                dishTypeElement={dishAndDishtype.dishType}
+                              />
+                              {dishAndDishtype.dishType.order !== 0 && (
+                                <DeleteDishTypeButton
+                                  dishTypeElement={dishAndDishtype.dishType}
+                                />
+                              )}
+                            </span>
+                          </TableHead>
+                          {/* <TableHead className="text-base text-right w-[4rem] font-bold">
                         Prix*
                       </TableHead> */}
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {dishAndDishtype.dishes
-                        // we sort by name
-                        .sort((a, b) => a.name.localeCompare(b.name, "fr"))
-                        // we map over the dishes
-                        .map((food, index) => (
-                          <TableRow
-                            className="border-none"
-                            key={index + "_" + food.name}
-                          >
-                            <TableCell className="py-4 pr-4 space-y-2 font-semibold">
-                              <p className="text-base">{food.name}</p>
-                              <p className="text-muted-foreground leading-4 tracking-wider">
-                                {food.description}
-                              </p>
-                              <p>{food.price.toFixed(2)}€</p>
-                            </TableCell>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {dishAndDishtype.dishes
+                          // we sort by name
+                          .sort((a, b) => a.name.localeCompare(b.name, "fr"))
+                          // we map over the dishes
+                          .map((food, index) => (
+                            <TableRow
+                              className="border-none"
+                              key={index + "_" + food.name}
+                            >
+                              <TableCell className="py-4 pr-4 space-y-2 font-semibold">
+                                <p className="text-base">{food.name}</p>
+                                <p className="text-muted-foreground leading-4 tracking-wider">
+                                  {food.description}
+                                </p>
+                                <p>{food.price.toFixed(2)}€</p>
+                              </TableCell>
 
-                            <TableCell className="flex justify-end pt-4">
-                              <div
-                                onClick={() =>
-                                  setCurrentDishAndDishType({
-                                    dishType: dishAndDishtype.dishType,
-                                    dish: food,
-                                  })
-                                }
-                                className="flex flex-col gap-2"
-                              >
-                                <ModifyDishButton
-                                  dishType={dishAndDishtype.dishType}
-                                  dish={food}
-                                />
-                                <DeleteDishButton />
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              );
-            })}
+                              <TableCell className="flex justify-end pt-4">
+                                <div
+                                  onClick={() =>
+                                    setCurrentDishAndDishType({
+                                      dishType: dishAndDishtype.dishType,
+                                      dish: food,
+                                    })
+                                  }
+                                  className="flex flex-col gap-2"
+                                >
+                                  <ModifyDishButton
+                                    dishType={dishAndDishtype.dishType}
+                                    dish={food}
+                                  />
+                                  <DeleteDishButton />
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                );
+              })}
+        </div>
       </div>
     </div>
   );

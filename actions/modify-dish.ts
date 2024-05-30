@@ -42,7 +42,6 @@ export const modifyDishAction = async (
   // Update dish
   const updatedDish = await updateDish(validatedFields.data);
   if (!updatedDish) {
-    console.log(updateDish);
     return { error: "Un problème est survenu lors de la mise à jour du plat" };
   }
 

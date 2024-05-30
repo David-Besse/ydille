@@ -170,7 +170,7 @@ export const DishSchema = z.object({
   description: z
     .string()
     .trim()
-    .min(10, { message: "T'as oublié la description !" }),
+    .min(1, { message: "T'as oublié la description !" }),
 });
 
 // dishtype schema
@@ -206,7 +206,7 @@ export const ModifyDishFormSchema = z.object({
   description: z
     .string()
     .trim()
-    .min(10, { message: "T'as oublié la description !" }),
+    .min(1, { message: "T'as oublié la description !" }),
   dishTypeId: z.string().trim(),
 });
 
@@ -219,7 +219,7 @@ export const CreateDishFormSchema = z.object({
   description: z
     .string()
     .trim()
-    .min(10, { message: "T'as oublié la description !" }),
+    .min(1, { message: "T'as oublié la description !" }),
   dishTypeId: z.string().trim(),
 });
 

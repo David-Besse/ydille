@@ -4,7 +4,7 @@ import { z } from "zod";
 import { db } from "../src/lib/db";
 import { CreateDishFormSchema } from "../schemas";
 import { currentUserFromServer } from "@/lib/currentUserServerAccess";
-import { createDish, getDishTypeByName } from "../data/meals";
+import { createDish, getAllDishTypes, getDishType } from "../data/meals";
 
 export const newDishAction = async (
   values: z.infer<typeof CreateDishFormSchema>
@@ -31,30 +31,43 @@ export const newDishAction = async (
     return { error: "Un problème est survenu" };
   }
 
-  // get the dishType default
-  const dishType = await getDishTypeByName("stock");
-
-  if (!dishType) {
+  // get the selected dishType
+  const selectedDishType = await getDishType(values.dishTypeId);
+  if (!selectedDishType) {
     return {
-      error:
-        "Un problème est survenu (impossible d'accéder à la catégorie par défaut)",
+      error: "un problème est survenu pour récupérer le type de plat",
     };
   }
 
-  const newDish = {
+  const newDish: {
+    dish: {
+      name: string;
+      price: number;
+      description: string;
+    };
+    dishType: {
+      id: string;
+      name: string;
+      order: number;
+    };
+  } = {
     dish: {
       name: validatedFields.data.name,
       price: validatedFields.data.price,
       description: validatedFields.data.description,
     },
-    dishType: dishType,
+    dishType: {
+      id: selectedDishType.id,
+      name: selectedDishType.name,
+      order: selectedDishType.order,
+    },
   };
 
-  // Update dish
-  const updatedDish = await createDish(newDish);
-  if (!updatedDish) {
-    return { error: "Un problème est survenu" };
-  }
+  // Create new dish in database
+  const createdDishWithDishType = await createDish(newDish);
 
-  return { updatedDish: updatedDish, success: "Plat modifié" };
+  if (!createdDishWithDishType) {
+    return { error: "Échec de la création du plat" };
+  }
+  return { createdDishWithDishType: createdDishWithDishType, success: "Plat créé avec succès" };
 };

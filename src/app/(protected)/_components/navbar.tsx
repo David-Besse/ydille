@@ -31,14 +31,14 @@ export const Navbar = () => {
       break;
 
     default:
-      shadowColor = "shadow-[0_0_4px_4px_rgb(255,255,255,0.5)]";
+      shadowColor = "shadow-[0_0_4px_4px_rgb(0,0,0,1)]";
       break;
   }
 
   return (
     <nav
       className={cn(
-        "fixed w-[90%] sm:w-2/3 top-2 left-1/2 transform -translate-x-1/2 flex items-center justify-between p-4 rounded-xl bg-white z-50",
+        "fixed w-[90%] sm:w-2/3 top-0 left-1/2 transform -translate-x-1/2 flex items-center justify-between p-4 rounded-b-xl bg-white z-50",
         shadowColor
       )}
     >
