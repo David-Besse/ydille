@@ -15,6 +15,7 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 import { localDish, localDishType } from "@/store/dish-store";
 import { toast } from "sonner";
 import { orderChangeDishtypeAction } from "../../../../actions/order-change-dishtype";
+import { CustomReorderItem } from "./custom-reorder-item";
 
 export const ChangeTheOrderDishes = () => {
   const [sheetOpening, setSheetOpening] = useState(false);
@@ -26,15 +27,16 @@ export const ChangeTheOrderDishes = () => {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    setItems(localDishesAndDishTypesList);
-  }, [localDishesAndDishTypesList]);
+    if (!sheetOpening) {
+      setItems(localDishesAndDishTypesList);
+    }
+  }, [localDishesAndDishTypesList, sheetOpening]);
 
   const handleOrderChange = () => {
     const newItemsListOrdered = items.map((item, index) => {
       return {
         dishType: {
-          id: item.dishType.id,
-          name: item.dishType.name,
+          ...item.dishType,
           order: index,
         },
         dishes: item.dishes,
@@ -82,22 +84,19 @@ export const ChangeTheOrderDishes = () => {
         </DialogHeader>
         <div className="py-4">
           <Reorder.Group
+            axis="y"
             values={items}
             onReorder={setItems}
             className="flex flex-col items-center justify-center gap-2"
           >
             <AnimatePresence>
               {items.map((item, index) => (
-                <Reorder.Item
+                <CustomReorderItem
                   key={item.dishType.id}
-                  value={item}
-                  className="min-w-[250px] w-fit h-[50px] flex items-center justify-center rounded-lg border shadow-sm cursor-grab hover:bg-slate-100 hover:border-2 px-4"
-                >
-                  <p className="w-full text-sm text-center flex justify-between font-semibold p-1 gap-2">
-                    <span className="h-fit">{index}</span>{" "}
-                    <span>{item.dishType.name.toUpperCase()}</span>
-                  </p>
-                </Reorder.Item>
+                  item={item}
+                  index={index}
+                  isFixed={index === 0}
+                />
               ))}
             </AnimatePresence>
           </Reorder.Group>
