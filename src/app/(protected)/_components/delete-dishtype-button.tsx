@@ -52,7 +52,7 @@ export function DeleteDishTypeButton({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="p-0 w-6 h-6  border border-red-500 bg-white text-red-500 hover:text-white hover:bg-red-500">
+        <Button className="p-0 w-8 h-8  border border-red-500 bg-white text-red-500 hover:text-white hover:bg-red-500">
           <Trash2Icon size={14} className="" />
         </Button>
       </DialogTrigger>

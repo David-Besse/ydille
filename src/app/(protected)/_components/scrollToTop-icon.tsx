@@ -72,7 +72,7 @@ export const ScrollToTopIcon = () => {
         staggerChildren: 0.05,
       }}
       className={cn(
-        "fixed bottom-8 right-8 sm:bottom-[10%] sm:right-[10%] bg-white rounded-xl z-50",
+        "text-gray-500 fixed bottom-8 right-8 sm:bottom-[10%] sm:right-[10%] bg-white rounded-xl z-50",
         shadowColor
       )}
     >

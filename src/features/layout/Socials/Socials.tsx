@@ -4,7 +4,7 @@ import instaIcon from "../../../../public/img/instagram.png";
 import tripIcon from "../../../../public/img/tripadvisor.png";
 import facebookIcon from "../../../../public/img/facebook.png";
 
-const Socials = () => {
+export const Socials = () => {
   return (
     <div
       id="footer_social"
@@ -52,5 +52,3 @@ const Socials = () => {
     </div>
   );
 };
-
-export default Socials;

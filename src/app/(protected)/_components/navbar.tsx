@@ -25,14 +25,12 @@ const parentVariants = {
 export const Navbar = () => {
   const [hidden, setHidden] = useState(false);
   const [prevScroll, setPrevScroll] = useState(0);
-
-  // get the scroll position (Y)
   const { scrollY } = useScroll();
-
   const currentUser = useCurrentUser();
   const currentPath = usePathname();
 
   let shadowColor = "";
+  const defaultShadowColor = "shadow-[0_0_4px_4px_rgb(0,0,0,1)]";
 
   const hideNavbarOnScrollChanges = (latest: number, prevScroll: number) => {
     if (latest > 50 && latest > prevScroll) {
@@ -66,7 +64,7 @@ export const Navbar = () => {
       break;
 
     default:
-      shadowColor = "shadow-[0_0_4px_4px_rgb(0,0,0,1)]";
+      shadowColor = defaultShadowColor;
       break;
   }
 
@@ -88,11 +86,13 @@ export const Navbar = () => {
         <Image src="/img/idylle.svg" alt="logo idylle" width={60} height={60} />
       </Link>
 
-      <p className="text-xl font-semibold flex flex-col justify-center items-center">
+      <p className="text-gray-700 text-xl font-semibold flex flex-col justify-center items-center">
         Bonjour {currentUser?.name} !<br />
-        <span className="italic text-sm text-gray-400 flex gap-2">
-          le menu se trouve vers ici <ArrowRightIcon className="w-4 h-4" />
-        </span>
+        {shadowColor !== defaultShadowColor && (
+          <span className="italic text-sm text-gray-400 flex gap-2">
+            le menu se trouve vers ici <ArrowRightIcon className="w-4 h-4" />
+          </span>
+        )}
       </p>
 
       <div className="flex gap-2 items-center justify-center">

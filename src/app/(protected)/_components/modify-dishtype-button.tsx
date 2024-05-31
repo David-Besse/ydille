@@ -98,7 +98,7 @@ export const ModifyDishTypeButton = ({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="p-0 h-6 w-6 hover:border-black hover:shadow-md"
+          className="p-0 h-8 w-8 text-emerald-500 bg-white border border-emerald-500 hover:bg-emerald-500 hover:text-white"
         >
           <PencilIcon size={18} />
         </Button>

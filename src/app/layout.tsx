@@ -4,9 +4,6 @@ import { handleeFont } from "@/components/fonts/fonts";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import { cn } from "../lib/utils";
 import "./globals.css";
-import { Header } from "@/features/layout/Header/Header";
-import { Footer } from "@/features/layout/Footer/Footer";
-import Socials from "@/features/layout/Socials/Socials";
 
 export const metadata: Metadata = {
   title: "Idylle Club",
