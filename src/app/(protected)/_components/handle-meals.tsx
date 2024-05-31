@@ -40,12 +40,12 @@ export const HandleMeals = ({ data }: HandleMealsProps) => {
   return (
     <div
       id="handle-meals"
-      className="w-full py-24 px-2 md:px-0 border-none shadow-black shadow-lg rounded-lg bg-white z-0 cursor-default tracking-widest"
+      className="w-full min-h-screen py-24 px-2 md:px-0 border-none shadow-black shadow-lg rounded-lg bg-white z-0 cursor-default tracking-widest"
     >
       <div
         className={cn("w-full text-2xl py-10 border-b-2", asapFont.className)}
       >
-        <h2 className="font-bold px-2 text-center md:text-end">
+        <h2 className="font-bold px-2 text-center md:text-start">
           Panneau de gestion de la carte
         </h2>
       </div>
@@ -89,9 +89,6 @@ export const HandleMeals = ({ data }: HandleMealsProps) => {
                               )}
                             </span>
                           </TableHead>
-                          {/* <TableHead className="text-base text-right w-[4rem] font-bold">
-                        Prix*
-                      </TableHead> */}
                         </TableRow>
                       </TableHeader>
                       <TableBody>

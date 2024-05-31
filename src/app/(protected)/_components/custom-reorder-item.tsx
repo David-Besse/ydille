@@ -8,10 +8,10 @@ interface Props {
     dishes: { id: string; name: string; price: number; description: string }[];
   };
   index: number;
-  isFixed: boolean;
+  isInactive: boolean;
 }
 
-export const CustomReorderItem = ({ item, index, isFixed }: Props) => {
+export const CustomReorderItem = ({ item, index, isInactive }: Props) => {
   return (
     <Reorder.Item
       id={item.dishType.name}
@@ -19,7 +19,7 @@ export const CustomReorderItem = ({ item, index, isFixed }: Props) => {
       className={cn(
         `min-w-[250px] w-fit h-[50px] flex items-center justify-center rounded-lg border shadow-sm hover:bg-slate-100 hover:border-2 hover:shadow-lg px-4 gap-2`,
         {
-          hidden: isFixed,
+          hidden: isInactive,
         }
       )}
     >

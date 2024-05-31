@@ -28,7 +28,7 @@ export const UserButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild data-state="closed">
-        <Avatar className="w-8 h-8 hover:scale-125 cursor-pointer">
+        <Avatar className="w-12 h-12 hover:scale-125 cursor-pointer">
           <AvatarImage src={user && user.image ? user.image : ""} />
           <AvatarFallback className="bg-gray-500 text-white hover:border hover:text-gray-500 hover:bg-white">
             <FaUser />

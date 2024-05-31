@@ -5,13 +5,48 @@ import { useCurrentUser } from "../../../../hooks/useCurrentUser";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useScroll, motion, useMotionValueEvent } from "framer-motion";
+import { useState } from "react";
+import { ArrowRightIcon } from "lucide-react";
+
+// VARIANTS
+const parentVariants = {
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+  hidden: {
+    opacity: 0,
+    y: -50,
+  },
+};
 
 export const Navbar = () => {
+  const [hidden, setHidden] = useState(false);
+  const [prevScroll, setPrevScroll] = useState(0);
+
+  // get the scroll position (Y)
+  const { scrollY } = useScroll();
+
   const currentUser = useCurrentUser();
   const currentPath = usePathname();
+
   let shadowColor = "";
+
+  const hideNavbarOnScrollChanges = (latest: number, prevScroll: number) => {
+    if (latest > 50 && latest > prevScroll) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+    setPrevScroll(latest);
+  };
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    hideNavbarOnScrollChanges(latest, prevScroll);
+    setPrevScroll(latest);
+  });
 
   switch (currentPath) {
     case "/gestion/evenements":
@@ -36,27 +71,33 @@ export const Navbar = () => {
   }
 
   return (
-    <nav
+    <motion.nav
+      variants={parentVariants}
+      animate={hidden ? "hidden" : "visible"}
+      transition={{
+        ease: [0.32, 0.72, 0, 1],
+        duration: 0.4,
+        staggerChildren: 0.05,
+      }}
       className={cn(
-        "fixed w-[90%] sm:w-2/3 top-0 left-1/2 transform -translate-x-1/2 flex items-center justify-between p-4 rounded-b-xl bg-white z-50",
+        "fixed top-0 z-50 w-[90%] sm:max-w-[800px] flex items-center justify-between p-4 rounded-b-xl bg-white",
         shadowColor
       )}
     >
-      <Link href="/" aria-label="Accueil" title="Accueil">
-        <Image
-          src="/img/idylle.svg"
-          alt="logo idylle"
-          width={50}
-          height={50}
-        />
+      <Link href="/" aria-label="Retour au site" title="Retour au site">
+        <Image src="/img/idylle.svg" alt="logo idylle" width={60} height={60} />
       </Link>
-      <div className="flex gap-4 items-center justify-center">
-        <p className="text-lg text-center">
-          Bonjour
-          <br /> {currentUser?.name} !
-        </p>
+
+      <p className="text-xl font-semibold flex flex-col justify-center items-center">
+        Bonjour {currentUser?.name} !<br />
+        <span className="italic text-sm text-gray-400 flex gap-2">
+          le menu se trouve vers ici <ArrowRightIcon className="w-4 h-4" />
+        </span>
+      </p>
+
+      <div className="flex gap-2 items-center justify-center">
         <UserButton />
       </div>
-    </nav>
+    </motion.nav>
   );
 };

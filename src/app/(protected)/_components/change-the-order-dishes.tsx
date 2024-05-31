@@ -95,7 +95,7 @@ export const ChangeTheOrderDishes = () => {
                   key={item.dishType.id}
                   item={item}
                   index={index}
-                  isFixed={index === 0}
+                  isInactive={index === 0}
                 />
               ))}
             </AnimatePresence>

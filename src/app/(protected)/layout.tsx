@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 import { Navbar } from "@/app/(protected)/_components/navbar";
 import { Toaster } from "@/components/ui/sonner";
+import { ScrollToTopIcon } from "./_components/scrollToTop-icon";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
         <Navbar />
         {children}
         <Toaster />
+        <ScrollToTopIcon />
       </div>
     </SessionProvider>
   );
