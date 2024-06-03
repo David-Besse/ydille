@@ -58,7 +58,7 @@ export const ScrollToTopIcon = () => {
       break;
 
     default:
-      shadowColor = "shadow-[0_0_4px_4px_rgb(0,0,0,1)]";
+      shadowColor = "animate-bounce";
       break;
   }
 
@@ -72,7 +72,7 @@ export const ScrollToTopIcon = () => {
         staggerChildren: 0.05,
       }}
       className={cn(
-        "text-gray-500 fixed bottom-8 right-8 sm:bottom-[10%] sm:right-[10%] bg-white rounded-xl z-50",
+        "text-gray-500 fixed bottom-8 right-8 sm:bottom-[10%] sm:right-[10%] rounded-xl z-50",
         shadowColor
       )}
     >

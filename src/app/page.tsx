@@ -4,6 +4,7 @@ import { HeroPage } from "@/features/layout/Hero/HeroPage";
 import { Contact } from "@/features/layout/Contact/Contact";
 import { Gallery } from "@/features/layout/Gallery/Gallery";
 import { MenuCard } from "@/features/layout/MenuCard/MenuCard";
+import { ScrollToTopIcon } from "@/features/layout/ScrollToTopIcon";
 
 const Home = () => {
   return (
@@ -12,6 +13,7 @@ const Home = () => {
       <Gallery />
       <Contact />
       <MenuCard />
+      <ScrollToTopIcon />
     </PublicLayout>
   );
 };
