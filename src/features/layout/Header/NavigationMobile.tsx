@@ -10,7 +10,7 @@ export const NavigationMobile = () => {
     <div className="text-white block self-center md:hidden">
       <Drawer direction="bottom">
         <DrawerTrigger>
-          <MenuIcon size={48} />
+          <MenuIcon size={46} />
         </DrawerTrigger>
         <DrawerContent className="justify-center items-center gap-4 font-semibold bg-white bg-opacity-70 pb-6">
           <Link href="#hero" aria-label="Accueil">

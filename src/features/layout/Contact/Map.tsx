@@ -19,7 +19,7 @@ export default function Map() {
       center={[44.456244745841765, -1.1998075297139543]}
       zoom={11}
       scrollWheelZoom={false}
-      className="h-[40vh] w-[90vw] md:max-w-[50vw] rounded-xl border border-white z-0"
+      className="w-[250px] h-[300px] md:w-[600px] rounded-xl border border-white z-0"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

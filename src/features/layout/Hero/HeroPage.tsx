@@ -4,7 +4,10 @@ import React from "react";
 
 export const HeroPage = () => {
   return (
-    <div id="hero" className="flex items-center justify-center min-h-[80vh] w-full">
+    <div
+      id="hero"
+      className="flex items-center justify-center w-full"
+    >
       <div className="flex flex-col p-2 w-full justify-center items-center">
         <h1
           id="logo_title"
