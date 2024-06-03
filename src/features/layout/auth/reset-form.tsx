@@ -16,9 +16,8 @@ import {
 import { ResetPasswordSchema } from "../../../../schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FormError } from "@/features/layout/form-error";
-import { FormSuccess } from "@/features/layout/form-sucess";
-import { login } from "../../../../actions/login";
+import { FormError } from "@/features/layout/FormError";
+import { FormSuccess } from "@/features/layout/FormSucess";
 import { resetPassword } from "../../../../actions/reset-password";
 
 export const ResetForm = () => {

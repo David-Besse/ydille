@@ -32,8 +32,8 @@ import {
 import { ProfilSchema } from "../../../../../schemas";
 import { useCurrentUser } from "../../../../../hooks/useCurrentUser";
 
-import { FormError } from "@/features/layout/form-error";
-import { FormSuccess } from "@/features/layout/form-sucess";
+import { FormError } from "@/features/layout/FormError";
+import { FormSuccess } from "@/features/layout/FormSucess";
 import { InputExtended } from "@/features/layout/auth/input-extended";
 
 const ProfilePage = () => {

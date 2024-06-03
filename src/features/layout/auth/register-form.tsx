@@ -17,8 +17,8 @@ import { RegisterSchema } from "../../../../schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { InputExtended } from "@/features/layout/auth/input-extended";
-import { FormError } from "@/features/layout/form-error";
-import { FormSuccess } from "@/features/layout/form-sucess";
+import { FormError } from "@/features/layout/FormError";
+import { FormSuccess } from "@/features/layout/FormSucess";
 import { register } from "../../../../actions/register";
 
 export const RegisterForm = () => {

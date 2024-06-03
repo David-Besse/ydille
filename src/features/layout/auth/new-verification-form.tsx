@@ -5,8 +5,8 @@ import { CardWrapper } from "./card-wrapper";
 import { SyncLoader } from "react-spinners";
 import { useSearchParams } from "next/navigation";
 import { newVerification } from "../../../../actions/new-verification";
-import { FormError } from "@/features/layout/form-error";
-import { FormSuccess } from "@/features/layout/form-sucess";
+import { FormError } from "@/features/layout/FormError";
+import { FormSuccess } from "@/features/layout/FormSucess";
 
 export const NewVerificationForm = () => {
   const [error, setError] = useState<string | undefined>();

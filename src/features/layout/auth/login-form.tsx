@@ -19,8 +19,8 @@ import { LoginSchema } from "../../../../schemas";
 import { Input } from "@/components/ui/input";
 import { InputExtended } from "@/features/layout/auth/input-extended";
 import { Button } from "@/components/ui/button";
-import { FormError } from "@/features/layout/form-error";
-import { FormSuccess } from "@/features/layout/form-sucess";
+import { FormError } from "@/features/layout/FormError";
+import { FormSuccess } from "@/features/layout/FormSucess";
 import { login } from "../../../../actions/login";
 
 export const LoginForm = () => {

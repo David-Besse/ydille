@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,7 +39,9 @@ export const ModifyDishTypeButton = ({
 }: ModifyDishTypeButtonProps) => {
   const [sheetOpening, setSheetOpening] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { updateDishTypeInState } = useDishStore((state) => state);
+  const { updateDishTypeInState, localDishesAndDishTypesList } = useDishStore(
+    (state) => state
+  );
 
   const modifyDishTypeForm = useForm<z.infer<typeof ModifyDishTypeFormSchema>>({
     resolver: zodResolver(ModifyDishTypeFormSchema),
@@ -49,6 +51,21 @@ export const ModifyDishTypeButton = ({
       order: dishTypeElement.order,
     },
   });
+
+  // Update the form values when the dishTypeElement changes
+  useEffect(() => {
+    const updatedDishtype = localDishesAndDishTypesList.find(
+      (dishType) => dishType.dishType.id === dishTypeElement.id
+    );
+
+    if (!updatedDishtype) {
+      return;
+    }
+
+    modifyDishTypeForm.setValue("id", updatedDishtype.dishType.id);
+    modifyDishTypeForm.setValue("name", updatedDishtype?.dishType.name);
+    modifyDishTypeForm.setValue("order", updatedDishtype?.dishType.order);
+  }, [localDishesAndDishTypesList, modifyDishTypeForm, dishTypeElement.id]);
 
   const onSubmit = (values: z.infer<typeof ModifyDishTypeFormSchema>) => {
     // Use lodash to check if there are any changes in properties between form values and dishTypeElement

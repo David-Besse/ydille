@@ -17,8 +17,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { CardWrapper } from "@/features/layout/auth/card-wrapper";
 import { InputExtended } from "@/features/layout/auth/input-extended";
-import { FormError } from "@/features/layout/form-error";
-import { FormSuccess } from "@/features/layout/form-sucess";
+import { FormError } from "@/features/layout/FormError";
+import { FormSuccess } from "@/features/layout/FormSucess";
 import { newPassword } from "../../../../actions/new-password";
 
 export const NewPasswordForm = () => {
