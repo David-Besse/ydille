@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { MenuIcon } from "lucide-react";
@@ -13,13 +13,13 @@ export const NavigationMobile = () => {
           <MenuIcon size={48} />
         </DrawerTrigger>
         <DrawerContent className="justify-center items-center gap-4 font-semibold bg-white bg-opacity-70 pb-6">
-          <Link href="/" aria-label="Accueil">
+          <Link href="#hero" aria-label="Accueil">
             Accueil
           </Link>
-          <Link href="#carte" aria-label="Carte">
+          <Link href="#menucard" aria-label="Carte">
             Carte
           </Link>
-          <Link href="#galerie" aria-label="Galerie">
+          <Link href="#gallery" aria-label="Galerie">
             Galerie
           </Link>
           <Link href="#contact" aria-label="Contact">

@@ -9,15 +9,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { cn } from "../../../lib/utils";
 import Link from "next/link";
-import {
-  ComponentPropsWithoutRef,
-  ElementRef,
-  forwardRef,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
+import { ListItem } from "./ListItem";
 
 export const NavigationDesktop = () => {
   const [menuLinkVisible, setMenuLinkVisible] = useState<boolean>(false);
@@ -43,7 +37,7 @@ export const NavigationDesktop = () => {
       <NavigationMenu>
         <NavigationMenuList className="flex flex-col md:flex-row">
           <NavigationMenuItem>
-            <Link href="/" legacyBehavior passHref>
+            <Link href="#hero" scroll={false} legacyBehavior passHref>
               <NavigationMenuLink
                 className={`${navigationMenuTriggerStyle()} bg-transparent`}
               >
@@ -58,20 +52,29 @@ export const NavigationDesktop = () => {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="gap-3 p-4 w-[20rem]">
-                <ListItem href="/carte" title="Notre carte">
-                  Découvrez nos entrées, plats, desserts, boissons et tapas
-                </ListItem>
-                <ListItem href="tel:+33585098714" title="Réservation">
-                  Réserver à l&apos;avance
-                  <br />
-                  au 05 58 09 87 14
-                </ListItem>
+                <Link href="#menucard" legacyBehavior passHref>
+                  <ListItem title="Notre carte">
+                    Découvrez nos entrées, plats, desserts, boissons et tapas
+                  </ListItem>
+                </Link>
+                <Link
+                  href="tel:+33585098714"
+                  scroll={false}
+                  legacyBehavior
+                  passHref
+                >
+                  <ListItem title="Réservation">
+                    Réserver à l&apos;avance
+                    <br />
+                    au 05 58 09 87 14
+                  </ListItem>
+                </Link>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <Link href="/contact" legacyBehavior passHref>
+            <Link href="#contact" legacyBehavior passHref>
               <NavigationMenuLink
                 className={`${navigationMenuTriggerStyle()} bg-transparent`}
               >
@@ -81,7 +84,7 @@ export const NavigationDesktop = () => {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <Link href="/galerie" accessKey="" legacyBehavior passHref>
+            <Link href="#gallery" legacyBehavior passHref>
               <NavigationMenuLink
                 className={`${navigationMenuTriggerStyle()} bg-transparent`}
               >
@@ -105,28 +108,3 @@ export const NavigationDesktop = () => {
     </div>
   );
 };
-
-const ListItem = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
-  ({ className, title, children, ...props }, ref) => {
-    return (
-      <li>
-        <NavigationMenuLink asChild>
-          <a
-            ref={ref}
-            className={cn(
-              "block select-none space-y-1 rounded-md p-2 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-wrap",
-              className
-            )}
-            {...props}
-          >
-            <p className="text-sm font-bold leading-none">{title}</p>
-            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-              {children}
-            </p>
-          </a>
-        </NavigationMenuLink>
-      </li>
-    );
-  }
-);
-ListItem.displayName = "ListItem";

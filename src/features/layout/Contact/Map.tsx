@@ -18,7 +18,7 @@ export default function Map() {
       preferCanvas={true}
       center={[44.456244745841765, -1.1998075297139543]}
       zoom={11}
-      scrollWheelZoom={true}
+      scrollWheelZoom={false}
       className="h-[40vh] w-[90vw] md:max-w-[50vw] rounded-xl border border-white z-0"
     >
       <TileLayer

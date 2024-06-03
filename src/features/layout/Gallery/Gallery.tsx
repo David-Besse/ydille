@@ -54,7 +54,7 @@ const galleryImgList = [
 
 export const Gallery = () => {
   return (
-    <div className="h-[calc(100vh-20rem)] flex items-center justify-center">
+    <div id="gallery" className="min-h-[80vh] flex items-center justify-center">
       {galleryImgList.length > 0 &&
         galleryImgList.map((img) => (
           <div className="w-fit h-fit" key={img.name + img.id}>

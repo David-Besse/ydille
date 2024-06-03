@@ -55,8 +55,8 @@ export const MenuCard = async () => {
 
   return (
     <div
-      id="carte"
-      className="w-full lg:w-[50vw] p-2 md:px-24 md:py-12 border-none shadow-black shadow-lg rounded-lg bg-white bg-opacity-[90%] z-0 cursor-default tracking-widest"
+      id="menucard"
+      className="w-full min-h-[80vh] lg:w-[50vw] p-2 md:px-24 md:py-12 border-none shadow-black shadow-lg rounded-lg bg-white bg-opacity-[90%] z-0 cursor-default tracking-widest"
     >
       {verifyDishTypes.some((dishType) => dishType === 0) && (
         <div className="w-full flex flex-col justify-center items-center text-center py-6 px-1 gap-8">
