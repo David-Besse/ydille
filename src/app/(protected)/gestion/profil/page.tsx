@@ -32,8 +32,7 @@ import {
 import { ProfilSchema } from "../../../../../schemas";
 import { useCurrentUser } from "../../../../../hooks/useCurrentUser";
 
-import { FormError } from "@/features/layout/FormError";
-import { FormSuccess } from "@/features/layout/FormSucess";
+import { ToastMessage } from "@/features/layout/ToastMessage";
 import { InputExtended } from "@/features/layout/auth/input-extended";
 
 const ProfilePage = () => {
@@ -234,8 +233,7 @@ const ProfilePage = () => {
                 />
               )}
 
-              <FormError message={error} />
-              <FormSuccess message={success} />
+              <ToastMessage message={{error: error, success: success}} />
             </div>
             <Button
               disabled={isPending}

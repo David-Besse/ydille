@@ -16,8 +16,7 @@ import {
 import { ResetPasswordSchema } from "../../../../schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FormError } from "@/features/layout/FormError";
-import { FormSuccess } from "@/features/layout/FormSucess";
+import { ToastMessage } from "@/features/layout/ToastMessage";
 import { resetPassword } from "../../../../actions/reset-password";
 
 export const ResetForm = () => {
@@ -78,8 +77,7 @@ export const ResetForm = () => {
               )}
             />
           </div>
-          <FormError message={error} />
-          <FormSuccess message={success} />
+          <ToastMessage message={{ success: success, error: error }} />
           <Button type="submit" className="w-full" disabled={isPending}>
             Envoyer un email de reinitialisation
           </Button>

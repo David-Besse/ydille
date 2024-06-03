@@ -3,9 +3,6 @@
  */
 export const publicRoutes: string[] = [
   "/",
-  "/carte",
-  "/galerie",
-  "/contact",
   "/auth/new-verification",
   "/mentions-legales",
   "/politique-de-confidentialite",

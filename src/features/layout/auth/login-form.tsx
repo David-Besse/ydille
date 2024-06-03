@@ -19,8 +19,7 @@ import { LoginSchema } from "../../../../schemas";
 import { Input } from "@/components/ui/input";
 import { InputExtended } from "@/features/layout/auth/input-extended";
 import { Button } from "@/components/ui/button";
-import { FormError } from "@/features/layout/FormError";
-import { FormSuccess } from "@/features/layout/FormSucess";
+import { ToastMessage } from "@/features/layout/ToastMessage";
 import { login } from "../../../../actions/login";
 
 export const LoginForm = () => {
@@ -31,7 +30,7 @@ export const LoginForm = () => {
       : "";
 
   const [showTwoFactor, setShowTwoFactor] = useState(false);
-  
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSucess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -158,10 +157,10 @@ export const LoginForm = () => {
                 />
               </>
             )}
-            
           </div>
-          <FormError message={error || urlError} />
-          <FormSuccess message={success} />
+          <ToastMessage
+            message={{ error: error || urlError, success: success }}
+          />
           <Button type="submit" className="w-full" disabled={isPending}>
             {showTwoFactor ? "Valider" : "Se connecter"}
           </Button>

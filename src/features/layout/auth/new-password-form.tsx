@@ -17,8 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CardWrapper } from "@/features/layout/auth/card-wrapper";
 import { InputExtended } from "@/features/layout/auth/input-extended";
-import { FormError } from "@/features/layout/FormError";
-import { FormSuccess } from "@/features/layout/FormSucess";
+import { ToastMessage } from "@/features/layout/ToastMessage";
 import { newPassword } from "../../../../actions/new-password";
 
 export const NewPasswordForm = () => {
@@ -102,8 +101,7 @@ export const NewPasswordForm = () => {
               )}
             />
           </div>
-          <FormError message={error} />
-          <FormSuccess message={success} />
+          <ToastMessage message={{ success: success, error: error }} />
           <Button type="submit" className="w-full" disabled={isPending}>
             Réinitialiser le mot de passe
           </Button>

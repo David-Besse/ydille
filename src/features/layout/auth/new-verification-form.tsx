@@ -5,8 +5,7 @@ import { CardWrapper } from "./card-wrapper";
 import { SyncLoader } from "react-spinners";
 import { useSearchParams } from "next/navigation";
 import { newVerification } from "../../../../actions/new-verification";
-import { FormError } from "@/features/layout/FormError";
-import { FormSuccess } from "@/features/layout/FormSucess";
+import { ToastMessage } from "@/features/layout/ToastMessage";
 
 export const NewVerificationForm = () => {
   const [error, setError] = useState<string | undefined>();
@@ -47,8 +46,7 @@ export const NewVerificationForm = () => {
     >
       <div className="flex items-center justify-center">
         {!success && !error && <SyncLoader color="#e2321f" />}
-        <FormSuccess message={success} />
-        {!success && <FormError message={error} />}
+        <ToastMessage message={{ success: success, error: error }} />
       </div>
     </CardWrapper>
   );

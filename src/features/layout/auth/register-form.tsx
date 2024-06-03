@@ -17,8 +17,7 @@ import { RegisterSchema } from "../../../../schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { InputExtended } from "@/features/layout/auth/input-extended";
-import { FormError } from "@/features/layout/FormError";
-import { FormSuccess } from "@/features/layout/FormSucess";
+import { ToastMessage } from "@/features/layout/ToastMessage";
 import { register } from "../../../../actions/register";
 
 export const RegisterForm = () => {
@@ -143,8 +142,7 @@ export const RegisterForm = () => {
               )}
             />
           </div>
-          <FormError message={error} />
-          <FormSuccess message={success} />
+          <ToastMessage message={{ success: success, error: error }} />
           <Button type="submit" className="w-full" disabled={isPending}>
             Créer un compte
           </Button>

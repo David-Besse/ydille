@@ -2,7 +2,7 @@
 
 import { UserRole } from "@prisma/client";
 import { useCurrentRole } from "../../../../hooks/useCurrentUser";
-import { FormError } from "@/features/layout/FormError";
+import { ToastMessage } from "@/features/layout/ToastMessage";
 
 interface RoleGateProps {
   children: React.ReactNode;
@@ -14,7 +14,11 @@ export const RoleGate = ({ children, allowedRole }: RoleGateProps) => {
 
   if (role !== allowedRole) {
     return (
-      <FormError message="Vous n'avez pas le droit d'accéder à cette page" />
+      <ToastMessage
+        message={{
+          error: "Vous n'avez pas le droit d'accéder à cette page",
+        }}
+      />
     );
   }
 
