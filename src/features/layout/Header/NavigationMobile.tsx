@@ -12,17 +12,17 @@ export const NavigationMobile = () => {
         <DrawerTrigger>
           <MenuIcon size={48} />
         </DrawerTrigger>
-        <DrawerContent className="justify-center items-center gap-4 font-semibold bg-white bg-opacity-90 pb-6">
+        <DrawerContent className="justify-center items-center gap-4 font-semibold bg-white bg-opacity-70 pb-6">
           <Link href="/" aria-label="Accueil">
             Accueil
           </Link>
-          <Link href="/carte" aria-label="Carte">
+          <Link href="#carte" aria-label="Carte">
             Carte
           </Link>
-          <Link href="/galerie" aria-label="Galerie">
+          <Link href="#galerie" aria-label="Galerie">
             Galerie
           </Link>
-          <Link href="/contact" aria-label="Contact">
+          <Link href="#contact" aria-label="Contact">
             Nous contacter
           </Link>
         </DrawerContent>

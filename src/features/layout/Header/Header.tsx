@@ -3,6 +3,7 @@ import * as React from "react";
 import Link from "next/link";
 import { NavigationDesktop } from "./NavigationDesktop";
 import { NavigationMobile } from "./NavigationMobile";
+import { ThemeToggle } from "@/theme/ThemeToggle";
 
 export const Header = () => {
   return (
@@ -18,6 +19,7 @@ export const Header = () => {
           />
         </Link>
       </div>
+      <ThemeToggle />
       <NavigationDesktop />
       <NavigationMobile />
     </header>
