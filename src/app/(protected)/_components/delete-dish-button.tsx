@@ -48,10 +48,13 @@ export function DeleteDishButton() {
           <Trash2Icon size={18} className="" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:min-w-fit">
         <DialogHeader>
-          <DialogDescription className="text-slate-500 text-base font-semibold">
-            T&apos;es certain de vouloir faire ça ?
+          <DialogDescription className="text-slate-500 text-base font-semibold flex flex-col gap-4">
+            <p>T&apos;es certain de vouloir supprimer ?</p>
+            <span className="font-sans text-gray-700 font-semibold self-center">
+              {currentDishAndDishType.dish.name.toUpperCase()}
+            </span>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -59,7 +62,7 @@ export function DeleteDishButton() {
             <Button
               variant={"outline"}
               onClick={() => handleDelete()}
-              className="text-base hover:bg-emerald-500 hover:text-white text-emerald-500"
+              className="text-base hover:bg-emerald-500 hover:text-white text-emerald-500 transition-all duration-[2000ms] ease-in-out"
               disabled={isPending}
             >
               oui

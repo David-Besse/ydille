@@ -103,7 +103,7 @@ export const ModifyDishTypeButton = ({
           <PencilIcon size={18} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95%] sm:max-w-[44rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl">
+      <DialogContent className="w-[95%] sm:max-w-[32rem] left-1/2 transform -translate-x-1/2 rounded-t-xl sm:rounded-t-xl">
         <DialogHeader>
           <DialogTitle className="text-xl tracking-wider">
             Modifier une catégorie
@@ -139,7 +139,7 @@ export const ModifyDishTypeButton = ({
             <Button
               type="submit"
               disabled={isPending}
-              className="hover:bg-emerald-600"
+              className="hover:bg-emerald-600 w-fit self-center"
             >
               Valider
             </Button>

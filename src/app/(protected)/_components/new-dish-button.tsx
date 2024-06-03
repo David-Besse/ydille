@@ -199,7 +199,7 @@ export const NewDishButton = () => {
             <Button
               type="submit"
               disabled={isPending}
-              className="hover:bg-emerald-600"
+              className="hover:bg-emerald-600 w-fit self-center"
             >
               Valider
             </Button>
