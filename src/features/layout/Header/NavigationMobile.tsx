@@ -1,32 +1,72 @@
-// "use client";
+"use client";
 
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { MenuIcon } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import { useCycle, motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { NavigationMobileMenu } from "./NavigationMobileMenu";
+import { NavigationMobileToggle } from "./NavigationMobileToggle";
+
+const sidebar = {
+  open: (height = 1000) => ({
+    clipPath: `circle(${height * 2 + 200}px at 40px 40px)`,
+    transition: {
+      type: "spring",
+      stiffness: 20,
+      restDelta: 2,
+    },
+  }),
+  closed: {
+    clipPath: "circle(26px at 190px 40px)",
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 40,
+    },
+  },
+};
 
 export const NavigationMobile = () => {
+  const [isOpen, toggleOpen] = useCycle(false, true);
+  const containerRef = useRef<HTMLElement>(null);
+  const [dimensions, setDimensions] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        setDimensions({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight,
+        });
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    if (containerRef.current) {
+      handleResize();
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [containerRef]);
+
   return (
-    <div className="text-white block self-center md:hidden">
-      <Drawer direction="bottom">
-        <DrawerTrigger>
-          <MenuIcon size={46} />
-        </DrawerTrigger>
-        <DrawerContent className="justify-center items-center gap-4 font-semibold bg-white bg-opacity-70 pb-6">
-          <Link href="#hero" aria-label="Accueil">
-            Accueil
-          </Link>
-          <Link href="#menucard" aria-label="Carte">
-            Carte
-          </Link>
-          <Link href="#gallery" aria-label="Galerie">
-            Galerie
-          </Link>
-          <Link href="#contact" aria-label="Contact">
-            Nous contacter
-          </Link>
-        </DrawerContent>
-      </Drawer>
-    </div>
+    <motion.nav
+      initial={false}
+      animate={isOpen ? "open" : "closed"}
+      custom={dimensions.height}
+      ref={containerRef}
+      className="fixed top-0 right-0 bottom-0 w-[230px] md:hidden"
+    >
+      <motion.div
+        className="absolute min-w-[230px] top-0 right-0 bottom-0 bg-white opacity-35"
+        variants={sidebar}
+      />
+      <NavigationMobileMenu toggle={() => toggleOpen()} />
+      <NavigationMobileToggle toggle={() => toggleOpen()} />
+    </motion.nav>
   );
 };

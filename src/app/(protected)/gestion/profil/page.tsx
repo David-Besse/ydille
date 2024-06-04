@@ -238,7 +238,7 @@ const ProfilePage = () => {
             <Button
               disabled={isPending}
               type="submit"
-              className="w-fit self-center"
+              className=""
             >
               Mettre à jour
             </Button>

@@ -8,7 +8,7 @@ export const Socials = () => {
   return (
     <div
       id="footer_social"
-      className="fixed bottom-10 right-0 flex flex-col w-fit gap-2 md:gap-4 p-2 bg-white bg-opacity-60 rounded-s-xl z-10"
+      className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex flex-row w-fit gap-2 md:gap-4 p-2 rounded-e-xl z-10"
     >
       <Link
         href="https://www.instagram.com/lidylle_biscarrosse/"
@@ -19,7 +19,7 @@ export const Socials = () => {
         <Image
           src={instaIcon}
           alt="instagram"
-          className="w-10 h-10 md:w-12 md:h-12 hover:scale-110 hover:border-black border-white border-2 rounded-2xl bg-white"
+          className="w-10 h-10 md:w-12 md:h-12 opacity-70 hover:scale-110 hover:opacity-100 border-white border-2 rounded-2xl bg-white"
         />
         <span className="sr-only">instagram</span>
       </Link>
@@ -32,7 +32,7 @@ export const Socials = () => {
         <Image
           src={facebookIcon}
           alt="facebook"
-          className="w-10 h-10 md:w-12 md:h-12 hover:scale-110 hover:border-black border-white border-2 rounded-2xl bg-white"
+          className="w-10 h-10 md:w-12 md:h-12 opacity-70 hover:scale-110 hover:opacity-100 border-white border-2 rounded-2xl bg-white"
         />
         <span className="sr-only">facebook</span>
       </Link>
@@ -45,7 +45,7 @@ export const Socials = () => {
         <Image
           src={tripIcon}
           alt="tripadvisor"
-          className="w-10 h-10 md:w-12 md:h-12 hover:scale-110 hover:border-black border-white border-2 rounded-2xl bg-white"
+          className="w-10 h-10 md:w-12 md:h-12 opacity-70 hover:scale-110 hover:opacity-100 border-white border-2 rounded-2xl bg-white"
         />
         <span className="sr-only">tripadvisor</span>
       </Link>

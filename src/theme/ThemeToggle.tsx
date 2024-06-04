@@ -12,7 +12,7 @@ export const ThemeToggle = () => {
       variant={"ghost"}
       size="sm"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="md:absolute md:right-4 md:top-4 w-fit h-fit p-0"
+      className="w-fit h-fit p-0 absolute top-4 right-1/2 translate-x-1/2 md:right-4 md:translate-x-0"
     >
       <SunMedium
         size={32}

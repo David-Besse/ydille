@@ -6,7 +6,7 @@ export const HeroPage = () => {
   return (
     <div
       id="hero"
-      className="flex items-center justify-center w-full"
+      className="min-h-screen flex items-center justify-center w-full"
     >
       <div className="flex flex-col p-2 w-full justify-center items-center">
         <h1

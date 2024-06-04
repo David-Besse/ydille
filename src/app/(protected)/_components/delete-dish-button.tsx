@@ -62,7 +62,7 @@ export function DeleteDishButton() {
             <Button
               variant={"outline"}
               onClick={() => handleDelete()}
-              className="text-base hover:bg-emerald-500 hover:text-white text-emerald-500 transition-all duration-[2000ms] ease-in-out"
+              className="text-base hover:bg-emerald-500 hover:text-white text-emerald-500 transition-all duration-1000 ease-in-out"
               disabled={isPending}
             >
               oui
