@@ -5,7 +5,7 @@ import { KeyRoundIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { asapFont } from "@/components/fonts/fonts";
 import { RoleGate } from "../_components/role-gate";
-import { FormSuccess } from "@/features/layout/form-sucess";
+import { ToastMessage } from "@/features/layout/ToastMessage";
 import { UserRole } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -43,7 +43,7 @@ const AdminPage = () => {
       </CardHeader>
       <CardContent className={cn("space-y-4", asapFont.className)}>
         <RoleGate allowedRole={UserRole.ADMIN}>
-          <FormSuccess message="Vous avez le droit d'accéder à cette page" />
+          <ToastMessage message={{ success: "Vous avez le droit d'accéder à cette page" }} />
         </RoleGate>
         <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-md">
           <p className="text-sm font-medium">Admin-only API route</p>
