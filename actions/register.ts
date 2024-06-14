@@ -1,7 +1,7 @@
 "use server";
 
 import * as z from "zod";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { RegisterSchema } from "../schemas";
 import { createUser, getUserByEmail } from "../data/user";
 import { generateVerificationToken } from "../src/lib/token";
