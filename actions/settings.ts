@@ -7,7 +7,7 @@ import { getUserByEmail, getUserById } from "../data/user";
 import { currentUserFromServer } from "@/lib/currentUserServerAccess";
 import { generateVerificationToken } from "@/lib/token";
 import { sendVerificationEmail } from "@/lib/mail";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export const settings = async (values: z.infer<typeof ProfilSchema>) => {
   // Get current user
