@@ -14,6 +14,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "^1.6.0",
     "@hookform/resolvers": "^3.6.0",
+    "@mapbox/node-pre-gyp": "^1.0.11",
     "@prisma/client": "^5.15.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
