@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useTheme } from "next-themes";
 import React from "react";
@@ -12,7 +12,7 @@ export const ThemeToggle = () => {
       variant={"ghost"}
       size="sm"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="w-fit h-fit p-0 absolute top-4 right-1/2 translate-x-1/2 md:right-4 md:translate-x-0"
+      className="w-fit h-fit p-0 absolute top-[1.5rem] md:-top-4 left-[40%] translate-x-1/2 md:-left-10 md:translate-x-0"
     >
       <SunMedium
         size={32}
@@ -20,7 +20,7 @@ export const ThemeToggle = () => {
       />
       <Moon
         size={32}
-        className="absolute rotate-100 scale-0 transition-all duration-1000 dark:-rotate-0 dark:scale-100"
+        className="absolute rotate-100 scale-0 transition-all duration-500 dark:-rotate-0 dark:scale-100"
       />
       <span className="sr-only">Theme Toggle</span>
     </Button>

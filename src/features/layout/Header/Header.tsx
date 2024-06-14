@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { NavigationDesktop } from "./NavigationDesktop";
 import { NavigationMobile } from "./NavigationMobile";
-import { ThemeToggle } from "@/theme/ThemeToggle";
 import { useEffect, useRef, useState } from "react";
+import { ThemeToggle } from "@/theme/ThemeToggle";
 
 export const Header = () => {
   const [imgSize, setImgSize] = useState(100);
@@ -30,7 +30,7 @@ export const Header = () => {
   return (
     <header
       ref={refHeader}
-      className="w-full h-fit flex items-center justify-start md:flex-col p-4 z-10 bg-[url('/img/plage.jpg')] bg-cover bg-no-repeat bg-top bg-fixed"
+      className="absolute top-0 left-0 w-full h-fit flex items-center justify-start md:flex-col p-4 z-10 bg-[url('/img/plage.jpg')] bg-cover bg-no-repeat bg-top bg-fixed"
     >
       <Link href="/" aria-label="Accueil" title="Accueil">
         <Image
@@ -42,8 +42,6 @@ export const Header = () => {
           className="w-[50px] h-[50px] md:w-[100px] md:h-[100px] cursor-pointer"
         />
       </Link>
-
-      <ThemeToggle />
 
       <NavigationDesktop />
 

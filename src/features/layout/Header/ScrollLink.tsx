@@ -14,10 +14,21 @@ export const ScrollLink = ({ children, ...props }: ScrollLinkProps) => {
     //remove everything before the hash
     const targetId = e.currentTarget.href.replace(/.*\#/, "");
     const elem = document.getElementById(targetId);
-    window.scrollTo({
-      top: elem?.getBoundingClientRect().top,
-      behavior: "smooth",
-    });
+
+    if (!elem) {
+      return; // Handle cases where the target element doesn't exist
+    }
+
+    const currentScrollY = window.scrollY; // Get current scroll position
+    const targetTop = elem.getBoundingClientRect().top + currentScrollY; // Calculate target element's absolute top position
+
+    if (targetTop !== currentScrollY) {
+      // Only scroll if positions are different
+      window.scrollTo({
+        top: targetTop,
+        behavior: "smooth",
+      });
+    }
   };
   return (
     <Link {...props} onClick={handleScroll}>

@@ -29,10 +29,10 @@ const menuItems = [
   },
 ];
 
-export const NavigationMobileMenu = ({ toggle }: { toggle: () => void }) => (
+export const NavigationMobileMenu = () => (
   <motion.ul variants={variants} className="p-6 absolute top-[100px] w-[230px]">
     {menuItems.map((menuItem) => (
-      <MenuItem key={menuItem.menuName} menuItem={menuItem} toggle={toggle} />
+      <MenuItem key={menuItem.menuName} menuItem={menuItem} />
     ))}
   </motion.ul>
 );

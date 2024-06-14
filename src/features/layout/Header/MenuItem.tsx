@@ -23,16 +23,15 @@ interface MenuItemProps {
     menuName: string;
     menuId: string;
   };
-  toggle: () => void;
 }
 
-export const MenuItem = ({ menuItem, toggle }: MenuItemProps) => {
+export const MenuItem = ({ menuItem }: MenuItemProps) => {
   return (
     <motion.li
       variants={variants}
-      className="list-none mb-5 flex items-center justify-end cursor-pointer"
+      className="list-none mb-5 flex items-center justify-end cursor-pointer hover:bg-slate-200 hover:rounded-md hover:p-1"
     >
-      <ScrollLink href={menuItem.menuId} className="text-lg font-semibold" onClickCapture={toggle}>
+      <ScrollLink href={menuItem.menuId} className="text-lg font-semibold">
         {menuItem.menuName}
       </ScrollLink>
     </motion.li>

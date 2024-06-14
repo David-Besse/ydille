@@ -4,6 +4,7 @@ import { useCycle, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { NavigationMobileMenu } from "./NavigationMobileMenu";
 import { NavigationMobileToggle } from "./NavigationMobileToggle";
+import { ThemeToggle } from "@/theme/ThemeToggle";
 
 const sidebar = {
   open: (height = 1000) => ({
@@ -65,8 +66,9 @@ export const NavigationMobile = () => {
         className="absolute min-w-[230px] top-0 right-0 bottom-0 bg-white opacity-35"
         variants={sidebar}
       />
-      <NavigationMobileMenu toggle={() => toggleOpen()} />
+      <NavigationMobileMenu />
       <NavigationMobileToggle toggle={() => toggleOpen()} />
+      <ThemeToggle />
     </motion.nav>
   );
 };

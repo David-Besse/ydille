@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ScrollLink } from "./ScrollLink";
+import { ThemeToggle } from "@/theme/ThemeToggle";
 
 export const NavigationDesktop = () => {
   const [menuLinkVisible, setMenuLinkVisible] = useState<boolean>(false);
@@ -33,6 +34,8 @@ export const NavigationDesktop = () => {
 
   return (
     <div className="sticky self-center border-b-2 border-white text-white hidden md:block py-2">
+      <ThemeToggle />
+      
       <NavigationMenu>
         <NavigationMenuList className="flex flex-col md:flex-row">
           <NavigationMenuItem>
