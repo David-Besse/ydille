@@ -1,9 +1,9 @@
 import * as React from "react";
-import MainLayout from "@/features/layout/MainLayout";
+import { PublicLayout } from "../../features/layout/PublicLayout";
 
 
 const ContactLayout = ({ children }: { children: React.ReactNode }) => {
-  return <MainLayout>{children}</MainLayout>;
+  return <PublicLayout>{children}</PublicLayout>;
 };
 
 export default ContactLayout;
