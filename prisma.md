@@ -1,6 +1,6 @@
 # Reminders
 
-## How to reset data base
+## How to update data base
 
 > [!WARNING]
 > 'migrate dev' is a development command and should never be used in a production environment.

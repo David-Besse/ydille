@@ -1,4 +1,4 @@
-import { Dish, DishType, Prisma, PrismaClient } from "@prisma/client";
+import { Dish, DishType, Gallery, Prisma, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function populate() {
@@ -124,6 +124,51 @@ export async function populate() {
     },
   ];
 
+  const galleryList: Prisma.GalleryCreateInput[] = [
+    { name: "chipirons-a-la-plancha.jpg", alt: "chipirons à la plancha" },
+    { name: "cosy.jpg", alt: "vue d'une table cosy" },
+    { name: "coucher-de-soleil.jpeg", alt: "coucher de soleil" },
+    { name: "entree-cote-route.jpg", alt: "entrée cote route" },
+    { name: "envie-de-rose.jpg", alt: "envie de vin rosé" },
+    { name: "notre-table-privee-sur.jpg", alt: "coin prive VIP" },
+    { name: "pieds-dans-le-sable.jpg", alt: "pieds dans le sable" },
+    { name: "pilotis.jpg", alt: "pilotis" },
+    {
+      name: "salade-idyllique-saumon.jpg",
+      alt: "salade de fruits de mer",
+    },
+    { name: "sous-nos-pergolas-et.jpg", alt: "vue sous nos pergolas" },
+    {
+      name: "une-de-nos-soiree-blanche.jpg",
+      alt: "vue du restaurant lors d'une soirée blanche au coucher du soleil",
+    },
+    {
+      name: "une-soiree-d-exception.jpg",
+      alt: "vue du coin VIP lors d'un feu d'artifice",
+    },
+    { name: "chipirons-a-la-plancha.jpg", alt: "chipirons à la plancha" },
+    { name: "cosy.jpg", alt: "vue d'une table cosy" },
+    { name: "coucher-de-soleil.jpeg", alt: "coucher de soleil" },
+    { name: "entree-cote-route.jpg", alt: "entrée cote route" },
+    { name: "envie-de-rose.jpg", alt: "envie de vin rosé" },
+    { name: "notre-table-privee-sur.jpg", alt: "coin prive VIP" },
+    { name: "pieds-dans-le-sable.jpg", alt: "pieds dans le sable" },
+    { name: "pilotis.jpg", alt: "pilotis" },
+    {
+      name: "salade-idyllique-saumon.jpg",
+      alt: "salade de fruits de mer",
+    },
+    { name: "sous-nos-pergolas-et.jpg", alt: "vue sous nos pergolas" },
+    {
+      name: "une-de-nos-soiree-blanche.jpg",
+      alt: "vue du restaurant lors d'une soirée blanche au coucher du soleil",
+    },
+    {
+      name: "une-soiree-d-exception.jpg",
+      alt: "vue du coin VIP lors d'un feu d'artifice",
+    },
+  ];
+
   console.log(`Start seeding dishType ...`);
   for (const dishType of dishTypesList) {
     await prisma.dishType.create({
@@ -169,6 +214,14 @@ export async function populate() {
     console.log(
       `Created dishDishTypeLink : ${dishDishTypeLink.dishType?.connect?.id} - ${dishDishTypeLink.dish?.connect?.id}`
     );
+  }
+
+  console.log(`Start seeding gallery ...`);
+  for (const img of galleryList) {
+    await prisma.gallery.create({
+      data: img,
+    });
+    console.log(`Created image with name: ${img.name}`);
   }
 }
 

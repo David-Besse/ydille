@@ -96,6 +96,12 @@ model DishDishTypeLink {
   @@unique([dishId, dishTypeId])
 }
 
+model Gallery {
+  id   String @id @default(cuid())
+  alt  String @db.VarChar(255)
+  name String @db.VarChar(255)
+}
+
 enum UserRole {
   USER
   ADMIN
