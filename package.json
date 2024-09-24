@@ -44,7 +44,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "leaflet-geosearch": "^3.11.1",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.363.0",
+    "lucide-react": "^0.438.0",
     "mock-aws-s3": "^4.0.2",
     "next": "14.2.12",
     "next-auth": "5.0.0-beta.16",
