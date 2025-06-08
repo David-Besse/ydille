@@ -14,7 +14,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
     "@hookform/resolvers": "^3.9.1",
-    "@mapbox/node-pre-gyp": "^1.0.11",
+    "@mapbox/node-pre-gyp": "^2.0.0",
     "@prisma/client": "^6.1.0",
     "@radix-ui/react-alert-dialog": "^1.1.4",
     "@radix-ui/react-avatar": "^1.1.2",
@@ -46,7 +46,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.468.0",
     "mock-aws-s3": "^4.0.2",
-    "next": "15.1.6",
+    "next": "15.2.3",
     "next-auth": "5.0.0-beta.25",
     "next-themes": "^0.4.4",
     "nock": "^13.5.6",
