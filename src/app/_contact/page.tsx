@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-const LazyMap = dynamic(() => import("@/features/layout/Contact/Map"), {
+const LazyMap = dynamic(() => import("@/features/layout/Contact/MapLeaflet"), {
   ssr: false,
   loading: () => <p>Loading...</p>,
 });
