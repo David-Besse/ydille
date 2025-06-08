@@ -1,5 +1,3 @@
-"use client";
-
 import { asapFont } from "@/components/fonts/fonts";
 
 import "leaflet/dist/leaflet.css";
@@ -12,7 +10,7 @@ import { ArrowBigRightDash, Mail, Phone } from "lucide-react";
 
 import "./styles_map.css";
 
-export default function Map() {
+export default function MapLeaflet() {
   return (
     <MapContainer
       preferCanvas={true}
