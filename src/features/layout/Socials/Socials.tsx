@@ -8,7 +8,7 @@ export const Socials = () => {
   return (
     <div
       id="footer_social"
-      className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex flex-row w-fit gap-2 md:gap-4 p-2 rounded-e-xl z-10"
+      className="sticky bottom-0 left-1/2 transform -translate-x-1/2 flex flex-row w-fit gap-2 md:gap-4 p-2 rounded-e-xl z-10"
     >
       <Link
         href="https://www.instagram.com/lidylle_biscarrosse/"
