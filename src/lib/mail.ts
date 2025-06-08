@@ -2,13 +2,12 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+/**
+ * Envoie un email contenant le code de verification 2FA
+ * @param email Adresse email du destinataire
+ * @param token Code de verification 2FA
+ */
 export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
-  const url =
-    process.env.NODE_ENV === "production"
-      ? "https://idylle.vercel.app"
-      : "http://localhost:3000";
-
-  const confirmLink = `${url}/auth/2fa?token=${token}`;
 
   await resend.emails.send({
     from: "onboarding@resend.dev",
@@ -25,10 +24,16 @@ export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
   });
 };
 
+/**
+ * Envoie un email contenant le lien de verification pour confirmer une adresse
+ * email
+ * @param email Adresse email du destinataire
+ * @param token Code de verification
+ */
 export const sendVerificationEmail = async (email: string, token: string) => {
   const url =
     process.env.NODE_ENV === "production"
-      ? "https://idylle.vercel.app"
+      ? "https://ydille.vercel.app"
       : "http://localhost:3000";
 
   const confirmLink = `${url}/auth/new-verification?token=${token}`;
@@ -50,10 +55,16 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   });
 };
 
+/**
+ * Envoie un email contenant un lien pour réinitialiser le mot de passe
+ * @param email Adresse email du destinataire
+ * @param token Jeton unique utilisé pour générer le lien de réinitialisation du mot de passe
+ */
+
 export const sendResetPasswordEmail = async (email: string, token: string) => {
   const url =
     process.env.NODE_ENV === "production"
-      ? "https://idylle.vercel.app"
+      ? "https://ydille.vercel.app"
       : "http://localhost:3000";
 
   const resetLink = `${url}/auth/new-password?token=${token}`;

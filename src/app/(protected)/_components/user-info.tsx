@@ -46,7 +46,7 @@ export const UserInfo = ({ user, label }: UserInfoProps) => {
           </p>
           <span className="flex items-center justify-center truncate text-sm max-w-[200px] p-1  rounded-sm gap-x-2">
             <Badge
-              variant={user?.isTwoFactorEnabled ? "success" : "destructive"}
+              variant={user?.isTwoFactorEnabled ? "default" : "destructive"}
             >
               {user?.isTwoFactorEnabled ? "Active" : "Inactif"}
             </Badge>
